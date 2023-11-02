@@ -1,4 +1,4 @@
-# prochat.ru
+# ChatHub
 ## Authors
 Markus Vallin, Samu Hiltunen, Anton Laine, Teemu Pulli
 
@@ -8,7 +8,7 @@ webdev project
    
 •The title of the project
 
-   Web Chat Service -ProChat.ru
+   Web Chat Service - ChatHub
   	
 •The names of the members
 
