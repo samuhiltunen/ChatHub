@@ -52,7 +52,7 @@ People: (User can contact other people who are using the web chat service by sea
 
 Multimedia support: Can send images
 
-#Example layout:
+# Example layout:
 ![chatMain](https://github.com/vitumake/prochat.ru/assets/111981148/6b69cbc6-bdfc-4d03-bd7e-6d4e2ce621e8)
 ![smaller-chat](https://github.com/vitumake/prochat.ru/assets/111981148/67ebdb47-0fc2-4937-93b6-24ac7f17d027)
 ![chat-login-full](https://github.com/vitumake/prochat.ru/assets/111981148/ecb42390-1650-424b-bde1-05787614bb02)
