@@ -6,23 +6,23 @@ webdev project
 
 2 Project description
    
-•The title of the project
+• The title of the project
 
    Web Chat Service - ChatHub
   	
-•The names of the members
+• The names of the members
 
   Anton Laine, Markus Vallin, Samu Hiltunen, Teemu Pulli
 
-•The target users and other stakeholders
+• The target users and other stakeholders
 
   People in need of a web chat service
     
-•The main functionality of the application.
+• The main functionality of the application.
 
   Chat with numerous people simultanously
   
-•Describe the user stories.
+• User stories.
 
 	User can create an account with username and password, name, profile picture and status
  
@@ -38,7 +38,7 @@ webdev project
  
 	User can search their own chats and search new people by name.
 	
-•Product backlog
+• Product backlog
 
 User Registration (username, password)
 
