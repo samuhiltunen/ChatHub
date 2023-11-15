@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body>
+    <header>
+        <h1>ChatHub</h1>
+    </header>
+
+    <section>
+        <aside>
+            <H1>threads here</H1>
+        </aside>
+
+        <main>
+            <div id="chat" class="chat-container">
+                <!-- Chat messages go here -->
+            </div>
+
+            <!-- Input area for typing messages -->
+            <div class="flex-container">
+                <input type="text" id="messageInput" placeholder="Type your message">
+                <button onclick="sendMessage()" id="sendMessageButton">Send</button>
+            </div>
+        </main>
+    </section>
+
+    <script>
+        function showLogin() {
+            document.getElementById('login').style.display = 'block';
+            document.getElementById('register').style.display = 'none';
+        }
+
+        function showRegister() {
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('register').style.display = 'block';
+        }
+
+        function sendMessage() {
+            // Implement message sending logic here
+        }
+    </script>
+</body>
+
+</html>
