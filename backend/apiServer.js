@@ -13,8 +13,6 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(validateJSON);
-
 app.use(express.json());
 
 // Routes

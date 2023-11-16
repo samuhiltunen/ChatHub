@@ -67,7 +67,7 @@ router.route('/:job')
 
     // Validate request
     if(req.body.query === undefined) {
-        res.status(400).json({error: 'Bad request'});
+        res.status(400).json({error: 'Bad request', msg: 'Query is undefined'});
         return;
     }
 

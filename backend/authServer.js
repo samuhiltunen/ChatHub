@@ -9,7 +9,6 @@ const db = new DbController(process.env.MONGO_URI, process.env.MONGO_DB);
 const { login } = require('./middleware/login');
 const { validateJSON } = require('./middleware/validateJson');
 
-app.use(validateJSON);
 app.use(express.json());
 
 // Login route for client to authenticate
