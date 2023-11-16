@@ -1,0 +1,30 @@
+{
+  "name": "chathub",
+  
+  "version": "1.0.0",
+  "description": "Simple chatting application built with MERN stack",
+  "main": "index.js",
+  "scripts": {
+    "genDocs": "node ./genDocs %npm_config_file%",
+    "server": "concurrently \"npm run serv:*\"",
+    "serv:auth": "nodemon --env-file=./.env ./backend/authServer.js",
+    "serv:api": "nodemon --env-file=./.env ./backend/apiServer.js"
+  },
+  "keywords": [],
+  "author": "Samu Hiltunen, Anton Laine, Markus Vallin, Teemu Pulli",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "moment": "^2.29.4",
+    "mongodb": "^6.2.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "jsdoc": "^4.0.2",
+    "jsdoc-to-markdown": "^8.0.0",
+    "nodemon": "^3.0.1"
+  }
+}
