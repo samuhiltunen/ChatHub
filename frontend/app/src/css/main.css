@@ -82,12 +82,13 @@ input[type="password"] {
 }
 
 button {
-    padding: 10px;
     background-color: #4CAF50;
     color: #fff;
+    padding: 10px;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
-    height: 2.5rem;
+    height: 2.4rem;
 }
 
 button:hover {

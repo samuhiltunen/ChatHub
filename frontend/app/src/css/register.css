@@ -5,18 +5,20 @@ body {
     background-color: #f4f4f4;
 }
 
-header {
-    text-align: center;
+.header-container header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 15px;
     background-color: #333;
     color: #fff;
 }
 
-section {
+.register-section {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: auto;
 }
 
 form {

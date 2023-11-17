@@ -1,14 +1,17 @@
-import React from 'react'
+import React from "react";
+import "../css/register.css";
 
 export default function Register() {
   return (
     <>
-      <header>
-        <h1>ChatHub</h1>
-      </header>
-      <section>
+      <div className="header-container">
+        <header>
+          <h1>ChatHub</h1>
+        </header>
+      </div>
+      <section className="register-section">
         <form>
-          <h2>Register</h2>
+          <h2>Register</h2>                               
           <label htmlFor="username">Username:</label>
           <input type="text" id="username" name="username" required="" />
           <label htmlFor="email">Email:</label>
@@ -28,6 +31,5 @@ export default function Register() {
         </form>
       </section>
     </>
-
-  )
+  );
 }
