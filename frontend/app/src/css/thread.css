@@ -1,0 +1,15 @@
+.thread-container {
+    margin-bottom: 5px;
+    border: 2px solid white;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.thread-container p {
+    color: white;
+}
+
+.thread-link {
+    text-decoration: none;
+}
