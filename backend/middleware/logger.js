@@ -1,8 +1,10 @@
 // Logger middleware
 const logger = (req, res, next) => {
     console.log(`
-        [${req.currtime}] ${req.method}: ${req.host}${req.url} requested from ${req.ip}. 
-        \n Response sent with status ${res.statusCode}.
+    [${req.currtime}] ${req.method}: ${req.hostname}${req.url} requested from ${req.ip}. 
+    
+    Request:
+       L ${JSON.stringify(req.body)}
     `);
     next();
 }

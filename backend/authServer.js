@@ -10,16 +10,25 @@ const { auth, validateJSON, motd, logger, timestamp, login }= require('./middlew
 
 app.use(express.json());
 app.use(timestamp);
+app.use(logger);
 app.use(validateJSON);
 app.use(motd);
-app.use(cors);
-app.use(logger);
+app.use(cors());
 
 // Login route for client to authenticate
 app.post('/login', login, async (req, res) => {
     // User authenticated in middleware
     try {
          
+        // Check if user is already logged in
+        // This is legacy code - potential security issue
+        /*
+        if(req.user.info.logged) {
+            res.status(403).json({error: 'User already logged in'});
+            return;
+        }
+        */
+
         // Payload for tokens
         const payload = {
             flags: "login",
@@ -36,15 +45,16 @@ app.post('/login', login, async (req, res) => {
             {$set: {createdAt: new Date(), token: refreshToken}}, 
             {upsert: true});
 
-        // Update user last online
-        await db.update("users", {name: req.user.name}, {$set: {"info.lastOnline": new Date()}});
+        // Update user logged in status
+        await db.update("users", {name: req.user.name}, {$set: {"info.logged": true}});
 
         // Send tokens to client
         res.status(200).json({accessToken: accessToken, refreshToken: refreshToken});
-
+        return;
     } catch (err) {
         console.log(err);
         res.status(500).json({error: 'Internal server error'});
+        return;
     }
 });
 
@@ -56,15 +66,17 @@ app.delete('/logout', auth, async (req, res) => {
     // Check if token exists
     if(refreshToken == null) return res.sendStatus(400);
 
+    try{
+    // Change user logged in status and last online
+    await db.update("users", {name: req.user.name}, {$set: {"info.logged": false, "info.lastOnline": new Date()}});
+
     // Delete token from database
     await db.delete("tokens", {token: refreshToken})
-    .then(result => {
-        res.status(204).json({msg: result});
-    })
-    .catch(err => {
+    } catch (err) {
         console.log(err);
         res.status(500).json({error: 'Internal server error'});
-    });
+    }
+    return;
 });
 
 // Refresh token route for client to get new access token
@@ -77,13 +89,14 @@ app.post('/token', async (req, res) => {
 
     // Check if token is in database
     const token = await db.find("tokens", {token: refreshToken}, {}, true);
-    if(token === null) return res.sendStatus(404);
-
-    // 
+    if(token === null) return res.sendStatus(401);
 
     // Verify token
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, data) => {
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN,async (err, data) => {
         if(err) return res.sendStatus(403);
+
+        // Refresh refresh token in database
+        await db.update("tokens", {token: refreshToken}, {$set: {createdAt: new Date()}});
 
         // Payload for new access token
         const payload = {
@@ -95,11 +108,11 @@ app.post('/token', async (req, res) => {
         const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN, { expiresIn: '15m' });
         res.status(200).json({accessToken: accessToken});
     });
+    return;
 });
 
-const port = process.env.AUTH_PORT || 3001;
-
 // Start server
+const port = process.env.AUTH_PORT || 3001;
 app.listen(port, () => {
     console.log(`Auth server listening on port ${port}`);
 });
