@@ -13,15 +13,16 @@ const { logger, timestamp } = require('./middleware/export');
 const files = require('./routes/files');
 
 // Serve static files
+app.use(cors());
 app.use(timestamp)
-app.use(logger)
+app.use(logger);
 app.use(express.static(path.join(__dirname, 'files')));
-app.use(cors);
+
+// Routes
 app.use('/files', files)
 
-const port = process.env.FILE_PORT || 3002;
-
 // Listen
+const port = process.env.FILE_PORT || 3002;
 app.listen(port, () => {
     console.log(`File server listening on port ${port}`);
 })

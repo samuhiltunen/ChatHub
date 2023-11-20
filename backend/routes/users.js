@@ -49,7 +49,9 @@ router.route('/:job')
                 pass: passHash,
                 info: {
                     avatar: req.body.avatar,
+                    status: '',
                     bio: req.body.bio,
+                    logged: false,
                     userCreated: new Date(),
                     lastOnline: null
                 }
@@ -62,6 +64,7 @@ router.route('/:job')
         } catch (err) {
             console.log(err);
             res.status(500).json({error: 'Internal server error'});
+            return;
         }
     }
 })
@@ -93,6 +96,7 @@ router.route('/:job')
         console.log(err);
         res.status(500).json({error: 'Internal server error'});
     });
+    return;
 });
 
 module.exports = router;
