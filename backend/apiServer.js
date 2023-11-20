@@ -14,11 +14,14 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
+app.use(validateJSON);
 
 // Routes
 app.use('/users', users);
 
+const port = process.env.API_PORT || 3000;
+
 // Start server
-app.listen(3000, () => {
-    console.log('Server started on port 3000');
+app.listen(port, () => {
+    console.log(`API server listening on port ${port}`);
 });

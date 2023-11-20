@@ -151,4 +151,5 @@ class DbController {
 }
 
 // Export class
+// Should be exported differently but oh well
 module.exports = { DbController };

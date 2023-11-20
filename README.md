@@ -56,20 +56,3 @@ Multimedia support: Can send images
 ![chatMain](https://github.com/vitumake/prochat.ru/assets/111981148/6b69cbc6-bdfc-4d03-bd7e-6d4e2ce621e8)
 ![smaller-chat](https://github.com/vitumake/prochat.ru/assets/111981148/67ebdb47-0fc2-4937-93b6-24ac7f17d027)
 ![chat-login-full](https://github.com/vitumake/prochat.ru/assets/111981148/ecb42390-1650-424b-bde1-05787614bb02)
-
-## Domains
-
-### Services
-- https://chathub.kontra.tel (frontend)
-- https://api.chathub.kontra.tel (api)
-- https://auth.chathub.kontra.tel (auth)
-
-Backend contains two services:
-
-- Api service for handling database requests
-- Auth service for handling authentication for api service
-
-### Example requests
-```
-wip
-```

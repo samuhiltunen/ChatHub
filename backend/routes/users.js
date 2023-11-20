@@ -1,6 +1,8 @@
+// Desc: User routes
+
+// Import modules
 const express = require('express');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 
 // Import middleware
 const { auth } = require('../middleware/auth');
@@ -19,7 +21,7 @@ router.route('/:job')
         // Legacy code
         res.status(301).json({
             error: 'Moved permanently',
-            msg: 'Moved to authServer at port 4000'
+            msg: 'Moved to authServer'
         })
  
     } else if(req.params.job === 'register') {
@@ -54,7 +56,7 @@ router.route('/:job')
             };
 
             const result = await db.insert("users", [user]);
-            res.status(200).json({result: result});
+            res.status(201).json({result: result});
             return;
 
         } catch (err) {
@@ -76,16 +78,12 @@ router.route('/:job')
         projection: req.body.proj ?? {},
     };
 
-    // Remove unwanted properties from options
+    // Remove unwanted properties from options to avoid db errors
     for(const [key, val] of Object.entries(options.projection)) {
-        console.log(`${key}: ${val}`);
-        if(!val) {
-            delete options.projection[key];
-        }
-        if(key=='pass') {delete options.projection[key];} // Remove password from projection
+        if(!val) delete options.projection[key];
+        if(key=='pass') delete options.projection[key]; // Remove password from projection
     }
 
-    console.log(options);
     // Find user in database
     db.find("users", req.body.query, options, false)
     .then(docs => {
