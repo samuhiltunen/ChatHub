@@ -7,6 +7,7 @@ backend/files/*
 !backend/files/index.html
 backend/files/images/*
 !backend/files/images/default.png
+!.gitignore
 
 ### dotenv ###
 .env
