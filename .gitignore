@@ -3,10 +3,6 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,visualstudiocode,react,node,linux,dotenv,macos
 
 ### Chathub repo ###
-backend/files/*
-!backend/files/index.html
-backend/files/images/*
-!backend/files/images/default.png
 !.gitignore
 
 ### dotenv ###
