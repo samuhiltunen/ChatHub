@@ -3,20 +3,13 @@ const app = express();
 const cors = require('cors');
 
 // Import middleware
-const { validateJSON }= require('./middleware/validateJson');
-const { motd } = require('./middleware/motd');
-//const { cors } = require('./middleware/cors');
-const { logger } = require('./middleware/logger');
+const { validateJSON, motd, logger, timestamp }= require('./middleware/export');
 
 // Import routes
 const users = require('./routes/users');
 
 // Global Middleware
-app.use((req, res, next) => {
-    req.currtime = new Date().getTime;
-    next();
-});
-
+app.use(timestamp);
 app.use(express.json());
 app.use(validateJSON);
 app.use(motd);

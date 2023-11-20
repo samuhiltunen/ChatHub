@@ -7,17 +7,17 @@ const cors = require('cors');
 const app = express();
 
 // Middleware
-//const { cors } = require('./middleware/cors');
-const { logger } = require('./middleware/logger');
+const { logger, timestamp } = require('./middleware/export');
 
 // Import routes
 const files = require('./routes/files');
 
 // Serve static files
+app.use(timestamp)
+app.use(logger)
 app.use(express.static(path.join(__dirname, 'files')));
 app.use(cors);
 app.use('/files', files)
-app.use(logger)
 
 const port = process.env.FILE_PORT || 3002;
 
