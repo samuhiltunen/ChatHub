@@ -59,10 +59,10 @@ export default function Profile() {
                     </button>
                     </Link>
 
-                    <Link to={"/"}><button id="mainPageButton" onclick="location.href='index.html'">
-                        Main Page
-                    </button>
+                    <Link to="/main">
+                    <button id="mainPageButton">Main Page</button>
                     </Link>
+        
                 </div>
             </header>
     
