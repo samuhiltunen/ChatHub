@@ -16,4 +16,4 @@ async function auth(req, res, next) {
 }
 
 // Export middleware
-exports.auth = auth;
+module.exports = {auth};
