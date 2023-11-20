@@ -34,7 +34,7 @@ Authentication tokens expire after 15min and must be refreshed. To refresh a tok
 
 Registers a new user to the database.
 
-- **POST:** `https://auth.chathub.kontra.tel/api/register`
+- **POST:** `https://auth.chathub.kontra.tel/register`
 - AUTH: None
 
 ### Parameters
