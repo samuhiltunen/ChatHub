@@ -1,5 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 const { DbController } = require('./dbController');
 const db = new DbController(process.env.MONGO_URI, process.env.MONGO_DB);
 const app = express();
@@ -9,12 +10,14 @@ const { login } = require('./middleware/login');
 const { auth } = require('./middleware/auth');
 const { validateJSON } = require('./middleware/validateJson');
 const { motd } = require('./middleware/motd');
-const { cors } = require('./middleware/cors');
+//const { cors } = require('./middleware/cors');
+const { logger } = require('./middleware/logger');
 
 app.use(express.json());
 app.use(validateJSON);
 app.use(motd);
 app.use(cors);
+app.use(logger);
 
 // Login route for client to authenticate
 app.post('/login', login, async (req, res) => {
