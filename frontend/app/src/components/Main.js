@@ -1,7 +1,7 @@
 import React from 'react';
-import "../css/main.css";
 import { Link } from 'react-router-dom';
 import Threads from './Threads';
+import '../css/main.css';
 
 export default function Main() {
     return (
@@ -11,12 +11,15 @@ export default function Main() {
                     <h1>ChatHub</h1>
                 </div>
                 <div className="buttons">
-                    <Link to={"/"}><button id="logoutButton" onclick="location.href='landing.html'">
-                        Logout
-                    </button>
-                    <Link to="/profile">
-                    <button id="profileButton">View Profile</button>
+                    <Link to="/">
+                        <button id="logoutButton">
+                            Logout
+                        </button>
                     </Link>
+                    <Link to="/profile">
+                        <button id="profileButton">View Profile</button>
+                    </Link>
+                </div>
             </header>
             <section>
                 <aside>
@@ -27,6 +30,10 @@ export default function Main() {
                             placeholder="search by username"
                         />
                         <button className="searchButton">Search</button>
+                    </div>
+                    <div className='thread-controls-container'>
+                        <button>Create thread</button>
+                        <button>Create Group</button>
                     </div>
                     <h1>My Threads</h1>
                     <Threads />
@@ -43,6 +50,5 @@ export default function Main() {
                 </main>
             </section>
         </>
-
-    )
+    );
 }
