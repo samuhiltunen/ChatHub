@@ -53,7 +53,7 @@ app.delete('/logout', auth, async (req, res) => {
     const refreshToken = req.body.token;
 
     // Check if token exists
-    if(refreshToken == null) return res.sendStatus(401);
+    if(refreshToken == null) return res.sendStatus(400);
 
     // Delete token from database
     await db.delete("tokens", {token: refreshToken})
@@ -72,11 +72,13 @@ app.post('/token', async (req, res) => {
     const refreshToken = req.body.token;
 
     // Check if token exists
-    if(refreshToken == null) return res.sendStatus(401);
+    if(refreshToken == null) return res.sendStatus(400);
 
     // Check if token is in database
     const token = await db.find("tokens", {token: refreshToken}, {}, true);
-    if(token === null) return res.sendStatus(403);
+    if(token === null) return res.sendStatus(404);
+
+    // 
 
     // Verify token
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, data) => {
