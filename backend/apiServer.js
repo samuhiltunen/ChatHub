@@ -4,6 +4,7 @@ const app = express();
 // Import middleware
 const { validateJSON }= require('./middleware/validateJson');
 const { motd } = require('./middleware/motd');
+const { cors } = require('./middleware/cors');
 
 // Import routes
 const users = require('./routes/users');
@@ -17,6 +18,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(validateJSON);
 app.use(motd);
+app.use(cors);
 
 // Routes
 app.use('/users', users);
