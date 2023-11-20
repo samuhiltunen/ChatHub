@@ -1,8 +1,9 @@
 import React from 'react';
 import "../css/main.css";
 import { Link } from 'react-router-dom';
+import Threads from './Threads';
 
-export default function () {
+export default function Main() {
     return (
         <>
             <header className="header">
@@ -28,7 +29,8 @@ export default function () {
                         />
                         <button className="searchButton">Search</button>
                     </div>
-                    <h1>threads here</h1>
+                    <h1>My Threads</h1>
+                    <Threads />
                 </aside>
                 <main>
                     <div id="chat" className="chat-container">
