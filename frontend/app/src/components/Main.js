@@ -14,10 +14,9 @@ export default function Main() {
                     <Link to={"/"}><button id="logoutButton" onclick="location.href='landing.html'">
                         Logout
                     </button>
+                    <Link to="/profile">
+                    <button id="profileButton">View Profile</button>
                     </Link>
-
-                    <button id="profile">View Profile</button>
-                </div>
             </header>
             <section>
                 <aside>
