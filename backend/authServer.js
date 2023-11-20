@@ -8,9 +8,11 @@ const app = express();
 const { login } = require('./middleware/login');
 const { auth } = require('./middleware/auth');
 const { validateJSON } = require('./middleware/validateJson');
+const { motd } = require('./middleware/motd');
 
 app.use(express.json());
 app.use(validateJSON);
+app.use(motd);
 
 // Login route for client to authenticate
 app.post('/login', login, async (req, res) => {
