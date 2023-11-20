@@ -1,0 +1,156 @@
+/* styles.css */
+html, body {
+    height: 100%;
+}
+
+root {
+    height: auto;
+}
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 15px;
+    text-align: center;
+}
+
+.title {
+    grid-column: 2;
+}
+.header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    grid-column: 3;
+    justify-self: end;
+}
+
+section {
+    display: flex;
+    /*max-width: 1200px;*/
+    margin: 0;
+    height: 100vh;
+}
+
+
+main {
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+nav {
+    background-color: #555;
+    padding: 10px;
+    text-align: center;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 16px;
+    display: inline-block;
+    margin: 0 5px;
+}
+
+#login,
+#register {
+    display: block;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 2.4rem;
+}
+
+button:hover {
+    background-color: #388E3C;
+}
+
+.hamburger-icon {
+    display: none; /* hide the hamburger icon */
+}
+
+.chat-container {
+    border: 1px solid #ccc;
+    height: 70%;
+    overflow-y: scroll;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+
+.messagebox {
+    display: flex;
+}
+
+#messageInput {
+    flex: 1;
+}
+
+#sendMessageButton {
+    margin-left: 10px;
+}
+
+.user-searchbox {
+    display: flex;
+}
+
+#username-search {
+    flex: 1;
+    margin-right: 10px;
+}
+
+@media only screen and (max-width: 600px)  {
+    .hamburger-icon {
+        display: block; /* Show the hamburger icon */
+    }
+}
+
+.show-aside{
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.hide-aside{
+    display: none
+}
+
+.hide-main {
+    display: none;
+}
+.thread-controls-container {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+}
