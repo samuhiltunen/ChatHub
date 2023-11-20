@@ -125,3 +125,8 @@ button:hover {
     margin-right: 10px;
 }
 
+.thread-controls-container {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+}
