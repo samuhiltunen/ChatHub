@@ -17,7 +17,7 @@ const router = express.Router();
 
 router.use(busboy());
 
-const filebus = (req, res) => {
+const filebus = (req, res, next) => {
     if (req.busboy) {
       req.busboy.on('file', (name, file, info) => {
         console.log('File [' + name + ']: filename: ' + info.filename);

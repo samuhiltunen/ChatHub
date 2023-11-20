@@ -8,12 +8,12 @@ const app = express();
 // Import middleware
 const { auth, validateJSON, motd, logger, timestamp, login }= require('./middleware/export');
 
+app.use(cors());
 app.use(express.json());
 app.use(timestamp);
 app.use(logger);
 app.use(validateJSON);
 app.use(motd);
-app.use(cors());
 
 // Login route for client to authenticate
 app.post('/login', login, async (req, res) => {

@@ -9,12 +9,12 @@ const { validateJSON, motd, logger, timestamp }= require('./middleware/export');
 const users = require('./routes/users');
 
 // Global Middleware
+app.use(cors());
 app.use(express.json());
 app.use(timestamp);
 app.use(logger);
 app.use(validateJSON);
 app.use(motd);
-app.use(cors());
 
 // Routes
 app.use('/users', users);

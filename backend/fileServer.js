@@ -13,10 +13,10 @@ const { logger, timestamp } = require('./middleware/export');
 const files = require('./routes/files');
 
 // Serve static files
+app.use(cors());
 app.use(timestamp)
 app.use(logger);
 app.use(express.static(path.join(__dirname, 'files')));
-app.use(cors());
 
 // Routes
 app.use('/files', files)
