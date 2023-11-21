@@ -1,38 +1,41 @@
 // Import modules
 const express = require('express');
-const busboy = require('connect-busboy');
-const fs = require('fs');
-const path = require('path');
-const uid = require('uuid');
 
 // Import database controller
 const { DbController } = require("../dbController");
 const db = new DbController(process.env.MONGO_URI, process.env.MONGO_DB);
 
 // Import middleware
-const { auth } = require('../middleware/auth');
+const { auth, upload } = require('../middleware/export');
 
 // Router
 const router = express.Router();
 
-router.use(busboy());
-
-const filebus = (req, res, next) => {
-    if (req.busboy) {
-      req.busboy.on('file', (name, file, info) => {
-        console.log('File [' + name + ']: filename: ' + info.filename);
-      });
-      req.busboy.on('field', (name, value, info) => {
-      });
-      req.pipe(req.busboy);
-    }
-    next();
-  };
-
 router.route('/')
-.post(auth, filebus, async (req, res) => {
-    // Upload file
-    res.status(200).json({message: 'File uploaded'});
+.post(auth, upload.single('file'), (req, res) => {
+    // Check if file was uploaded
+    if(req.file === undefined) {
+        res.status(400).json({error: 'Bad request'});
+        return;
+    }
+
+    // Create file object
+    const fileObj = {
+        name: req.file.originalname,
+        path: `${req.hostname}/${req.file.filename}`,
+        owner: req.user.name,
+        size: req.headers['content-length'],
+        createdAt: new Date()
+    }
+
+    // Add file to database
+    db.insert("files", [fileObj])
+    .then(result => {
+        res.status(200).json({msg: 'File uploaded', file: fileObj});
+    })
+    .catch(err => {
+        res.status(500).json({error: "Internal server error"});
+    });
 })
 
 module.exports = router;

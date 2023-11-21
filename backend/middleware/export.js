@@ -8,6 +8,7 @@ const {motd} = require('./motd');
 const {validateJSON} = require('./validateJson');
 const {timestamp} = require('./timestamp');
 const {login} = require('./login');
+const {upload} = require('./upload');
 
 // Export modules
-module.exports = { auth, cors, logger, motd, validateJSON, timestamp, login };
+module.exports = { auth, cors, logger, motd, validateJSON, timestamp, login, upload};
