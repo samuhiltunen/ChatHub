@@ -41,8 +41,11 @@ input {
     box-sizing: border-box;
 }
 
-
-
 button:hover {
     background-color: #45a049;
+}
+
+.error {
+  height: 20px;
+  color: red;
 }

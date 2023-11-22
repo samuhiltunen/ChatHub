@@ -5,6 +5,7 @@ import "../css/login.css";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [err, setErr] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -25,6 +26,7 @@ export default function Login() {
         navigate('/main');
       } else {
         console.error("Server responded with status:", response.status);
+        setErr(true);
       }
     } catch (err) {
       console.error(err);
@@ -46,6 +48,7 @@ export default function Login() {
           <input type="text" id="username" name="username" required="" onChange={e => setUsername(e.target.value)} />
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" name="password" required="" onChange={e => setPassword(e.target.value)} />
+          {err && <p className="error">Invalid username or password</p>}
           <button type="submit" onClick={handleSubmit}>Login</button>
           <div className="register-btn-container">
             <p>Don't have an account?</p>
