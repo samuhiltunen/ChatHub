@@ -27,8 +27,7 @@ export default function Register() {
       const response = await fetch('https://api.chathub.kontra.tel/users/register', options);
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('token', data.token);
-        navigate('/main');
+        navigate('/');
       } else {
         console.error("Server responded with status:", response.status);
         setErr(true);
