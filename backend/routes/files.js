@@ -6,7 +6,8 @@ const { DbController } = require("../dbController");
 const db = new DbController(process.env.MONGO_URI, process.env.MONGO_DB);
 
 // Import middleware
-const { auth, upload } = require('../loader');
+const { middleware } = require('../loader');
+const { auth, upload } = middleware;
 
 // Router
 const router = express.Router();

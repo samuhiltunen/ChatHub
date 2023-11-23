@@ -1,0 +1,20 @@
+const mongoose = require('mongoose');
+
+// Create db connection and create models
+const dbConn = async () => {
+    
+    // Connect to database
+    await mongoose.connect(`mongodb://metropolia:koulu123@192.168.50.35:27017/chathub`);
+
+    // Import schemas
+    const userSchema = require('./schemas/user');
+
+    // Create models
+    const User = mongoose.model('User', userSchema);
+
+    // Return models
+    return { User };
+}
+
+// Export db connection
+module.exports = dbConn;

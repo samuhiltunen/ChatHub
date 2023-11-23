@@ -3,9 +3,14 @@
 // Import modules
 const express = require('express');
 const bcrypt = require('bcrypt');
+const { default: ShortUniqueId } = require('short-unique-id');
+const { middleware, database } = require('../loader');
+
+// Database
+const { dbConn } = database;
 
 // Import middleware
-const { auth } = require('../loader');
+const { auth } = middleware;
 
 // Import db controller
 const { DbController } = require("../dbController");
@@ -21,7 +26,7 @@ router.route('/:job')
         // Legacy code
         res.status(301).json({
             error: 'Moved permanently',
-            msg: 'Moved to authServer'
+            content: 'Moved to authServer'
         })
  
     } else if(req.params.job === 'register') {
@@ -42,23 +47,26 @@ router.route('/:job')
 
             // Hash password
             const passHash = await bcrypt.hash(req.body.password, 10);
-            
-            // Add user to database
-            const user = {
-                name: req.body.name,
-                pass: passHash,
-                info: {
-                    avatar: req.body.avatar,
-                    status: '',
-                    bio: req.body.bio,
-                    logged: false,
-                    userCreated: new Date(),
-                    lastOnline: null
-                }
-            };
 
-            const result = await db.insert("users", [user]);
-            res.status(201).json({result: result});
+            // Add user to database
+            dbConn().then(async ({ User }) => {
+                const newUser = new User({
+                    uuid: new ShortUniqueId().randomUUID(8),
+                    name: req.body.name,
+                    pass: passHash,
+                    info: {
+                        avatar: req.body.avatar,
+                        status: '',
+                        bio: req.body.bio,
+                        logged: false,
+                        userCreated: new Date(),
+                        lastOnline: null
+                    }
+                });
+                
+                await newUser.save();
+                res.status(201).json({success: 'User created'});
+            })
             return;
 
         } catch (err) {
@@ -70,27 +78,11 @@ router.route('/:job')
 })
 .get(auth, async (req, res) => {
 
-    // Validate request
-    if(req.body.query === undefined) {
-        res.status(400).json({error: 'Bad request', msg: 'Query is undefined'});
-        return;
-    }
-
-    let options = {
-        sort: req.body.sort ?? {},
-        projection: req.body.proj ?? {},
-    };
-
-    // Remove unwanted properties from options to avoid db errors
-    for(const [key, val] of Object.entries(options.projection)) {
-        if(!val) delete options.projection[key];
-        if(key=='pass') delete options.projection[key]; // Remove password from projection
-    }
-
     // Find user in database
-    db.find("users", req.body.query, options, false)
-    .then(docs => {
-        res.status(200).json({result: docs});
+    dbConn().then(async ({ User }) => {
+        const result = await User.find();
+        console.log(result);
+        res.status(200).json(result);
     })
     .catch(err => {
         console.log(err);

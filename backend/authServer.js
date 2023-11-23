@@ -5,8 +5,11 @@ const { DbController } = require('./dbController');
 const db = new DbController(process.env.MONGO_URI, process.env.MONGO_DB);
 const app = express();
 
+// Import modules
+const { middleware, routes } = require('./loader');
+
 // Import middleware
-const { timestamp, logger, validateJSON, motd, auth, login } = require('./loader');
+const { timestamp, logger, validateJSON, motd, auth, login } = middleware;
 
 app.use(cors());
 app.use(express.json());

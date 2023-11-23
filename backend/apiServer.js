@@ -3,7 +3,13 @@ const app = express();
 const cors = require('cors');
 
 // Import modules
-const { timestamp, logger, motd, validateJSON, users } = require('./loader');
+const { middleware, routes } = require('./loader');
+
+// Import middleware
+const { timestamp, logger, validateJSON, motd } = middleware;
+
+// Import routes
+const { users } = routes;
 
 // Global Middleware
 app.use(cors());
