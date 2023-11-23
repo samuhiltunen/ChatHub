@@ -17,7 +17,7 @@ async function auth(req, res, next) {
     if(token == null) return res.sendStatus(401).json({error: "Unauthorized"});
 
     jwt.verify(token, process.env.ACCESS_TOKEN, (err, payload) => {
-        if(err) return res.sendStatus(403);
+        if(err) return res.sendStatus(403).json({error: "Invalid refresh token"});
         req.user = payload.user;
         next();
     });
