@@ -14,7 +14,7 @@ async function auth(req, res, next) {
     }
 
     // Check if token exists
-    if(token == null) return res.sendStatus(401).sendJSON({error: "Unauthorized"});
+    if(token == null) return res.sendStatus(401).json({error: "Unauthorized"});
 
     jwt.verify(token, process.env.ACCESS_TOKEN, (err, payload) => {
         if(err) return res.sendStatus(403);
