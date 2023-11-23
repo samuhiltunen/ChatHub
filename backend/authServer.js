@@ -75,6 +75,10 @@ app.delete('/logout', auth, async (req, res) => {
 
     // Delete token from database
     await db.delete("tokens", {token: refreshToken})
+
+    // Send response
+    res.status(204).json({success: 'User logged out'});
+
     } catch (err) {
         console.log(err);
         res.status(500).json({error: 'Internal server error'});
