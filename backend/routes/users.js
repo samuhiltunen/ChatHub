@@ -5,7 +5,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 
 // Import middleware
-const { auth } = require('../middleware/auth');
+const { auth } = require('../loader');
 
 // Import db controller
 const { DbController } = require("../dbController");

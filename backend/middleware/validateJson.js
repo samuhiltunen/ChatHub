@@ -10,4 +10,4 @@ function validateJSON(req, res, next) {
 }
 
 // Export middleware
-exports.validateJSON = validateJSON;
+module.exports = validateJSON;

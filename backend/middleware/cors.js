@@ -8,4 +8,4 @@ const cors = corsModule({
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 });
 // Export middleware
-module.exports = { cors };
+module.exports = cors;

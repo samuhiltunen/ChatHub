@@ -10,4 +10,4 @@ const logger = (req, res, next) => {
 }
 
 // Export middleware
-module.exports = { logger };
+module.exports = logger;

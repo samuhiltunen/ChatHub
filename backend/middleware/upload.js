@@ -37,4 +37,4 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage, fileFilter: fileFilter});
 
 // Export middleware
-module.exports = {upload};
+module.exports = upload;

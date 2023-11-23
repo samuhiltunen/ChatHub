@@ -6,7 +6,7 @@ const db = new DbController(process.env.MONGO_URI, process.env.MONGO_DB);
 const app = express();
 
 // Import middleware
-const { auth, validateJSON, motd, logger, timestamp, login }= require('./middleware/export');
+const { timestamp, logger, validateJSON, motd, auth, login } = require('./loader');
 
 app.use(cors());
 app.use(express.json());

@@ -14,4 +14,4 @@ const timestamp = (req, res, next) => {
 }
 
 // Export middleware
-module.exports = { timestamp };
+module.exports = timestamp;

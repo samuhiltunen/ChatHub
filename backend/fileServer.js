@@ -6,11 +6,8 @@ const cors = require('cors');
 // App
 const app = express();
 
-// Middleware
-const { logger, timestamp } = require('./middleware/export');
-
-// Import routes
-const files = require('./routes/files');
+// Import modules
+const { logger, timestamp, files } = require('./loader');
 
 // Serve static files
 app.use(cors());

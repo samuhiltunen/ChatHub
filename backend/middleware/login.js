@@ -29,4 +29,4 @@ async function login(req, res, next) {
 }
 
 // Export middleware
-module.exports = { login };
+module.exports = login;

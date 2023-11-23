@@ -14,4 +14,4 @@ const motd = (req, res, next) => {
 }
 
 // Export middleware
-module.exports = { motd };
+module.exports = motd;
