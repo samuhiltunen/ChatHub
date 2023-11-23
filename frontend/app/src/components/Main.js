@@ -1,17 +1,49 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import "../css/main.css";
 import { Link } from 'react-router-dom';
 import Threads from './Threads';
+import { useNavigate } from 'react-router-dom';
 
 export default function Main() {
     const [asideVisible, setAsideVisible] = useState(true);
     const [mainVisible, setMainVisible] = useState(true)
+    const navigate = useNavigate();
 
     const toggleAside = () => {
         setAsideVisible(!asideVisible);
         setMainVisible(!mainVisible);
         console.log(asideVisible)
     };
+
+    const logOutRoute = "https://auth.chathub.kontra.tel/logout"
+
+    const handleLogout = async (e) => {
+        e.preventDefault();
+
+        const options = {
+            method: 'DELETE',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({ token: localStorage.getItem('refreshToken') })
+          };
+
+        try {
+            const response = await fetch(logOutRoute, options);
+            if (response.ok) {
+                localStorage.removeItem('token');
+                navigate("/");
+                console.log(response.status);
+                console.log("logged out");
+            } else {
+                console.error("Server responded with status:", response.status);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -43,9 +75,7 @@ export default function Main() {
                     <h1>ChatHub</h1>
                 </div>
                 <div className="buttons">
-                    <Link to={"/"}>
-                        <button id="logoutButton">Logout</button>
-                    </Link>
+                    <button id="logoutButton" onClick={handleLogout}>Logout</button>
                     <Link to="/profile">
                         <button id="profileButton">View Profile</button>
                     </Link>
@@ -76,5 +106,5 @@ export default function Main() {
                 </main>
             </section>
         </>
-);
+    );
 }
