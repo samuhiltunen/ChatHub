@@ -1,6 +1,7 @@
 const express = require('express');
-const app = express();
 const cors = require('cors');
+const app = express();
+app.use(cors());
 
 // Import modules
 const { middleware, routes } = require('./loader');
@@ -12,7 +13,6 @@ const { timestamp, logger, validateJSON, motd } = middleware;
 const { users } = routes;
 
 // Global Middleware
-app.use(cors());
 app.use(express.json());
 app.use(timestamp);
 app.use(logger);
