@@ -7,6 +7,7 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [err, setErr] = useState(false);
   const navigate = useNavigate();
 
   const submitRegistration = async (e) => {
@@ -30,6 +31,7 @@ export default function Register() {
         navigate('/main');
       } else {
         console.error("Server responded with status:", response.status);
+        setErr(true);
       }
     } catch (err) {
       console.error(err);
@@ -60,6 +62,7 @@ export default function Register() {
             required
             onChange={e => setConfirmPassword(e.target.value)}
           />
+          {err && <p className="error-register">Check the inputs</p>}
           <button type="submit" onClick={submitRegistration}>
             Register
           </button>
