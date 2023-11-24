@@ -76,19 +76,34 @@ router.route('/:job')
         }
     }
 })
-.get(auth, async (req, res) => {
+.get(auth, (req, res) => {
+
+    const query = req.body.query??req.user.uuid;
 
     // Find user in database
     dbConn().then(async ({ User }) => {
-        const result = await User.find();
-        console.log(result);
-        res.status(200).json(result);
+        new Promise((res, rej) => {
+            switch(req.body.param??'uuid') {
+                case 'uuid':
+                    res(User.find().byUUID(query));
+                    break;
+                case 'mult':
+                    res(User.find().byMult(query));
+                    break;
+
+                default:
+                    res(User.find().byName(query));
+                    break;
+            }
+        })
+        .then(result => {
+        res.status(200).json({content: result});
+        })
     })
     .catch(err => {
         console.log(err);
         res.status(500).json({error: 'Internal server error'});
     });
-    return;
 });
 
 module.exports = router;

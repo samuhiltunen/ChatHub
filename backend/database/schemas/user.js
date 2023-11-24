@@ -2,19 +2,6 @@ const { Schema } = require('mongoose');
 
 // Loader ignore
 
-// Remove sensitive data from user object
-function filter(arr) {
-    if(Array.isArray(arr)) {
-        return arr.map(user => {
-            const { pass, _id, __v, ...rest } = user;
-            return rest;
-        });
-    } else {
-        const { pass, _id, __v, ...rest } = arr;
-        return rest;
-    }
-}
-
 const userSchema = new Schema(
 {
     uuid: String,
@@ -31,7 +18,19 @@ const userSchema = new Schema(
 },{
     query: {
         byUUID(uuid) {
-            this.where({ uuid: new RegExp(uuid, 'i') });
+            return this
+                .where({ uuid: new RegExp(`^${uuid}$`) })
+                .select('-pass -_id -__v');
+        },
+        byName(name) {
+            return this
+                .where({ name: new RegExp(name)})
+                .select('-pass -_id -__v');
+        },
+        byMult(query) {
+            return this
+            .where(query)
+            .select('-pass -_id -__v');
         }
     }
 });

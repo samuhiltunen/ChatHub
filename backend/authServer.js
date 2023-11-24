@@ -92,15 +92,24 @@ app.post('/token', async (req, res) => {
     const refreshToken = req.body.token;
 
     // Check if token exists
-    if(refreshToken == null) return res.sendStatus(400);
+    if(refreshToken == null) {
+        res.sendStatus(400);
+        return;
+    }
 
     // Check if token is in database
     const token = await db.find("tokens", {token: refreshToken}, {}, true);
-    if(token === null) return res.sendStatus(401);
+    if(token === null) {
+        res.sendStatus(401);
+        return;
+    }
 
     // Verify token
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN,async (err, data) => {
-        if(err) return res.sendStatus(403);
+        if(err) {
+            res.sendStatus(403);
+            return;
+        }
 
         // Refresh refresh token in database
         await db.update("tokens", {token: refreshToken}, {$set: {createdAt: new Date()}});
@@ -114,8 +123,8 @@ app.post('/token', async (req, res) => {
         // Create new access token
         const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN, { expiresIn: '15m' });
         res.status(200).json({accessToken: accessToken});
+        return;
     });
-    return;
 });
 
 // Start server
