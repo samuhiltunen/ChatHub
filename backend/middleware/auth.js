@@ -12,19 +12,20 @@ function auth(req, res, next) {
             name: 'dev',
             uuid: 'fG4ZHdiG'
         };
-        return next();
+        next();
     }
 
     // Check if token exists
     if(token == null) return res.sendStatus(401).json({error: "Unauthorized"});
 
     jwt.verify(token, process.env.ACCESS_TOKEN, (err, payload) => {
-        if(err) return res.sendStatus(403).json({error: "Forbidden"});
+        if(err) res.sendStatus(403).json({error: "Forbidden"});
         else {
             req.user = payload.user;
-            return next();
+            next();
         }
     });
+    return;
 }
 
 // Export middleware

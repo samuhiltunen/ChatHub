@@ -18,8 +18,8 @@ const { files } = routes;
 
 // Serve static files
 app.use(timestamp)
-app.use(logger);
 app.use(express.static(path.join(__dirname, 'files')));
+app.use(logger);
 
 // Routes
 app.use('/files', files)
@@ -28,6 +28,7 @@ app.use('/files', files)
 const port = process.env.FILE_PORT || 3002;
 app.listen(port, () => {
     console.log(`File server listening on port ${port}`);
+    return;
 })
 
 // Peten wifi salasana

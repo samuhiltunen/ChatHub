@@ -15,9 +15,9 @@ const { users } = routes;
 // Global Middleware
 app.use(express.json());
 app.use(timestamp);
-app.use(logger);
 app.use(validateJSON);
 app.use(motd);
+app.use(logger);
 
 // Routes
 app.use('/users', users);
