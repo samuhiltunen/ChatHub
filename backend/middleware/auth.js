@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 function auth(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-
+    
     // Dev ip
     if(req.ip == '::1') {
         console.log('dev route');
@@ -14,9 +14,9 @@ function auth(req, res, next) {
         };
         next();
     }
-
+    
     // Check if token exists
-    if(token == null) return res.sendStatus(401).json({error: "Unauthorized"});
+    if(token == null) res.sendStatus(401).json({error: "Unauthorized"});
 
     jwt.verify(token, process.env.ACCESS_TOKEN, (err, payload) => {
         if(err) res.sendStatus(403).json({error: "Forbidden"});
