@@ -8,12 +8,16 @@ const dbConn = async () => {
 
     // Import schemas
     const userSchema = require('./schemas/user');
+    const tokenSchema = require('./schemas/token');
+    const fileSchema = require('./schemas/file');
 
     // Create models
     const User = mongoose.model('User', userSchema);
+    const Token = mongoose.model('Token', tokenSchema);
+    const File = mongoose.model('File', fileSchema);
 
     // Return models
-    return { User };
+    return { User, Token, File };
 }
 
 // Export db connection

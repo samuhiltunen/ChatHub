@@ -21,7 +21,6 @@ function auth(req, res, next) {
     jwt.verify(token, process.env.ACCESS_TOKEN, (err, payload) => {
         if(err) return res.sendStatus(403).json({error: "Forbidden"});
         else {
-            console.log(payload);
             req.user = payload.user;
             return next();
         }

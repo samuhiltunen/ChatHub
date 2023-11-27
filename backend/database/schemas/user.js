@@ -19,19 +19,20 @@ const userSchema = new Schema(
     query: {
         byUUID(uuid) {
             return this
-                .where({ uuid: new RegExp(`^${uuid}$`) })
-                .select('-pass -_id -__v');
+            .where({ uuid: new RegExp(`^${uuid}$`) })
+            .select('-pass -_id -__v');
         },
         byName(name) {
             return this
-                .where({ name: new RegExp(name)})
-                .select('-pass -_id -__v');
+            .where({ name: new RegExp(name)})
+            .select('-pass -_id -__v');
         },
         byMult(query) {
             return this
             .where(query)
             .select('-pass -_id -__v');
-        }
+        },
+        
     }
 });
 

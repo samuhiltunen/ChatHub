@@ -1,9 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const {DbController} = require('../dbController');
 const { default: ShortUniqueId } = require('short-unique-id');
-const db = new DbController(process.env.MONGO_URI, process.env.MONGO_DB);
 const uid = new ShortUniqueId({length: 10});
 
 const fileFilter = (req, file, cb) => {

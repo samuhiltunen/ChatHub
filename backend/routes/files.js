@@ -1,12 +1,10 @@
 // Import modules
 const express = require('express');
+const { middleware, database } = require('../loader');
 
-// Import database controller
-const { DbController } = require("../dbController");
-const db = new DbController(process.env.MONGO_URI, process.env.MONGO_DB);
 
 // Import middleware
-const { middleware } = require('../loader');
+const { dbConn } = database;
 const { auth, upload } = middleware;
 
 // Router
@@ -22,6 +20,7 @@ router.route('/')
 
     // Create file object
     const fileObj = {
+        ufid: req.file.filename,
         name: req.file.originalname,
         path: `${req.hostname}/${req.file.filename}`,
         owner: req.user.name,
@@ -30,12 +29,14 @@ router.route('/')
     }
 
     // Add file to database
-    db.insert("files", [fileObj])
-    .then(result => {
-        res.status(200).json({msg: 'File uploaded', file: fileObj});
-    })
-    .catch(err => {
-        res.status(500).json({error: "Internal server error"});
+    dbConn().then(async ({ File }) => {
+        const newFile = new File(fileObj);
+        await newFile.save();
+
+        res.status(200).json({result: newFile});
+    }).catch(()=> {
+        res.status(500).json({error: 'Internal server error'});
+        return;
     });
 })
 .get(auth, (req, res) => {
@@ -46,21 +47,12 @@ router.route('/')
     }
 
     // Get files from database
-    let options = {
-        sort: req.body.sort ?? {},
-        projection: req.body.proj ?? {path: 1},
-    };
-    for(const [key, val] of Object.entries(options.projection)) {
-        if(!val) delete options.projection[key];
-    }
-    const single = Array.isArray(req.body.query);
-
-    db.find("files", req.body.query, options, single)
-    .then(result => {
-        res.status(200).json({result: result});
-    })
-    .catch(err => {
-        res.status(500).json({error: "Internal server error"});
+    dbConn().then(async ({ File }) => {
+        const files = await File.find().byUFID(req.body.query);
+        res.status(200).json({result: files});
+    }).catch(() => {
+        res.status(500).json({error: 'Internal server error'});
+        return;
     });
 });
 

@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
-const { DbController } = require('../dbController');
-const db = new DbController(process.env.MONGO_URI, process.env.MONGO_DB);
+const { database } = require('../loader');
+const { dbConn } = database;
 
 // Validate user login
 async function login(req, res, next) {
@@ -11,21 +11,33 @@ async function login(req, res, next) {
     }
 
     // Check if user exists in database
-    const user = await db.find("users", {name: req.body.name}, {}, true);
-    if(user === null) {
-        res.status(403).json({error: 'User does not exist'});
-        return;
-    }
+    dbConn()
+    .then(({ User }) => {
+        return new Promise((resolve)=>{
+            resolve(User.findOne({name: req.body.name}));
+        });
+    })
+    .then(async (user) => {
 
-    // Compare passwords
-    if(! await bcrypt.compare(req.body.password, user.pass)) {
-        res.status(403).json({error: 'Wrong password'});
-        return;
-    }
+        // Compare passwords
+        if(!await bcrypt.compare(req.body.password, user.pass)) {
+            res.status(403).json({error: 'Invalid password'});
+            return;
+        }
 
-    // Add user to request
-    req.user = user;
-    next();
+        // Change user logged in status and last online
+        user.info.logged = true;
+        await user.save();
+        
+        // Add user to request
+        req.user = user;
+        next();
+
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({error: 'Internal server error'});
+        return;
+    });
 }
 
 // Export middleware

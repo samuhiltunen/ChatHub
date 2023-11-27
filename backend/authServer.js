@@ -1,13 +1,14 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
-const { DbController } = require('./dbController');
-const db = new DbController(process.env.MONGO_URI, process.env.MONGO_DB);
 const app = express();
 app.use(cors());
 
 // Import modules
-const { middleware, routes } = require('./loader');
+const { middleware, database } = require('./loader');
+
+// Import database
+const { dbConn } = database;
 
 // Import middleware
 const { timestamp, logger, validateJSON, motd, auth, login } = middleware;
@@ -44,12 +45,20 @@ app.post('/login', login, async (req, res) => {
 
         // Add refresh token to database
         // MongoDB will automatically remove tokens after 24 hours
-        const response = await db.update("tokens", {token: refreshToken},
-            {$set: {createdAt: new Date(), token: refreshToken}}, 
-            {upsert: true});
+        dbConn().then(async ({ Token }) => {
+            const newToken = new Token({
+                token: refreshToken,
+                createdAt: new Date()
+            });
+            await newToken.save();
+        });
 
         // Update user logged in status
-        await db.update("users", {name: req.user.name}, {$set: {"info.logged": true}});
+        dbConn().then(async ({ User }) => {
+            const user = await User.findOne({name: req.user.name});
+            user.info.logged = true;
+            await user.save();
+        });
 
         // Send tokens to client
         res.status(200).json({accessToken: accessToken, refreshToken: refreshToken});
@@ -71,10 +80,18 @@ app.delete('/logout', auth, async (req, res) => {
 
     try{
     // Change user logged in status and last online
-    await db.update("users", {name: req.user.name}, {$set: {"info.logged": false, "info.lastOnline": new Date()}});
+    dbConn().then(async ({ User }) => {
+        const user = await User.findOne({name: req.user.name});
+        user.info.logged = false;
+        user.info.lastOnline = new Date();
+        await user.save();
+    });
 
     // Delete token from database
-    await db.delete("tokens", {token: refreshToken})
+    dbConn().then(async ({ Token }) => {
+        const token = await Token.findOne({token: refreshToken});
+        await token.remove();
+    });
 
     // Send response
     res.status(204).json({success: 'User logged out'});
@@ -97,34 +114,46 @@ app.post('/token', async (req, res) => {
         return;
     }
 
-    // Check if token is in database
-    const token = await db.find("tokens", {token: refreshToken}, {}, true);
-    if(token === null) {
-        res.sendStatus(401);
+    try {
+        // Check if token is in database
+        dbConn().then(async ({ Token }) => {
+            const token = await Token.findOne({token: refreshToken});
+            if(token == null) {
+                res.sendStatus(403);
+                return;
+            }
+        });
+
+        // Verify token
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN,async (err, data) => {
+            if(err) {
+                res.sendStatus(403);
+                return;
+            }
+
+            // Refresh token date in database
+            dbConn().then(async ({ Token }) => {
+                const token = await Token.findOne({token: refreshToken});
+                token.createdAt = new Date();
+                await token.save();
+            });
+
+            // Payload for new access token
+            const payload = {
+                flags: "refresh",
+                user: data.user
+            };
+
+            // Create new access token
+            const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN, { expiresIn: '15m' });
+            res.status(200).json({accessToken: accessToken});
+            return;
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({error: 'Internal server error'});
         return;
     }
-
-    // Verify token
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN,async (err, data) => {
-        if(err) {
-            res.sendStatus(403);
-            return;
-        }
-
-        // Refresh refresh token in database
-        await db.update("tokens", {token: refreshToken}, {$set: {createdAt: new Date()}});
-
-        // Payload for new access token
-        const payload = {
-            flags: "refresh",
-            user: data.user
-        };
-
-        // Create new access token
-        const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN, { expiresIn: '15m' });
-        res.status(200).json({accessToken: accessToken});
-        return;
-    });
 });
 
 // Start server

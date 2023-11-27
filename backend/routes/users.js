@@ -12,10 +12,6 @@ const { dbConn } = database;
 // Import middleware
 const { auth } = middleware;
 
-// Import db controller
-const { DbController } = require("../dbController");
-const db = new DbController(process.env.MONGO_URI, process.env.MONGO_DB);
-
 // Router
 const router = express.Router();
 
@@ -31,49 +27,45 @@ router.route('/:job')
  
     } else if(req.params.job === 'register') {
         // Do register
-        try {
-            
-            // Check if request is valid
-            if(req.body.name === undefined || req.body.password === undefined) {
-                res.status(400).json({error: 'Bad request'});
-                return;
-            }
-            
-            // Check if user exists in database
-            if(await db.find("users", {name: req.body.name}, {}, true) !== null) {
-                res.status(403).json({error: 'User already exists'})
-                return;
-            }
-
-            // Hash password
-            const passHash = await bcrypt.hash(req.body.password, 10);
-
-            // Add user to database
-            dbConn().then(async ({ User }) => {
-                const newUser = new User({
-                    uuid: new ShortUniqueId().randomUUID(8),
-                    name: req.body.name,
-                    pass: passHash,
-                    info: {
-                        avatar: req.body.avatar,
-                        status: '',
-                        bio: req.body.bio,
-                        logged: false,
-                        userCreated: new Date(),
-                        lastOnline: null
-                    }
-                });
-                
-                await newUser.save();
-                res.status(201).json({success: 'User created'});
-            })
+        if(!req.body.name || !req.body.password) {
+            res.status(400).json({error: 'Bad request'});
             return;
+        }
 
-        } catch (err) {
+        // Start database connection
+        dbConn().then(async ({ User }) => {
+
+            // Check if user exists
+            if(await User.exists({name: req.body.name})) {
+                res.status(409).json({error: 'User already exists'});
+                return;
+            }
+
+            const newUser = new User({
+                uuid: new ShortUniqueId().randomUUID(8),
+                name: req.body.name,
+                pass: bcrypt.hashSync(req.body.password, 10),
+                info: {
+                    avatar: req.body.avatar??'default',
+                    status: 'Hello there! I am new to ChatHub.',
+                    bio: req.body.bio??'',
+                    logged: false,
+                    userCreated: Date.now(),
+                    lastOnline: Date.now()
+                }
+            });
+
+            // Save user to database
+            newUser.save();
+
+            // Response
+            res.status(201).json({content: 'User created'});
+
+        }).catch(err => {
             console.log(err);
             res.status(500).json({error: 'Internal server error'});
             return;
-        }
+        });
     }
 })
 .get(auth, (req, res) => {
@@ -82,7 +74,7 @@ router.route('/:job')
 
     // Find user in database
     dbConn().then(async ({ User }) => {
-        new Promise((res, rej) => {
+        new Promise((res) => {
             switch(req.body.param??'uuid') {
                 case 'uuid':
                     res(User.find().byUUID(query));
