@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "../css/main.css";
 import { Link } from 'react-router-dom';
 import "../css/profile.css";
@@ -23,6 +23,35 @@ const StatusChanger = () => {
   const handleInputChange = (e) => {
     setNewStatus(e.target.value);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    const fetchData = async () => {
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        };
+
+        try {
+            const response = await fetch("https://auth.chathub.kontra.tel/users", options);
+            const data = await response.json();
+            if (response.ok) {
+                console.log(response.status);
+                console.log(data);
+            } else {
+                console.error("Server responded with status:", response.status);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    fetchData();
+}, []);
 
   return (
     <div>
