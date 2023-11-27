@@ -3,10 +3,10 @@ import "../css/main.css";
 import { Link } from 'react-router-dom';
 import "../css/profile.css";
 import ProfilePictureChanger from './TestPhoto';
-import { useLogout } from './useLogout';
+import { Logout } from './Logout';
 
 const StatusChanger = () => {
-  const [status, setStatus] = useState('Hello, My name is Dimitri!');
+  const [status, setStatus] = useState('Hello, My name is TestUser!');
   const [isEditing, setIsEditing] = useState(false);
   const [newStatus, setNewStatus] = useState(status);
 
@@ -46,7 +46,7 @@ const StatusChanger = () => {
 };
 
 export default function Profile() {
-  const handleLogout = useLogout();
+  const handleLogout = Logout();
 
   return (
     <>
@@ -74,7 +74,7 @@ export default function Profile() {
           <p>Click photo to change profile picture</p>
           <p>Your name</p>
           {/*make maxium status length 20 characters*/}
-          <h2>RussianProChatter123</h2>
+          <h2>TestUser</h2>
           <p>Status</p>
           {/*make maxium status length 40 characters*/}
           <StatusChanger />

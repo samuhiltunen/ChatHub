@@ -1,7 +1,8 @@
 // useLogout.js
 import { useNavigate } from 'react-router-dom';
+import { TokenRefresh } from './TokenRefresh';
 
-export const useLogout = () => {
+export const Logout = () => {
     const navigate = useNavigate();
 
     const handleLogout = async (e) => {
@@ -12,9 +13,9 @@ export const useLogout = () => {
 
         const options = {
             method: 'DELETE',
-            headers: { 
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({ token: refreshToken })
         };
@@ -27,7 +28,10 @@ export const useLogout = () => {
                 navigate("/");
                 console.log(response.status);
                 console.log("logged out");
-            } else {
+            } else if (response.status === 401) {
+                TokenRefresh();
+            }
+            else {
                 console.error("Server responded with status:", response.status);
             }
         } catch (err) {

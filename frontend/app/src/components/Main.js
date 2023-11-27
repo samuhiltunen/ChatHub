@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react';
 import "../css/main.css";
 import { Link } from 'react-router-dom';
 import Threads from './Threads';
-import { useNavigate } from 'react-router-dom';
 import Messages from './Messages';
-import { useLogout } from './useLogout';
+import { Logout } from './Logout';
 
 export default function Main() {
     const [asideVisible, setAsideVisible] = useState(true);
     const [mainVisible, setMainVisible] = useState(true)
-    const navigate = useNavigate();
 
     const toggleAside = () => {
         setAsideVisible(!asideVisible);
@@ -17,7 +15,7 @@ export default function Main() {
         console.log(asideVisible)
     };
 
-    const handleLogout = useLogout();
+    const handleLogout = Logout();
 
     useEffect(() => {
         const handleResize = () => {
