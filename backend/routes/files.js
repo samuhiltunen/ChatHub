@@ -13,6 +13,9 @@ const router = express.Router();
 router.route('/')
 .post(auth, upload.single('file'), (req, res) => {
     // Check if file was uploaded
+
+    console.log('file upload');
+
     if(req.file === undefined) {
         res.status(400).json({error: 'Bad request'});
         return;

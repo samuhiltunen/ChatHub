@@ -6,24 +6,24 @@ function auth(req, res, next) {
     const token = authHeader && authHeader.split(' ')[1];
 
     // Dev ip
-    if(req.ip == '::1') {
-        console.log('dev route');
-        req.user = {
-            name: 'dev',
-            uuid: 'fG4ZHdiG'
-        };
-        next();
-    }
-    
+    //if(req.ip == '::1') {
+    //    console.log('dev route');
+    //    req.user = {
+    //        name: 'dev',
+    //        uuid: 'fG4ZHdiG'
+    //    };
+    //    //next();
+    //}
+    console.log('Auth');
     // Check if token exists
-    if(token == null) 
-        res.sendStatus(401).json({error: "Unauthorized"});
+    if(token === undefined) res.status(401).json({error: "Unauthorized"});
     else {
         // Verify token
         jwt.verify(token, process.env.ACCESS_TOKEN, (err, payload) => {
-            if(err) res.sendStatus(403).json({error: "Forbidden"});
+            if(err) res.status(403).json({error: "Forbidden"});
             else {
                 req.user = payload.user;
+                console.log('Auth success');
                 next();
             }
         });
