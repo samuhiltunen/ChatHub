@@ -89,8 +89,7 @@ app.delete('/logout', auth, async (req, res) => {
 
     // Delete token from database
     dbConn().then(async ({ Token }) => {
-        const token = await Token.findOne({token: refreshToken});
-        await token.remove();
+        await Token.deleteOne({token: refreshToken});
     });
 
     // Send response
