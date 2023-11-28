@@ -14,13 +14,13 @@ function auth(req, res, next) {
     //    };
     //    //next();
     //}
-    console.log('Auth');
+    console.log('Starting auth');
     // Check if token exists
-    if(token === undefined) res.status(401).json({error: "Unauthorized"});
+    if(token === undefined) res.status(400).json({error: "Missing auth"});
     else {
         // Verify token
         jwt.verify(token, process.env.ACCESS_TOKEN, (err, payload) => {
-            if(err) res.status(403).json({error: "Forbidden"});
+            if(err) res.status(401).json({error: "Unauthorized"});
             else {
                 req.user = payload.user;
                 console.log('Auth success');
