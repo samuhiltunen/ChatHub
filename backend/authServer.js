@@ -121,17 +121,26 @@ app.post('/token', async (req, res) => {
         });
     })
     .then((token) => {
-        // Check if token exists
-        if(token == null) {
-            res.status(403).json({error: 'Forbidden', content: 'Token not found'});
-            return;
-        }
-
         // Verify token
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, user) => {
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, tokenload) => {
             if(err) {
                 res.status(403).json({error: 'Forbidden', content: 'Token not valid'});
                 return;
+            }
+
+            // Check if token exists
+            if(token == null) {
+
+            // Change user logged in status and last online
+            dbConn().then(async ({ User }) => {
+                const user = await User.findOne({name: tokenload.user.name});
+                user.info.logged = false;
+                user.info.lastOnline = new Date();
+                await user.save();
+            });
+
+            res.status(403).json({error: 'Forbidden', content: 'Token not found'});
+            return;
             }
 
             // Update refresh token
@@ -142,7 +151,7 @@ app.post('/token', async (req, res) => {
             // Payload for tokens
             const payload = {
                 flags: "refresh",
-                user: user.user
+                user: tokenload.user
             };
 
             // Create new access token
