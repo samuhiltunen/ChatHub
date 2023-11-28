@@ -58,7 +58,8 @@ router.route('/')
             res.status(200).json({result: files});
         else {
             // Download file
-            res.download(files[0].path, files[0].name);
+            const path = files[0].path.replace(req.hostname, 'backend/files');
+            res.download(path, files[0].name);
         }
     }).catch(() => {
         res.status(500).json({error: 'Internal server error'});
