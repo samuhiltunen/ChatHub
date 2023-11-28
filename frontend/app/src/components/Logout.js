@@ -11,7 +11,7 @@ export const Logout = () => {
         const token = localStorage.getItem('token');
         const refreshToken = localStorage.getItem('refreshToken');
 
-        const options = {
+        let options = {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -21,18 +21,23 @@ export const Logout = () => {
         };
 
         try {
-            const response = await fetch("https://auth.chathub.kontra.tel/logout", options);
+            let response = await fetch("https://auth.chathub.kontra.tel/logout", options);
+            if (response.status === 401) {
+                console.log("refreshing token");
+                await TokenRefresh();
+                // Update options with the new token
+                options.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+                // Retry logout after refreshing the token
+                response = await fetch("https://auth.chathub.kontra.tel/logout", options);
+            }
             if (response.ok) {
                 localStorage.removeItem('token');
                 localStorage.removeItem('refreshToken');
                 navigate("/");
                 console.log(response.status);
                 console.log("logged out");
-            } else if (response.status === 401) {
-                TokenRefresh();
-            }
-            else {
-                console.error("Server responded with status:", response.status);
+            } else {
+                console.error("/logout Server responded with status:", response.status);
             }
         } catch (err) {
             console.error(err);

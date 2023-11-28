@@ -10,18 +10,16 @@ export const TokenRefresh = async () => {
         body: JSON.stringify({ token: refreshToken })
     };
 
-    try {
-        const response = await fetch("https://auth.chathub.kontra.tel/token", options);
-        const data = await response.json();
-        if (response.ok) {
-            localStorage.removeItem('token');
-            localStorage.setItem('token', data.token);
-            console.log(response.status);
-            console.log("token refreshed");
-        } else {
-            console.error("Server responded with status:", response.status);
-        }
-    } catch (err) {
-        console.error(err);
-    }
+    return fetch("https://auth.chathub.kontra.tel/token", options)
+        .then(response => response.json().then(data => ({ ok: response.ok, status: response.status, data })))
+        .then(({ ok, status, data }) => {
+            if (ok) {
+                localStorage.removeItem('token');
+                localStorage.setItem('token', data.accessToken);
+                console.log(status);
+                console.log("token refreshed");
+            } else {
+                throw new Error("Server responded with status: " + status);
+            }
+        });
 }
