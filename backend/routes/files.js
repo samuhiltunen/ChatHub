@@ -23,7 +23,7 @@ router.route('/')
 
     // Create file object
     const fileObj = {
-        ufid: req.file.filename,
+        ufid: req.file.filename.split('/')[1].split('.')[0], // Dumb way to get ufid but im lazy
         name: req.file.originalname,
         path: `${req.hostname}/${req.file.filename}`,
         owner: req.user.name,
