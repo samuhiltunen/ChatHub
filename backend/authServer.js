@@ -121,14 +121,14 @@ app.post('/token', async (req, res) => {
     .then(async (token, Token) => {
         // Check if token exists
         if(token == null) {
-            res.sendStatus(403);
+            res.status(403).json({error: 'Forbidden', content: 'Token not found'});
             return;
         }
 
         // Verify token
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, user) => {
             if(err) {
-                res.sendStatus(403);
+                res.status(403).json({error: 'Forbidden', content: 'Token not valid'});
                 return;
             }
 
