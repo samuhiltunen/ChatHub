@@ -115,10 +115,12 @@ app.post('/token', async (req, res) => {
 
     // Check if token is in database
     dbConn()
-    .then(async ({ Token }) => {
-        return await Token.findOne({token: refreshToken});
+    .then(({ Token }) => {
+        return new Promise((res) => {
+            res(Token.findOne({token: refreshToken}));
+        });
     })
-    .then(async (token, Token) => {
+    .then((token) => {
         // Check if token exists
         if(token == null) {
             res.status(403).json({error: 'Forbidden', content: 'Token not found'});
@@ -133,8 +135,10 @@ app.post('/token', async (req, res) => {
             }
 
             // Update refresh token
-            Token.updateOne({token: refreshToken}, {createdAt: new Date()});
-
+            dbConn().then(({ Token }) => {
+                Token.updateOne({token: refreshToken}, {createdAt: new Date()});
+            });
+            
             // Payload for tokens
             const payload = {
                 flags: "refresh",
