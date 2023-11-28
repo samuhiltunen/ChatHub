@@ -6,7 +6,7 @@ const uid = new ShortUniqueId({length: 10});
 
 const fileFilter = (req, file, cb) => {
     // Allowed extensions
-    const fileTypes = /jpeg|jpg|png|gif|wav|ogg|mp3|mp4|avi|pdf/;
+    const fileTypes = /jpeg|jpg|png|gif|wav|ogg|mp3|mp4|avi|pdf|zip/;
     // Check extension
     if(fileTypes.test(path.extname(file.originalname).toLocaleLowerCase())) {
         cb(null, true);
