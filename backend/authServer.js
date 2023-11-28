@@ -113,46 +113,43 @@ app.post('/token', async (req, res) => {
         return;
     }
 
-    try {
-        // Check if token is in database
-        dbConn().then(async ({ Token }) => {
-            const token = await Token.findOne({token: refreshToken});
-            if(token == null) {
-                res.sendStatus(403);
-                return;
-            }
-        });
+    // Check if token is in database
+    dbConn()
+    .then(async ({ Token }) => {
+        return await Token.findOne({token: refreshToken});
+    })
+    .then(async (token) => {
+        // Check if token exists
+        if(token == null) {
+            res.sendStatus(403);
+            return;
+        }
 
         // Verify token
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN,async (err, data) => {
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, user) => {
             if(err) {
                 res.sendStatus(403);
                 return;
             }
 
-            // Refresh token date in database
-            dbConn().then(async ({ Token }) => {
-                const token = await Token.findOne({token: refreshToken});
-                token.createdAt = new Date();
-                await token.save();
-            });
-
-            // Payload for new access token
+            // Payload for tokens
             const payload = {
-                flags: "refresh",
-                user: data.user
+                flags: "token",
+                user: user.user
             };
 
             // Create new access token
             const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN, { expiresIn: '15m' });
+
+            // Send token to client
             res.status(200).json({accessToken: accessToken});
             return;
         });
-    } catch (err) {
+    }).catch((err) => {
         console.log(err);
         res.status(500).json({error: 'Internal server error'});
         return;
-    }
+    });
 });
 
 // Start server
