@@ -19,7 +19,9 @@ Chathub backend consists of three main components that are all hosted on the sam
 - [Login user](#login-user)
 - [Logout user](#logout-user)
 - [Refresh token](#refresh-token)
-- [Find users](#get-user)
+- [Get user](#get-user)
+- [Upload file](#upload-file)
+- [Get file](#get-file)
 
 ### Database
 
@@ -241,3 +243,107 @@ Parameters search for the exact value given. If you would like to search for a p
 To access nested objects, use dot notation. **ie:** `?info.logged=true` will return a list of users that are currently logged in.
 
 Database object structures can be found in the [database section](#database).
+
+## Upload File
+
+[**Back ➩**](#table-of-contents)
+
+Uploads a file to the server and returns the a file object.
+
+- Request: **POST:** `https://file.chathub.kontra.tel/files`
+- AUTH: token
+
+### Parameters
+
+| Name     | Type   | Description                                                  |
+| -------- | ------ | ------------------------------------------------------------ |
+| file | file | The file to be uploaded. |
+
+### Returns
+
+- 200 OK - File uploaded successfully.
+  - ufid: ID of the file.
+  - name: Original name of the file.
+  - path: URL of the file.
+  - owner: ID of the user who uploaded the file.
+  - size: Size of the file.
+  - createdAt: Date the file was uploaded.
+- 401 Unauthorized - Token is invalid or missing.
+- 403 Forbidden - Token is expired.
+- 413 Payload Too Large - File is too large.
+- 500 Internal Server Error - Server error.
+
+
+### Example
+  
+  ```javascript
+  const form = new FormData();
+form.append("file", "te-palvelut.400x239jpg.jpg");
+
+const options = {
+  method: 'POST',
+  headers: {
+    Authorization: 'Bearer <auth token>'
+  }
+};
+
+options.body = form;
+
+// Delete the Content-Type header from the fetch options
+// so the browser can set it automatically
+delete options.headers['Content-Type'];
+
+fetch('https://file.chathub.kontra.tel/files', options)
+  .then(response => response.json())
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
+  ```
+
+## Get File
+
+[**Back ➩**](#table-of-contents)
+
+Gets a file object or downloads the file.
+
+- Request: **GET:** `https://file.chathub.kontra.tel/files`
+
+### Parameters
+
+| Name     | Type   | Description                                                  |
+| -------- | ------ | ------------------------------------------------------------ |
+| ufid | string | ID of the file. |
+| download | boolean | If true, downloads the file. |
+
+### Returns
+
+- 200 OK - File found.
+  - ufid: ID of the file.
+  - name: Original name of the file.
+  - path: URL of the file.
+  - owner: ID of the user who uploaded the file.
+  - size: Size of the file.
+  - createdAt: Date the file was uploaded.
+- 200 OK - Fie data (Only id download is true).
+- 404 Not Found - File not found.
+- 401 Unauthorized - Token is invalid or missing.
+- 500 Internal Server Error - Server error.
+
+### Example
+
+```javascript
+const options = {
+  method: 'GET',
+  headers: {
+    Authorization: 'Bearer <auth token>'
+  }
+};
+
+fetch('https://file.chathub.kontra.tel/files?ufid=w4HPV38nBU&download=true', options)
+  .then(response => response.json())
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
+```
+
+## Users
+
+[**Back ➩**](#table-of-contents)
