@@ -52,7 +52,14 @@ router.route('/')
     // Get files from database
     dbConn().then(async ({ File }) => {
         const files = await File.find().byUFID(req.query.ufid);
-        res.status(200).json({result: files});
+
+        // Check if we should download file
+        if(req.query.download !== 'true')
+            res.status(200).json({result: files});
+        else {
+            // Download file
+            res.download(files[0].path, files[0].name);
+        }
     }).catch(() => {
         res.status(500).json({error: 'Internal server error'});
         return;
