@@ -1,6 +1,5 @@
 // Logger middleware
 const logger = (req, res, next) => {
-   console.log('Logger');
     next();
     console.log(`
     [${req.currtime}] ${req.method}: ${req.hostname}${req.url} requested from ${req.header('x-forwarded-for')}
@@ -12,6 +11,5 @@ const logger = (req, res, next) => {
        L [${JSON.stringify(res.statusCode)}] ${JSON.stringify(res.statusMessage)}
     `);
 }
-
 // Export middleware
 module.exports = logger;

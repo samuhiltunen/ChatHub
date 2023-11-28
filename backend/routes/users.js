@@ -70,9 +70,18 @@ router.route('/:job')
     // Find user in database
     dbConn().then(async ({ User }) => {
         new Promise((res) => {
+            
             const search = {};
-            for(const key in req.query) {
-                search[key] = new RegExp(req.query[key]);
+
+            // Make search object
+            for(const [key, val] of Object.entries(req.query)) {
+                
+                // Check if key is regex
+                if(RegExp('^/.*/$').test(val)) {
+                    search[key] = RegExp(val.slice(1, -1));
+                    continue;
+                }
+                search[key] = val;
             }
             res(User.find().byMult(search));
         })

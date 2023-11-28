@@ -206,10 +206,9 @@ Search for user information.
 
 ### Parameters
 
-| Name     | Type   | Description                                                  |
-| -------- | ------ | ------------------------------------------------------------ |
-| param    | string | Name of the search function |
-| query    | string | Query for the search function |
+The parameters correspond to the fields in the user object.
+
+Database object structures can be found in the [database section](#database).
 
 ### Returns
 
@@ -227,38 +226,18 @@ Search for user information.
 const options = {
   method: 'GET',
   headers: {
-    Authorization: 'Bearer <auth token>',
-    'Content-Type': 'application/json'
-  },
-  body: '{"param":"mult","query":{"info.logged":"false"}}'
+    Authorization: 'Bearer <auth token>'
+  }
 };
 
-fetch('http://localhost:3001/users/test', options)
+fetch(encodeUri('http://localhost:3001/users/get?name=^devUser$'), options)
   .then(response => response.json())
   .then(response => console.log(response))
   .catch(err => console.error(err));
 ```
 
-### Search Functions
+Parameters search for the exact value given. If you would like to search for a partial value, use regex. **ie:** `?name=/^devUser$/` will return a list of users with the name `devUser`. `?name=/^dev/` will return a list of users with names that start with `dev`.
 
-| Name       | Description    | Example                                                      |
-| ---------- | -------------- | ------------------------------------------------------------ |
-| uuid | Search for uuid param  | <pre>{<br>  "param": "uuid",<br>  "query": "testUser"<br>}|
-| name | Search for name param  | <pre>{<br>  "param": "name",<br>  "query": "testUser"<br>}|
-| mult | Search for multiple parameters.|<pre>{<br>  "param": "mult",<br>  "query": {<br>    "info.logged": "false",<br>    "name": "testUser"<br>  }<br>} |
-
-All search functions return a list of users that match the query.
-Queries accept regex.
+To access nested objects, use dot notation. **ie:** `?info.logged=true` will return a list of users that are currently logged in.
 
 Database object structures can be found in the [database section](#database).
-
-### Regex example
-
-```javascript
-const query = {
-  param: 'name',
-  query: '^testUser$'
-};
-```
-
-The above will only match the exact username `testUser` and not `testUser1` or `testUser2`.
