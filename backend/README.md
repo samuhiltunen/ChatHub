@@ -230,7 +230,7 @@ const options = {
   }
 };
 
-fetch(encodeUri('http://localhost:3001/users/get?name=^devUser$'), options)
+fetch(encodeUri('http://localhost:3001/users/get?name=/^devUser$/'), options)
   .then(response => response.json())
   .then(response => console.log(response))
   .catch(err => console.error(err));
