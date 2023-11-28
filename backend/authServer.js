@@ -118,7 +118,7 @@ app.post('/token', async (req, res) => {
     .then(async ({ Token }) => {
         return await Token.findOne({token: refreshToken});
     })
-    .then(async (token) => {
+    .then(async (token, Token) => {
         // Check if token exists
         if(token == null) {
             res.sendStatus(403);
@@ -132,9 +132,12 @@ app.post('/token', async (req, res) => {
                 return;
             }
 
+            // Update refresh token
+            Token.updateOne({token: refreshToken}, {createdAt: new Date()});
+
             // Payload for tokens
             const payload = {
-                flags: "token",
+                flags: "refresh",
                 user: user.user
             };
 
