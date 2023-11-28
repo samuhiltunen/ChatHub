@@ -44,14 +44,14 @@ router.route('/')
 })
 .get(auth, (req, res) => {
     // Validate query
-    if(req.body.query === undefined) {
+    if(req.query.ufid === undefined) {
         res.status(400).json({error: 'Bad request'});
         return;
     }
 
     // Get files from database
     dbConn().then(async ({ File }) => {
-        const files = await File.find().byUFID(req.body.query);
+        const files = await File.find().byUFID(req.query.ufid);
         res.status(200).json({result: files});
     }).catch(() => {
         res.status(500).json({error: 'Internal server error'});
