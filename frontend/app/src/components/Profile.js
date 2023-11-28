@@ -5,7 +5,7 @@ import "../css/profile.css";
 import ProfilePictureChanger from './TestPhoto';
 import { Logout } from './Logout';
 
-const StatusChanger = () => {
+const StatusChanger = ({ username }) => {
   const [status, setStatus] = useState('Hello, My name is TestUser!');
   const [isEditing, setIsEditing] = useState(false);
   const [newStatus, setNewStatus] = useState(status);
@@ -23,35 +23,6 @@ const StatusChanger = () => {
   const handleInputChange = (e) => {
     setNewStatus(e.target.value);
   };
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-
-    const fetchData = async () => {
-        const options = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        };
-
-        try {
-            const response = await fetch("https://auth.chathub.kontra.tel/users", options);
-            const data = await response.json();
-            if (response.ok) {
-                console.log(response.status);
-                console.log(data);
-            } else {
-                console.error("Server responded with status:", response.status);
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
-    fetchData();
-}, []);
 
   return (
     <div>
@@ -75,7 +46,36 @@ const StatusChanger = () => {
 };
 
 export default function Profile() {
+  const [username, setUsername] = useState("");
   const handleLogout = Logout();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setUsername(localStorage.getItem("username")); // replace with the username you want to search for
+
+    const fetchData = async () => {
+      const options = {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      };
+
+      try {
+        const response = await fetch(`https://api.chathub.kontra.tel/users/get?name=/${username}/`, options);
+        const data = await response.json();
+        if (response.ok) {
+          console.log(response.status);
+        } else {
+          console.error("Server responded with status:", response.status);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -103,10 +103,10 @@ export default function Profile() {
           <p>Click photo to change profile picture</p>
           <p>Your name</p>
           {/*make maxium status length 20 characters*/}
-          <h2>TestUser</h2>
+          <h2>{username}</h2>
           <p>Status</p>
           {/*make maxium status length 40 characters*/}
-          <StatusChanger />
+          <StatusChanger username={username} />
         </div>
 
 
