@@ -1,5 +1,3 @@
-// Desc: User routes
-
 // Import modules
 const express = require('express');
 const bcrypt = require('bcrypt');
@@ -69,24 +67,14 @@ router.route('/:job')
     }
 })
 .get(auth, (req, res) => {
-
-    const query = req.body.query??req.user.uuid;
-
     // Find user in database
     dbConn().then(async ({ User }) => {
         new Promise((res) => {
-            switch(req.body.param??'uuid') {
-                case 'uuid':
-                    res(User.find().byUUID(query));
-                    break;
-                case 'mult':
-                    res(User.find().byMult(query));
-                    break;
-
-                default:
-                    res(User.find().byName(query));
-                    break;
+            const search = {};
+            for(const key in req.query) {
+                search[key] = new RegExp(req.query[key]);
             }
+            res(User.find().byMult(search));
         })
         .then(result => {
         res.status(200).json({content: result});
