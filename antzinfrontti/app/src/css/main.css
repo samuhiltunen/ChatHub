@@ -1,6 +1,9 @@
 /* styles.css */
-html, body {
-    height: 100%;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 root {
@@ -8,64 +11,39 @@ root {
 }
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
     background-color: #f4f4f4;
 }
 
 header {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
+    justify-content: center;
     align-items: center;
+    height: 12vh;
     background-color: #333;
     color: #fff;
-    padding: 15px;
     text-align: center;
 }
 
-.title {
-    grid-column: 2;
-}
-.header {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-}
 
-.buttons {
-    display: flex;
-    gap: 10px;
-    grid-column: 3;
-    justify-self: end;
-}
 
 section {
     display: flex;
-    /*max-width: 1200px;*/
     margin: 0;
-    height: 100vh;
+    height: 88vh;
+    overflow: hidden;
 }
 
 
 main {
+    display: flex;
+    flex-direction: column;
     flex: 1;
-    padding: 20px;
-    box-sizing: border-box;
+    justify-content: flex-end;
+    overflow: hidden;
 }
 
-nav {
-    background-color: #555;
-    padding: 10px;
-    text-align: center;
-}
 
-nav a {
-    color: #fff;
-    text-decoration: none;
-    padding: 8px 16px;
-    display: inline-block;
-    margin: 0 5px;
-}
+
 
 #login,
 #register {
@@ -91,25 +69,63 @@ button {
     height: 2.4rem;
 }
 
+.fa-btn{
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 2.4rem;
+
+}
+
+.fa-btn:hover{
+    background-color: #388E3C;
+}
 button:hover {
     background-color: #388E3C;
 }
 
-.hamburger-icon {
+.header-icon {
     display: none; /* hide the hamburger icon */
+    color: #4CAF50;
+}
+.header-icon:hover {
+    color: #388E3C;
 }
 
 .chat-container {
-    border: 1px solid #ccc;
-    height: 70%;
+    display: flex;
+    flex: 1;
+    border: 1px solid red;
     overflow-y: scroll;
-    padding: 10px;
-    margin-bottom: 20px;
+    justify-content: center;
 }
 
 
 .messagebox {
+
+    width: 100%;
+}
+
+.messagewrap, .user-searchbox {
     display: flex;
+    border: black solid 1px;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
+}
+
+.user-searchbox{
+    height: auto;
+    border: none;
+}
+
+textarea{
+    border: none;
+    resize: none;
 }
 
 #messageInput {
@@ -117,29 +133,35 @@ button:hover {
 }
 
 #sendMessageButton {
-    margin-left: 10px;
-}
-
-.user-searchbox {
-    display: flex;
 }
 
 #username-search {
     flex: 1;
-    margin-right: 10px;
 }
 
 @media only screen and (max-width: 600px)  {
-    .hamburger-icon {
+    .header-icon {
         display: block; /* Show the hamburger icon */
     }
+    .header{
+        justify-content: space-evenly;
+
+    }
+    .show-aside{
+        flex: 1;
+    }
+
 }
 
 .show-aside{
     background-color: #333;
     color: #fff;
-    padding: 20px;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: fit-content;
+
 }
 
 .hide-aside{
@@ -153,4 +175,27 @@ button:hover {
     display: flex;
     justify-content: space-evenly;
     margin-bottom: 10px;
+}
+
+.profile-aside{
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* CSS */
+textarea:focus {
+    outline: none; /* Removes the border when the textarea is focused */
+}
+
+#userSearchButtons {
+    background-color:#333333 ;
+
+}
+#vittu{
+    display: flex;
+    flex-direction: column;
+}
+
+#allMessages{
+    flex: auto;
 }

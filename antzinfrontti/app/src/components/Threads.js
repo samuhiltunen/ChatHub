@@ -1,5 +1,7 @@
 import React from 'react';
 import Thread from './Thread';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUserPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
 // TODO: Data from backend
 const threads = [{
@@ -19,7 +21,19 @@ const threads = [{
 
 export default function Threads() {
     return (
-      <div>
+      <div id={"vittu"}>
+          <div className="user-searchbox">
+              <textarea
+                  type="text"
+                  id="username-search"
+                  placeholder="search by username"
+              />
+              <div id={"userSearchButtons"}>
+              <button> <FontAwesomeIcon icon={faMagnifyingGlass}/> </button>
+              <button> <FontAwesomeIcon icon={faUserPlus}/> </button>
+              </div>
+          </div>
+          <h1>My Threads</h1>
           {threads.map(thread => {
               return <Thread user={thread.user} time={thread.time} key={thread.id} />;
           })}
