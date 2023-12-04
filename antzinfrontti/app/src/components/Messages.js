@@ -11,7 +11,7 @@ const messages = [{
     id : 2,
     text: "Test Message2",
     time: "20.11 klo 12.25",
-    sender: "userB"
+    sender: "test3"
 }, {
     id: 3,
     text: "Test Message3",
@@ -24,7 +24,7 @@ export default function Messages() {
     return (
       <div id={"allMessages"}>
           {messages.map(message => {
-              return <Message text={message.text} time={message.time} key={message.id} />;
+              return <Message text={message.text} time={message.time} key={message.id} sender={message.sender.toLowerCase()} />;
           })}
       </div>
     )

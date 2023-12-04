@@ -38,7 +38,7 @@ export default function Threads() {
     };
 
     return (
-      <div id={"vittu"}>
+      <div id={"threads-container"}>
           <div className="user-searchbox">
               <textarea
                   type="text"
