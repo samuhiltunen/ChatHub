@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import "../css/main.css";
 import { Link } from 'react-router-dom';
 import Threads from './Threads';
-import Messages from './Messages';
-import { Logout } from './Logout';
+import ProfileInAside from "./ProfileInAside";
+import Header from "./Header";
+import Messages from "./Messages";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPaperclip, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 
 export default function Main() {
     const [asideVisible, setAsideVisible] = useState(true);
@@ -14,8 +17,6 @@ export default function Main() {
         setMainVisible(!mainVisible);
         console.log(asideVisible)
     };
-
-    const handleLogout = Logout();
 
     useEffect(() => {
         const handleResize = () => {
@@ -39,45 +40,27 @@ export default function Main() {
 
     return (
         <>
-            <header className="header">
-                <button className="hamburger-icon" onClick={toggleAside}>
-                    ☰
-                </button>
-                <div className="title">
-                    <h1>ChatHub</h1>
-                </div>
-                <div className="buttons">
-                    <button id="logoutButton" onClick={handleLogout}>Logout</button>
-                    <Link to="/profile">
-                        <button id="profileButton">View Profile</button>
-                    </Link>
-                </div>
-            </header>
+            <Header toggleAside={toggleAside} />
             <section>
                 <aside className={asideVisible ? 'show-aside' : 'hide-aside'}>
-                    <div className="user-searchbox">
-                        <input
-                            type="text"
-                            id="username-search"
-                            placeholder="search by username"
-                        />
-                        <button className="searchButton">Search</button>
-                    </div>
-                    <h1>My Threads</h1>
                     <Threads />
+                    <ProfileInAside/>
                 </aside>
                 <main className={mainVisible ? null : 'hide-main'}>
                     <div id="chat" className="chat-container">
                         {/* Chat messages go here */}
-                        <Messages />
+                        <Messages/>
                     </div>
                     {/* Input area for typing messages */}
                     <div className="messagebox">
-                        <input type="text" id="messageInput" placeholder="Type your message" />
-                        <button id="sendMessageButton">Send</button>
+                        <div className={"messagewrap"}>
+                            <button><FontAwesomeIcon icon={faPaperclip} size={"lg"} /></button>
+                        <textarea  id="messageInput" placeholder="Type your message" />
+                        <button ><FontAwesomeIcon icon={faPaperPlane} size={"lg"} /></button>
+                            </div>
                     </div>
                 </main>
             </section>
         </>
-    );
+);
 }
