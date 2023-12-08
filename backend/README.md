@@ -22,6 +22,10 @@ Chathub backend consists of three main components that are all hosted on the sam
 - [Get user](#get-user)
 - [Upload file](#upload-file)
 - [Get file](#get-file)
+- [Create thread](#create-thread)
+- [Update thread](#update-thread)
+- [Delete thread](#delete-thread)
+- [Get thread](#get-thread)
 
 ### Database
 
