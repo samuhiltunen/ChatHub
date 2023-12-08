@@ -344,6 +344,229 @@ fetch('https://file.chathub.kontra.tel/files?ufid=w4HPV38nBU&download=true', opt
   .catch(err => console.error(err));
 ```
 
-## Users
+## Create thread
+
+[**Back ➩**](#table-of-contents)
+
+Creates a new thread.
+
+- Request: **POST:** `https://api.chathub.kontra.tel/threads/create`
+- AUTH: token
+
+### Parameters
+
+| Name     | Type   | Description                                                  |
+| -------- | ------ | ------------------------------------------------------------ |
+| title | string | Name of the thread. (required) |
+| members | array | List of members in the thread. (uid) |
+| moderators | array | List of moderators in the thread. (uid) |
+| nsfw | boolean | If true, thread is marked as nsfw. |
+
+All users in moderators will also be added to members automatically. The owner of the thread is the user who created the thread. All duplicate users will be removed from the list automatically. Invalid users will be ignored.
+
+### Returns
+
+- 200 OK - Thread created successfully.
+  - Thread object. (see [database section](#database))
+- 401 Unauthorized - Token is invalid or missing.
+- 403 Forbidden - Token is expired.
+- 400 Bad Request - Title is missing.
+- 500 Internal Server Error - Server error.
+
+### Example
+
+```javascript
+const options = {
+  method: 'POST',
+  headers: {
+    Authorization: 'Bearer <auth token>',
+    'Content-Type': 'application/json'
+  },
+  body: '{
+    "title":"thread2",
+    "members":["e3Bvw5cc"],
+    "moderators":["adsasdas"],
+    "nsfw":"false"
+    }'
+};
+
+fetch('http://localhost:3001/threads/create', options)
+  .then(response => response.json())
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
+```
+
+## Update thread
+
+[**Back ➩**](#table-of-contents)
+
+Updates a thread.
+
+- Request: **POST:** `https://api.chathub.kontra.tel/threads/update`
+- AUTH: token
+
+### Parameters
+
+| Name     | Type   | Description                                                  |
+| -------- | ------ | ------------------------------------------------------------ |
+| utid | string | ID of the thread. (required) |
+| opers | array | List of operations to be performed. |
+
+### Operations
+
+Operations are objects that contain the operation to be performed and the data to be used in the operation. See examples for more details.
+
+Ther are two types of operations arrays and strings. Arrays are used for operations that require multiple values like adding or removing members. Strings are used for operations that require only one value like changing the title.
+
+#### Array operations example
+
+```javascript
+{
+  "type": "members", // members or moderators
+  "value": ["et5HUjjC"], // list of members to be added or removed
+  "action": "remove" // remove or add
+}
+```
+
+#### String operations example
+
+```javascript
+{
+  "type": "title", // title, nsfw, locked, owner
+  "value": "newName" // new title, nsfw value, locked value, new owner
+}
+```
+
+### Returns
+
+- 200 OK - Thread updated successfully.
+  - Thread object. (see [database section](#database))
+- 401 Unauthorized - Token is invalid or missing.
+- 403 Forbidden - Token is expired.
+- 400 Bad Request - Title is missing.
+- 500 Internal Server Error - Server error.
+
+### Example
+
+```javascript
+
+const body = {
+  utid: 'w4HPV38nBU',
+  opers: [
+    {
+      type: 'members',
+      value: ['e3Bvw5cc'],
+      action: 'remove'
+    },
+    {
+      type: 'title',
+      value: 'newName'
+    }
+  ]
+};
+
+const options = {
+  method: 'POST',
+  headers: {
+    Authorization: 'Bearer <auth token>',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(body)
+};
+
+fetch('http://localhost:3001/threads/update', options)
+  .then(response => response.json())
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
+```
+
+## Delete thread
+
+[**Back ➩**](#table-of-contents)
+
+Deletes a thread.
+
+- Request: **DELETE:** `https://api.chathub.kontra.tel/threads/delete`
+- AUTH: token
+
+### Parameters
+
+| Name     | Type   | Description                                                  |
+| -------- | ------ | ------------------------------------------------------------ |
+| utid | string | ID of the thread. (required) |
+
+### Returns
+
+- 204 No Content - Thread deleted successfully.
+- 401 Unauthorized - Token is invalid or missing.
+- 403 Forbidden - Token is expired.
+- 500 Internal Server Error - Server error.
+- 404 Not Found - Thread not found.
+
+### Example
+
+```javascript
+const options = {
+  method: 'DELETE',
+  headers: {
+    Authorization: 'Bearer <auth token>',
+    'Content-Type': 'application/json'
+  },
+  body: '{"utid":"jgp0V8Yu"}' // utid of the thread to be deleted
+};
+
+fetch('http://localhost:3001/threads/del', options)
+  .then(response => response.json())
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
+```
+
+## Get thread
+
+[**Back ➩**](#table-of-contents)
+
+Gets a thread.
+
+- Request: **GET:** `https://api.chathub.kontra.tel/threads/get`
+- AUTH: token
+
+### Parameters
+
+The parameters correspond to the fields in the thread object.
+
+Database object structures can be found in the [database section](#database).
+
+### Returns
+
+- 200 OK - Thread found.
+  - Thread object. (see [database section](#database))
+- 401 Unauthorized - Token is invalid or missing.
+- 403 Forbidden - Token is expired.
+- 500 Internal Server Error - Server error.
+- 404 Not Found - Thread not found.
+
+### Example
+
+```javascript
+const options = {
+  method: 'GET',
+  headers: {
+    Authorization: 'Bearer <auth token>'
+  }
+};
+
+fetch('http://localhost:3001/threads/a?title=thread2&options.owner=DpHytzT9', options)
+  .then(response => response.json())
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
+```
+
+Parameters search for the exact value given. If you would like to search for a partial value, use regex. **ie:** `?title=/^thread/` will return a list of threads with the title starting with `thread`.
+
+To access nested objects, use dot notation. **ie:** `?options.owner=DpHytzT9` will return a list of threads that have the owner `DpHytzT9`.
+
+Database object structures can be found in the [database section](#database).
+
+## Create message
 
 [**Back ➩**](#table-of-contents)

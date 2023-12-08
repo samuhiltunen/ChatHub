@@ -10,7 +10,7 @@ const { middleware, routes } = require('./loader');
 const { timestamp, logger, validateJSON, motd } = middleware;
 
 // Import routes
-const { users } = routes;
+const { users, threads } = routes;
 
 // Global Middleware
 app.use(express.json());
@@ -21,6 +21,7 @@ app.use(logger);
 
 // Routes
 app.use('/users', users);
+app.use('/threads', threads);
 
 // Start server
 const port = process.env.API_PORT || 3000;
