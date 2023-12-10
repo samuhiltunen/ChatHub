@@ -1,0 +1,8 @@
+.create-thread #create-thread-form label {
+    color: black;
+}
+
+.create-thread #create-thread-form ul li {
+    color: black;
+    background-color: white;
+}

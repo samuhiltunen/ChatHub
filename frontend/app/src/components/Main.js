@@ -7,10 +7,12 @@ import Header from "./Header";
 import Messages from "./Messages";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperclip, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
+import CreateThread from "./CreateThread";
 
 export default function Main() {
     const [asideVisible, setAsideVisible] = useState(true);
     const [mainVisible, setMainVisible] = useState(true)
+    const [showCreateThread, setShowCreateThread] = useState(false);
 
     const toggleAside = () => {
         setAsideVisible(!asideVisible);
@@ -43,6 +45,8 @@ export default function Main() {
             <Header toggleAside={toggleAside} />
             <section>
                 <aside className={asideVisible ? 'show-aside' : 'hide-aside'}>
+                    <button onClick={() => setShowCreateThread(true)}>Create new thread</button>
+                    {showCreateThread && <CreateThread setShowCreateThread={setShowCreateThread}/>}
                     <Threads />
                     <ProfileInAside/>
                 </aside>
