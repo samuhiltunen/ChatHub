@@ -43,7 +43,7 @@ router.route('/:job')
                         edited: null,
                         authorUUID: req.user.uuid,
                         utid: req.body.utid,
-                        attatchments: req.body.attatchments ?? [],
+                        attatchments: req.body.attachments ?? [],
                     },
                 });
 
@@ -52,6 +52,11 @@ router.route('/:job')
 
                 // Send response
                 res.status(200).json({content: newMessage});
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({error: 'Internal server error'});
+                return;
             });
             break;
 
@@ -161,6 +166,11 @@ router.route('/:job')
             // Send response
             res.status(200).json({content: messages});
         }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({error: 'Internal server error'});
+        return;
     });
 });
 
