@@ -12,6 +12,7 @@ const { auth } = middleware;
 const router = express.Router();
 router.route('/:job')
 .post(auth, (req, res) => {
+    
     switch(req.params.job) {
 
         // Create new thread

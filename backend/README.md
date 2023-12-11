@@ -26,6 +26,10 @@ Chathub backend consists of three main components that are all hosted on the sam
 - [Update thread](#update-thread)
 - [Delete thread](#delete-thread)
 - [Get thread](#get-thread)
+- [Create message](#create-message)
+- [Update message](#update-message)
+- [Delete message](#delete-message)
+- [Get message](#get-message)
 
 ### Database
 
@@ -236,7 +240,7 @@ const options = {
   }
 };
 
-fetch(encodeUri('http://localhost:3001/users/get?name=/^devUser$/'), options)
+fetch(encodeUri('http://api.chathub.kontra.tel/users/get?name=/^devUser$/'), options)
   .then(response => response.json())
   .then(response => console.log(response))
   .catch(err => console.error(err));
@@ -394,7 +398,7 @@ const options = {
     }'
 };
 
-fetch('http://localhost:3001/threads/create', options)
+fetch('api.chathub.kontra.tel/threads/create', options)
   .then(response => response.json())
   .then(response => console.log(response))
   .catch(err => console.error(err));
@@ -478,7 +482,7 @@ const options = {
   body: JSON.stringify(body)
 };
 
-fetch('http://localhost:3001/threads/update', options)
+fetch('http://api.chathub.kontra.tel/threads/update', options)
   .then(response => response.json())
   .then(response => console.log(response))
   .catch(err => console.error(err));
@@ -519,7 +523,7 @@ const options = {
   body: '{"utid":"jgp0V8Yu"}' // utid of the thread to be deleted
 };
 
-fetch('http://localhost:3001/threads/del', options)
+fetch('http://api.chathub.kontra.tel/threads/del', options)
   .then(response => response.json())
   .then(response => console.log(response))
   .catch(err => console.error(err));
@@ -559,7 +563,7 @@ const options = {
   }
 };
 
-fetch('http://localhost:3001/threads/a?title=thread2&options.owner=DpHytzT9', options)
+fetch('http://api.chathub.kontra.tel/threads/a?title=thread2&options.owner=DpHytzT9', options)
   .then(response => response.json())
   .then(response => console.log(response))
   .catch(err => console.error(err));
@@ -574,3 +578,172 @@ Database object structures can be found in the [database section](#database).
 ## Create message
 
 [**Back ➩**](#table-of-contents)
+
+Creates a new message.
+
+- Request: **POST:** `https://api.chathub.kontra.tel/messages/create`
+- AUTH: token
+
+### Parameters
+
+| Name     | Type   | Description                                                  |
+| -------- | ------ | ------------------------------------------------------------ |
+| utid | string | ID of the thread. (required) |
+| content | string | Content of the message. (required) |
+| attachments | array | List of files in the message. (ufid) |
+
+### Returns
+
+- 200 OK - Message created successfully.
+  - Message object. (see [database section](#database))
+- 401 Unauthorized - Token is invalid or missing.
+- 403 Forbidden - Token is expired.
+- 400 Bad Request - Required params missing.
+- 500 Internal Server Error - Server error.
+- 404 Not Found - Thread not found.
+  
+### Example
+
+```javascript
+const options = {
+  method: 'POST',
+  headers: {
+    Authorization: 'Bearer <auth token>',
+    'Content-Type': 'application/json'
+  },
+  body: '{"utid":"1XdqQYyD","content":"lisää paskaa ääääöÖÖÖAAA"}'
+};
+
+fetch('http://api.chathub.kontra.tel/messages/create', options)
+  .then(response => response.json())
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
+```
+
+## Update message
+
+[**Back ➩**](#table-of-contents)
+
+Updates a message. Updating a message will create add the message as a string to the content array of the message. The old message will be kept in the content array until the message is deleted.
+
+- Request: **POST:** `https://api.chathub.kontra.tel/messages/update`
+- AUTH: token
+
+### Parameters
+
+| Name     | Type   | Description                                                  |
+| -------- | ------ | ------------------------------------------------------------ |
+| umid | string | ID of the message. (required) |
+| content | string | Content of the message. |
+
+### Returns
+
+- 200 OK - Message updated successfully.
+  - Message object. (see [database section](#database))
+- 401 Unauthorized - Token is invalid or missing.
+- 403 Forbidden - Token is expired.
+- 400 Bad Request - Required params missing.
+- 500 Internal Server Error - Server error.
+- 404 Not Found - Message not found.
+
+### Example
+
+```javascript
+const options = {
+  method: 'POST',
+  headers: {
+    Authorization: 'Bearer <auth token>',
+    'Content-Type': 'application/json'
+  },
+  body: '{"umid":"T9o1FVAm","content":"Hello World!"}'
+};
+
+fetch('http://api.chathub.kontra.tel/messages/update', options)
+  .then(response => response.json())
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
+```
+
+## Delete message
+
+[**Back ➩**](#table-of-contents)
+
+Deletes a message. The message content will be replaced with a deleted message string. The message object will be accesible and will be returned by the get message endpoint.
+
+- Request: **DELETE:** `https://api.chathub.kontra.tel/messages/delete`
+- AUTH: token
+
+### Parameters
+
+| Name     | Type   | Description                                                  |
+| -------- | ------ | ------------------------------------------------------------ |
+| umid | string | ID of the message. (required) |
+
+### Returns
+
+- 204 No Content - Message deleted successfully.
+- 401 Unauthorized - Token is invalid or missing.
+- 403 Forbidden - Token is expired.
+- 500 Internal Server Error - Server error.
+- 404 Not Found - Message not found.
+
+### Example
+
+```javascript
+const options = {
+  method: 'DELETE',
+  headers: {
+    Authorization: 'Bearer <auth token>',
+    'Content-Type': 'application/json'
+  },
+  body: '{"umid":"m5fL5HKQ"}'
+};
+
+fetch('http://api.chathub.kontra.tel/messages/del', options)
+  .then(response => response.json())
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
+```
+
+## Get message
+
+[**Back ➩**](#table-of-contents)
+
+Gets a message. If the message is deleted, the message object will be returned with the deleted message string as the content. If no date is given, messages are returned from the current date towards the past. If no amount is given, 50 messages are returned. If a date is specified new messages are returned from the date towards the future.
+
+- Request: **GET:** `https://api.chathub.kontra.tel/messages/get`
+- AUTH: token
+
+### Parameters
+
+| Name     | Type   | Description                                                  |
+| -------- | ------ | ------------------------------------------------------------ |
+| umid | string | ID of the message. (required) |
+| utid | string | ID of the thread. (required)|
+| amnt | number | Amount of messages to get. (default: 50) |
+| date | string | Date to get messages from. (default: now) |
+
+### Returns
+
+- 200 OK - Message found. (either a list of messages or a single message)
+  - Message object. (see [database section](#database))
+- 401 Unauthorized - Token is invalid or missing.
+- 403 Forbidden - Token is expired.
+- 500 Internal Server Error - Server error.
+- 404 Not Found - Message not found.
+
+### Example
+
+```javascript
+const options = {
+  method: 'GET',
+  headers: {
+    Authorization: 'Bearer <auth token>'
+  }
+};
+
+fetch(encodeUri('http://api.chathub.kontra.tel/messages/get?utid=1XdqQYyD&amnt=3&date=2023-12-11T10:02:20.408Z'), options)
+  .then(response => response.json())
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
+```
