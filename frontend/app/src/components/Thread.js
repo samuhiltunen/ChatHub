@@ -6,7 +6,7 @@ export default function Thread(props) {
   return (
     <Link className="thread-link"/* onClick={openThread(id)} */>
       <div className="thread-container">
-        <p>User: {props.user}</p>
+        <p>{props.user}</p>
         <p>{props.time}</p>
       </div>
     </Link>

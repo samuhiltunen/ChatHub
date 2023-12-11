@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import Thread from './Thread';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import CreateThread from "./CreateThread";
 
 // TODO: Data from backend
 const threadsData = [{
@@ -23,18 +24,25 @@ export default function Threads() {
 
     const [searchText, setSearchText] = useState('');
     const [filteredThreads, setFilteredThreads] = useState(threadsData);
+    const [showAddPeople, setShowAddPeople] = useState(false);
 
-    const handleSearch = () => {
+    const handleSearch = (searchQuery) => {
+        setSearchText(searchQuery);
         const filtered = threadsData.filter(thread =>
-            thread.user.toLowerCase().includes(searchText.toLowerCase())
+            thread.user.toLowerCase().includes(searchQuery.toLowerCase())
         );
         setFilteredThreads(filtered);
     };
 
+
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
-            handleSearch();
+            handleSearch(searchText);
         }
+    };
+
+    const toggleAddPeople = () => {
+        setShowAddPeople(!showAddPeople);
     };
 
     return (
@@ -45,18 +53,24 @@ export default function Threads() {
                   id="username-search"
                   placeholder="search by username"
                   value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  onKeyPress= {handleKeyPress}
               />
               <div id={"userSearchButtons"}>
-              <button onClick={handleSearch}> <FontAwesomeIcon icon={faMagnifyingGlass}/> </button>
-              <button> <FontAwesomeIcon icon={faUserPlus}/> </button>
+              <button onClick={() => handleSearch(searchText)}> <FontAwesomeIcon icon={faMagnifyingGlass}/> </button>
+              <button onClick={toggleAddPeople}> <FontAwesomeIcon icon={faUserPlus}/> </button>
               </div>
           </div>
-          <h1>My Threads</h1>
-          {filteredThreads.map(thread => {
-              return <Thread user={thread.user} time={thread.time} key={thread.id} />;
-          })}
-      </div>
-    )
-  };
+
+              { showAddPeople
+                  ? (<div><CreateThread/></div>)
+                  : (
+                      <div>
+                          <h1>My Threads</h1>
+                          {filteredThreads.map(thread => (
+                              <Thread user={thread.user} time={thread.time} key={thread.id} />
+                          ))}
+                      </div>
+                  )}
+        </div>);}
+
