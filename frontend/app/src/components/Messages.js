@@ -1,31 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Message from './Message';
-
-// TODO: Data from backend
-const messages = [{
-    id: 1,
-    text: "Test Message",
-    time: "20.11 klo 12.25",
-    sender:"userA"
-}, {
-    id : 2,
-    text: "Test Message2",
-    time: "20.11 klo 12.25",
-    sender: "test3"
-}, {
-    id: 3,
-    text: "Test Message3",
-    time: "20.11 klo 12.25",
-    sender: "UserA"
-}
-];
+import { useParams } from 'react-router-dom';
 
 export default function Messages() {
+    const { utid } = useParams();
+    const [messages, setMessages] = useState([]);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const messageOptions = {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+    
+        const fetchMessages = async () => {
+            try {
+                const response = await fetch(`https://api.chathub.kontra.tel/messages/get?utid=${utid}`, messageOptions);
+                const data = await response.json();
+                console.log("fetch message data: ",data);
+                setMessages(data.content.sort((a, b) => new Date(a.info.sent) - new Date(b.info.sent)));
+            } catch (err) {
+                console.error(err);
+            }
+        };
+    
+        fetchMessages();  // Fetch messages immediately when the component mounts
+    
+        const intervalId = setInterval(fetchMessages, 3000);  // Fetch messages every 5 seconds
+    
+        return () => clearInterval(intervalId);  // Clean up the interval when the component unmounts
+    }, [utid]);
+
     return (
-      <div id={"allMessages"}>
-          {messages.map(message => {
-              return <Message text={message.text} time={message.time} key={message.id} sender={message.sender.toLowerCase()} />;
-          })}
-      </div>
-    )
-  };
+        <div id={"allMessages"}>
+            {messages.map(message => {
+                return <Message text={message.content[0]} time={message.info.sent} key={message.umid} />;
+            })}
+        </div>
+    );
+};

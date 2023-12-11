@@ -5,9 +5,10 @@ import "../css/thread.css";
 export default function Thread(props) {
   console.log("rending single thread");
   return (
-    <Link className="thread-link"/* onClick={openThread(id)} */>
+    <Link to={`/threads/${props.utid}`} className="thread-link">
       <div className="thread-container">
         <p>Title: {props.title}</p>
+        <p>utid: {props.utid}</p>
       </div>
     </Link>
   );
