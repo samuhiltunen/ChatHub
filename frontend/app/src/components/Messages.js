@@ -26,11 +26,11 @@ export default function Messages() {
             }
         };
     
-        fetchMessages();  // Fetch messages immediately when the component mounts
+        fetchMessages();  
     
-        const intervalId = setInterval(fetchMessages, 3000);  // Fetch messages every 5 seconds
+        const intervalId = setInterval(fetchMessages, 3000); 
     
-        return () => clearInterval(intervalId);  // Clean up the interval when the component unmounts
+        return () => clearInterval(intervalId);  
     }, [utid]);
 
     return (
