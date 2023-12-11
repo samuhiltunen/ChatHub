@@ -4,7 +4,6 @@ import "../css/register.css";
 
 export default function Register() {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [err, setErr] = useState(false);
@@ -26,7 +25,6 @@ export default function Register() {
     try {
       const response = await fetch('https://api.chathub.kontra.tel/users/register', options);
       if (response.ok) {
-        const data = await response.json();
         navigate('/');
       } else {
         console.error("Server responded with status:", response.status);
@@ -50,7 +48,7 @@ export default function Register() {
             <label htmlFor="username">Username:</label>
             <input type="text" id="username" name="username" required onChange={e => setUsername(e.target.value)} />
             <label htmlFor="email">Email:</label>
-            <input type="email" id="email" name="email" required onChange={e => setEmail(e.target.value)} />
+            <input type="email" id="email" name="email" />
             <label htmlFor="password">Password:</label>
             <input type="password" id="password" name="password" required onChange={e => setPassword(e.target.value)} />
             <label htmlFor="confirmPassword">Confirm Password:</label>

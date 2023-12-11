@@ -5,8 +5,9 @@ import { Link } from 'react-router-dom';
 import "../css/profile.css";
 import ProfilePictureChanger from './TestPhoto';
 import { Logout } from './Logout';
+import { TokenRefresh } from './TokenRefresh';
 
-const StatusChanger = ({ username }) => {
+const StatusChanger = () => {
     const [status, setStatus] = useState('Hello, My name is TestUser!');
     const [isEditing, setIsEditing] = useState(false);
     const [newStatus, setNewStatus] = useState(status);
@@ -53,23 +54,28 @@ export default function Profile() {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-
-        const fetchData = async () => {
+    
+        const getUser = async (retryCount = 0) => {
             const options = {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             };
-
+    
             try {
                 const response = await fetch(`https://api.chathub.kontra.tel/users/get`, options);
                 const data = await response.json();
                 if (response.ok) {
-                    console.log(data);
                     console.log(response.status);
                     setUsername(data.content.name);
                     setUserId(data.content.uuid);
+                } else if (response.status === 401 && retryCount < 3) {
+                    console.error("Unauthorized, refreshing token...");
+                    await TokenRefresh();
+                    await getUser(retryCount + 1);
+                } else if (retryCount >= 3) {
+                    console.error("Failed to refresh token after 3 attempts");
                 } else {
                     console.error("Server responded with status:", response.status);
                 }
@@ -77,8 +83,8 @@ export default function Profile() {
                 console.error(err);
             }
         }
-
-        fetchData();
+    
+        getUser();
     }, []);
 
     return (

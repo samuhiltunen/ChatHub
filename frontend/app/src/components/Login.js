@@ -22,7 +22,6 @@ export default function Login() {
       if (response.ok) {
         const data = await response.json();
         console.log("OK");
-        localStorage.setItem('username', username);
         localStorage.setItem('token', data.accessToken);
         localStorage.setItem('refreshToken', data.refreshToken);
         navigate('/main');

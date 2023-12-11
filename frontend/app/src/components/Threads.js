@@ -8,7 +8,6 @@ import { TokenRefresh } from './TokenRefresh';
 
 export default function Threads() {
     const [threadsData, setThreadsData] = useState([]);
-    console.log("rendering Threads.js");
     const token = localStorage.getItem('token');
 
     const [searchText, setSearchText] = useState('');
@@ -26,43 +25,53 @@ export default function Threads() {
         setThreadsData(prevThreads => [...prevThreads, newThread]);
     }
 
-    const getThreads = (uuid) => {
-        console.log("before fetch",uuid);
-        fetch(`https://api.chathub.kontra.tel/threads/a?members=${uuid}`, threadOptions)
-        .then(response => response.json())
-        .then(response => {
-            console.log(response);
-            setThreadsData(response.content); // Set threadsData state with response data
-        })
-        .catch(err => console.error(err));
-    }
-
-    const getUser = async () => {
-        const userOptions = {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        };
-
+    const getThreads = async (uuid, retryCount = 0) => {
         try {
-            const response = await fetch(`https://api.chathub.kontra.tel/users/get`, userOptions);
+            const response = await fetch(`https://api.chathub.kontra.tel/threads/a?members=${uuid}`, threadOptions);
             const data = await response.json();
             if (response.ok) {
-                console.log(response.status);
-                console.log(data);
-                getThreads(data.content.uuid);
-            } else if (response.status === 401) {
+                setThreadsData(data.content);
+            } else if (response.status === 401 && retryCount < 3) {
                 console.error("Unauthorized, refreshing token...");
                 await TokenRefresh();
-                await getUser();
+                await getThreads(uuid, retryCount + 1);
+            } else if (retryCount >= 3) {
+                console.error("Failed to refresh token after 3 attempts");
             } else {
                 console.error("Server responded with status:", response.status);
             }
         } catch (err) {
             console.error(err);
         }
-    }
+    };
+
+    const getUser = async (retryCount = 0) => {
+        const userOptions = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        };
+    
+        try {
+            const response = await fetch(`https://api.chathub.kontra.tel/users/get`, userOptions);
+            const data = await response.json();
+            if (response.ok) {
+                getThreads(data.content.uuid);
+            } else if (response.status === 401 && retryCount < 3) {
+                console.error("Unauthorized, refreshing token...");
+                await TokenRefresh();
+                await getUser(retryCount + 1);
+            } else if (retryCount >= 3) {
+                console.error("Failed to refresh token after 3 attempts");
+            } else {
+                console.error("Server responded with status:", response.status);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+    
 
     const handleSearch = (searchQuery) => {
         setSearchText(searchQuery);
