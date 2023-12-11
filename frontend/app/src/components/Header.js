@@ -11,7 +11,7 @@ const Header = ({ toggleAside }) => {
             <div className="title">
                 <h1>ChatHub</h1>
             </div>
-            <div className={"header-icon"}> <FontAwesomeIcon icon={faUserPlus} size={"lg"}/></div>
+            <div></div>
         </header>
     );
 };
