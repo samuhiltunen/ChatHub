@@ -68,7 +68,7 @@ export default function CreateThread(props) {
 
                         <label htmlFor="members" style={{ color: 'black' }}>Members</label>
                         <input type="text" id="members" value={memberInput} onChange={e => setMemberInput(e.target.value)} placeholder="Add a member" />
-                        <button type="button" onClick={addMember}>Add member</button>
+                        <button type="button" onClick={addMember}>Add member(userid)</button>
                         <p style={{ color: 'black' }}>Members</p>
                         <ul>
                             {members.map((member, index) => <li key={index} style={{ color: 'black', backgroundColor: 'white' }}>{member}</li>)}
@@ -76,7 +76,7 @@ export default function CreateThread(props) {
 
                         <label htmlFor="moderators" style={{ color: 'black' }}>Moderators</label>
                         <input type="text" id="moderators" value={moderatorInput} onChange={e => setModeratorInput(e.target.value)} placeholder="Add a moderator" />
-                        <button type="button" onClick={addModerator}>Add moderator</button>
+                        <button type="button" onClick={addModerator}>Add moderator (user id)</button>
                         <p style={{ color: 'black' }}>Moderators</p>
                         <ul>
                             {moderators.map((moderator, index) => <li key={index} style={{ color: 'black', backgroundColor: 'white' }}>{moderator}</li>)}

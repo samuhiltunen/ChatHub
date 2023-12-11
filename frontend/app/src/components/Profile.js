@@ -48,11 +48,11 @@ const StatusChanger = ({ username }) => {
 
 export default function Profile() {
     const [username, setUsername] = useState("");
+    const [userId, setUserId] = useState('');
     const handleLogout = Logout();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        setUsername(localStorage.getItem("username")); // replace with the username you want to search for
 
         const fetchData = async () => {
             const options = {
@@ -68,6 +68,8 @@ export default function Profile() {
                 if (response.ok) {
                     console.log(data);
                     console.log(response.status);
+                    setUsername(data.content.name);
+                    setUserId(data.content.uuid);
                 } else {
                     console.error("Server responded with status:", response.status);
                 }
@@ -106,6 +108,7 @@ export default function Profile() {
                     <p>Your name</p>
                     {/*make maxium status length 20 characters*/}
                     <h2>{username}</h2>
+                    <p>user id: {userId}</p>
                     <p>Status</p>
                     {/*make maxium status length 40 characters*/}
                     <StatusChanger username={username} />
