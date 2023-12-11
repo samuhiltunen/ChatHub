@@ -67,10 +67,17 @@ router.route('/:job')
     }
 })
 .get(auth, (req, res) => {
+
+    // Check if query is empty return self
+    if(Object.keys(req.query).length === 0) {
+        res.status(200).json({content: req.user});
+        return;
+    }
+
     // Find user in database
     dbConn().then(async ({ User }) => {
         new Promise((res) => {
-            
+
             const search = {};
 
             // Make search object
