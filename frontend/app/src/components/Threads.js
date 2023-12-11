@@ -1,30 +1,68 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Thread from './Thread';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import CreateThread from "./CreateThread";
+import { TokenRefresh } from './TokenRefresh';
 
-// TODO: Data from backend
-const threadsData = [{
-    id: 1,
-    user: "TestUser",
-    time: "20.11 klo 12.25"
-}, {
-    id: 2,
-    user: "TestUser2",
-    time: "20.11 klo 12.25"
-}, {
-    id: 3,
-    user: "TestUser3",
-    time: "20.11 klo 12.25"
-}
-];
 
 export default function Threads() {
+    const [threadsData, setThreadsData] = useState([]);
+    console.log("rendering Threads.js");
+    const token = localStorage.getItem('token');
 
     const [searchText, setSearchText] = useState('');
     const [filteredThreads, setFilteredThreads] = useState(threadsData);
     const [showAddPeople, setShowAddPeople] = useState(false);
+
+    const threadOptions = {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+    };
+
+    const addThread = (newThread) => {
+        setThreadsData(prevThreads => [...prevThreads, newThread]);
+    }
+
+    const getThreads = (uuid) => {
+        console.log("before fetch",uuid);
+        fetch(`https://api.chathub.kontra.tel/threads/a?&options.owner=${uuid}`, threadOptions)
+        .then(response => response.json())
+        .then(response => {
+            console.log(response);
+            setThreadsData(response.content); // Set threadsData state with response data
+        })
+        .catch(err => console.error(err));
+    }
+
+    const getUser = async () => {
+        const userOptions = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        };
+
+        try {
+            const response = await fetch(`https://api.chathub.kontra.tel/users/get`, userOptions);
+            const data = await response.json();
+            if (response.ok) {
+                console.log(response.status);
+                console.log(data);
+                getThreads(data.content.uuid);
+            } else if (response.status === 401) {
+                console.error("Unauthorized, refreshing token...");
+                await TokenRefresh();
+                await getUser();
+            } else {
+                console.error("Server responded with status:", response.status);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     const handleSearch = (searchQuery) => {
         setSearchText(searchQuery);
@@ -45,6 +83,15 @@ export default function Threads() {
         setShowAddPeople(!showAddPeople);
     };
 
+
+    useEffect(() => {
+        getUser();
+    }, []);
+
+    useEffect(() => {
+        setFilteredThreads(threadsData);
+    }, [threadsData]);
+
     return (
       <div id={"threads-container"}>
           <div className="user-searchbox">
@@ -63,12 +110,12 @@ export default function Threads() {
           </div>
 
               { showAddPeople
-                  ? (<div><CreateThread/></div>)
+                  ? (<div><CreateThread addThread={addThread}/></div>)
                   : (
                       <div>
                           <h1>My Threads</h1>
                           {filteredThreads.map(thread => (
-                              <Thread user={thread.user} time={thread.time} key={thread.id} />
+                              <Thread title={thread.title} key={thread.utid} owner={thread.options.owner}/>
                           ))}
                       </div>
                   )}

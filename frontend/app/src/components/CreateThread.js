@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import "../css/main.css";
 import { TokenRefresh } from './TokenRefresh';
 
-export default function CreateThread({ setShowCreateThread }) {
+export default function CreateThread(props) {
 
     const [title, setTitle] = useState("");
     const [memberInput, setMemberInput] = useState("");
@@ -13,7 +13,7 @@ export default function CreateThread({ setShowCreateThread }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         const options = {
             method: 'POST',
             headers: {
@@ -27,12 +27,14 @@ export default function CreateThread({ setShowCreateThread }) {
                 "nsfw": nsfw
             })
         };
-    
+
         try {
             const response = await fetch('https://api.chathub.kontra.tel/threads/create', options);
             if (response.ok) {
                 console.log("Thread OK");
-                setShowCreateThread(false);
+                const responseData = await response.json();
+                props.addThread(responseData.content.thread);
+
             } else {
                 if (response.status === 401) {
                     console.error("Unauthorized, refreshing token...");
