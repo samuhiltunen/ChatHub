@@ -63,9 +63,10 @@ export default function Profile() {
             };
 
             try {
-                const response = await fetch(`https://api.chathub.kontra.tel/users/get?name=/${username}/`, options);
+                const response = await fetch(`https://api.chathub.kontra.tel/users/get`, options);
                 const data = await response.json();
                 if (response.ok) {
+                    console.log(data);
                     console.log(response.status);
                 } else {
                     console.error("Server responded with status:", response.status);
