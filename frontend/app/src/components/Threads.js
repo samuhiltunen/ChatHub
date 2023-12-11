@@ -3,6 +3,7 @@ import Thread from './Thread';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import CreateThread from "./CreateThread";
+import { TokenRefresh } from './TokenRefresh';
 
 
 export default function Threads() {
@@ -51,6 +52,10 @@ export default function Threads() {
                 console.log(response.status);
                 console.log(data);
                 getThreads(data.content.uuid);
+            } else if (response.status === 401) {
+                console.error("Unauthorized, refreshing token...");
+                await TokenRefresh();
+                await getUser();
             } else {
                 console.error("Server responded with status:", response.status);
             }
