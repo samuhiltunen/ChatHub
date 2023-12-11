@@ -28,7 +28,7 @@ export default function Threads() {
 
     const getThreads = (uuid) => {
         console.log("before fetch",uuid);
-        fetch(`https://api.chathub.kontra.tel/threads/a?&options.owner=${uuid}`, threadOptions)
+        fetch(`https://api.chathub.kontra.tel/threads/a?members=${uuid}`, threadOptions)
         .then(response => response.json())
         .then(response => {
             console.log(response);
