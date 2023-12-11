@@ -27,6 +27,8 @@ router.route('/:job')
             // Start database connection
             dbConn().then(async ({ Message, Thread }) => {
 
+                console.log(req.body.utid);
+
                 // Check if thread exists
                 if(!await Thread.exists({ utid: req.body.utid })) {
                     res.status(404).json({error: 'Thread not found'});
@@ -43,7 +45,7 @@ router.route('/:job')
                         edited: null,
                         authorUUID: req.user.uuid,
                         utid: req.body.utid,
-                        attatchments: req.body.attatchments ?? [],
+                        attatchments: req.body.attachments ?? [],
                     },
                 });
 
@@ -52,6 +54,11 @@ router.route('/:job')
 
                 // Send response
                 res.status(200).json({content: newMessage});
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({error: 'Internal server error'});
+                return;
             });
             break;
 
@@ -161,6 +168,11 @@ router.route('/:job')
             // Send response
             res.status(200).json({content: messages});
         }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({error: 'Internal server error'});
+        return;
     });
 });
 
