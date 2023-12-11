@@ -27,6 +27,8 @@ router.route('/:job')
             // Start database connection
             dbConn().then(async ({ Message, Thread }) => {
 
+                console.log(req.body.utid);
+
                 // Check if thread exists
                 if(!await Thread.exists({ utid: req.body.utid })) {
                     res.status(404).json({error: 'Thread not found'});
