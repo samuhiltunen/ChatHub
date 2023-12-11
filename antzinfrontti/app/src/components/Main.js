@@ -43,8 +43,11 @@ export default function Main() {
             <Header toggleAside={toggleAside} />
             <section>
                 <aside className={asideVisible ? 'show-aside' : 'hide-aside'}>
+                    {/* if button pressed = false: */}
                     <Threads />
                     <ProfileInAside/>
+                    {/* if button pressed = true:
+                    <AddPeople />*/}
                 </aside>
                 <main className={mainVisible ? null : 'hide-main'}>
                     <div id="chat" className="chat-container">
