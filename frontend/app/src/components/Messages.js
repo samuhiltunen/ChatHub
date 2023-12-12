@@ -18,11 +18,11 @@ export default function Messages() {
     
         const fetchMessages = async (retryCount = 0) => {
             try {
-                const response = await fetch(`https://api.chathub.kontra.tel/messages/get?utid=${utid}`, messageOptions);
+                const response = await fetch(`https://api.chathub.kontra.tel/messages/get?utid=${utid}&amnt=50`, messageOptions);
                 if (response.status === 401) {
                     console.error("Unauthorized, refreshing token...");
                     await TokenRefresh();
-                    if (retryCount < 3) { // Limit the number of retries to 3
+                    if (retryCount < 3) { 
                         await fetchMessages(retryCount + 1);
                     } else {
                         console.error("Failed to refresh token after 3 attempts");
