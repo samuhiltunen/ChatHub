@@ -38,7 +38,6 @@ export default function Profile() {
             };
 
             try {
-                console.log('updating user');
                 const response = await fetch('https://api.chathub.kontra.tel/users/update', options);
                 if (!response.ok) {
                     if (response.status === 401 && retryCount < 3) {
@@ -50,9 +49,6 @@ export default function Profile() {
                     } else {
                         throw new Error(`Server responded with status: ${response.status}`);
                     }
-                } else {
-                    console.log('user updated');
-                    console.log("/updateUser: ", response.status);
                 }
             } catch (err) {
                 console.error(err);
@@ -77,7 +73,6 @@ export default function Profile() {
                 const response = await fetch(`https://api.chathub.kontra.tel/users/get`, options);
                 const data = await response.json();
                 if (response.ok) {
-                    console.log(response.status);
                     setUsername(data.content.name);
                     setUserId(data.content.uuid);
                     setStatus(data.content.info.status);
