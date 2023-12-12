@@ -49,7 +49,7 @@ export default function Messages() {
     return (
         <div id={"allMessages"}>
             {messages.map(message => {
-                return <Message text={message.content[0]} time={message.info.sent} key={message.umid} />;
+                return <Message text={message.content[0]} time={message.info.sent} key={message.umid} sender = {message.author}/>;
             })}
         </div>
     );
