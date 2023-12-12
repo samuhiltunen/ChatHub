@@ -103,25 +103,30 @@ export default function Threads() {
 
     return (
       <div id={"threads-container"}>
+
           <div className="user-searchbox">
-              <textarea
-                  type="text"
-                  id="username-search"
-                  placeholder="search by title"
-                  value={searchText}
-                  onChange={(e) => handleSearch(e.target.value)}
-                  onKeyPress= {handleKeyPress}
-              />
-              <div id={"userSearchButtons"}>
-              <button onClick={() => handleSearch(searchText)}> <FontAwesomeIcon icon={faMagnifyingGlass}/> </button>
-              <button onClick={toggleAddPeople}> <FontAwesomeIcon icon={faUserPlus}/> </button>
+
+              <div id={"text-and-search-container"}>
+
+                    <textarea id={"text-area-in-threads"}
+                            type="text"
+                            placeholder="Search by thread"
+                            value={searchText}
+                            onChange={(e) => handleSearch(e.target.value)}
+                            onKeyPress= {handleKeyPress}
+                    />
+                    <button id={"search-button-in-threads"} onClick={() => handleSearch(searchText)}> <FontAwesomeIcon icon={faMagnifyingGlass} size={"xl"}/> </button>
+
               </div>
+
+              <button onClick={toggleAddPeople}> <FontAwesomeIcon icon={faUserPlus} size={"xl"}/> </button>
+
           </div>
 
               { showAddPeople
                   ? (<div><CreateThread addThread={addThread}/></div>)
                   : (
-                      <div>
+                      <div id={"my-threads"}>
                           <h1>My Threads</h1>
                           {filteredThreads.map(thread => (
                               <Thread title={thread.title} key={thread.utid} owner={thread.options.owner} utid={thread.utid}/>

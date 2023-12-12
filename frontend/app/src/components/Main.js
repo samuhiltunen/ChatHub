@@ -95,14 +95,14 @@ export default function Main() {
                     </div>
                     <div className="messagebox">
                         <div className={"messagewrap"}>
-                            <button><FontAwesomeIcon icon={faPaperclip} size={"lg"} /></button>
+                            <button><FontAwesomeIcon icon={faPaperclip} size={"xl"} /></button>
                             <textarea
                                 id="messageInput"
                                 placeholder="Type your message"
                                 value={messageContent}
                                 onChange={handleMessageChange}
                             />
-                            <button onClick={handleSendClick}><FontAwesomeIcon icon={faPaperPlane} size={"lg"} /></button>
+                            <button onClick={handleSendClick}><FontAwesomeIcon icon={faPaperPlane} size={"xl"} /></button>
                         </div>
                     </div>
                 </main>

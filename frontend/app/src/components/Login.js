@@ -1,12 +1,21 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../css/login.css";
+import "../css/main.css";
+import { faLock, faUser} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export default function Login() {
+
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState(false);
-  const navigate = useNavigate();
+  let navigate = useNavigate();
+
+
+  const handleRegisterClick = () => {
+    navigate('/register');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,21 +52,24 @@ export default function Login() {
           </header>
         </div>
         <section className="login-section">
-          <form>
+          <form id={'login-form'}>
             <h2>Login</h2>
-            <label htmlFor="username">Username:</label>
-            <input type="text" id="username" name="username" required="" onChange={e => setUsername(e.target.value)} />
-            <label htmlFor="password">Password:</label>
-            <input type="password" id="password" name="password" required="" onChange={e => setPassword(e.target.value)} />
-            {err && <p className="error">Invalid username or password</p>}
-            <button type="submit" onClick={handleSubmit}>Login</button>
-            <div className="register-btn-container">
-              <p>Don't have an account?</p>
-              <Link to="/register">
-                <button>Register</button>
-              </Link>
+
+            <div className={"form-input-container"}>
+              <FontAwesomeIcon icon={faUser} size={"2x"}></FontAwesomeIcon>
+              <input placeholder={"Username"} type="text" id="username" name="username" required="" onChange={e => setUsername(e.target.value)} />
             </div>
-          </form>
+
+            <div className={"form-input-container"}>
+              <FontAwesomeIcon icon={faLock} size={"2x"}></FontAwesomeIcon>
+              <input placeholder={"Password"} type="password" id="password" name="password" required="" onChange={e => setPassword(e.target.value)} />
+
+            </div>
+            {err && <p className="error">Invalid username or password!</p>}
+            <button type="submit" onClick={handleSubmit}>Login</button>
+              <p>Don't have an account?<Link to={'/register'}> <a >Register</a></Link> </p>
+            { /*<button onClick={handleRegisterClick} >Register</button> */}
+        </form>
         </section>
       </>
   );

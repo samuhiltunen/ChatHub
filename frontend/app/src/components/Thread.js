@@ -1,14 +1,45 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../css/thread.css";
+import "../css/main.css";
+import { faTrashAlt} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {TokenRefresh} from "./TokenRefresh";
 
 export default function Thread(props) {
-  return (
-    <Link to={`/threads/${props.utid}`} className="thread-link">
+
+    /*
+    const token = localStorage.getItem('token');
+
+    const options = {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: `{"utid":"${props.utid}"}` // utid of the thread to be deleted
+    };
+
+    const deleteThread =  async () => {
+        try {
+            const response = await fetch('http://api.chathub.kontra.tel/threads/del', options);
+
+            const data = await response.json();
+
+        } catch (err) {
+            console.error(err);
+        }
+    };
+     */
+
+    return (
       <div className="thread-container">
-        <p>Title: {props.title}</p>
-        <p>utid: {props.utid}</p>
+    <Link to={`/threads/${props.utid}`} className="thread-link">
+      <div>
+        <p> {props.title}</p>
+        <p> ID: {props.utid}</p>
       </div>
     </Link>
+          <button /*onClick={deleteThread}*/> <FontAwesomeIcon icon={ faTrashAlt} size={"xl"}/> </button>
+          </div>
   );
 };
