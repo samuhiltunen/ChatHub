@@ -40,6 +40,7 @@ export default function Profile() {
             };
 
             try {
+                console.log("Updating user...");
                 const response = await fetch('https://api.chathub.kontra.tel/users/update', options);
                 if (!response.ok) {
                     if (response.status === 401 && retryCount < 3) {
