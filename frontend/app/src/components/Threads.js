@@ -76,7 +76,7 @@ export default function Threads() {
     const handleSearch = (searchQuery) => {
         setSearchText(searchQuery);
         const filtered = threadsData.filter(thread =>
-            thread.user.toLowerCase().includes(searchQuery.toLowerCase())
+            thread.title.toLowerCase().includes(searchQuery.toLowerCase())
         );
         setFilteredThreads(filtered);
     };
