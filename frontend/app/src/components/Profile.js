@@ -5,85 +5,8 @@ import "../css/profile.css";
 import ProfilePictureChanger from './TestPhoto';
 import { Logout } from './Logout';
 import { TokenRefresh } from './TokenRefresh';
-
-const StatusChanger = ({ status, setStatus }) => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [newStatus, setNewStatus] = useState(status);
-
-    const handleButtonClick = () => {
-        setIsEditing(true);
-    };
-
-    const handleFormSubmit = (e) => {
-        e.preventDefault();
-        setStatus(newStatus);
-        setIsEditing(false);
-    };
-
-    const handleInputChange = (e) => {
-        setNewStatus(e.target.value);
-    };
-
-    return (
-        <div>
-            {isEditing ? (
-                <form onSubmit={handleFormSubmit}>
-                    <input
-                        type="text"
-                        value={newStatus}
-                        onChange={handleInputChange}
-                    />
-                    <button type="submit">Submit</button>
-                </form>
-            ) : (
-                <div>
-                    <h2>{status}</h2>
-                    <button onClick={handleButtonClick}>Change status</button>
-                </div>
-            )}
-        </div>
-    );
-};
-const BioChanger = ({ bio, setBio }) => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [newBio, setNewBio] = useState(bio);
-
-    const handleButtonClick = () => {
-        setIsEditing(true);
-    };
-
-    const handleFormSubmit = (e) => {
-        e.preventDefault();
-        setBio(newBio);
-        setIsEditing(false);
-    };
-
-    const handleInputChange = (e) => {
-        setNewBio(e.target.value);
-    };
-
-    return (
-        <div>
-            {isEditing ? (
-                <form onSubmit={handleFormSubmit}>
-                    <textarea
-                        value={newBio}
-                        onChange={handleInputChange}
-                        rows="4" 
-                        cols="50"
-                    />
-                    <br />
-                    <button type="submit">Submit</button>
-                </form>
-            ) : (
-                <div>
-                    <h2>{bio}</h2>
-                    <button onClick={handleButtonClick}>Change Bio</button>
-                </div>
-            )}
-        </div>
-    );
-};
+import StatusChanger from './StatusChanger';
+import BioChanger from './BioChanger';
 
 export default function Profile() {
     const [username, setUsername] = useState("");
