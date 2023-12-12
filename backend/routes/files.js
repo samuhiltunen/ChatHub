@@ -26,7 +26,7 @@ router.route('/')
         ufid: req.file.filename.split('/')[1].split('.')[0], // Dumb way to get ufid but im lazy
         name: req.file.originalname,
         path: `${req.hostname}/${req.file.filename}`,
-        owner: req.user.name,
+        ownerUUID: req.user.uuid,
         size: req.headers['content-length'],
         createdAt: new Date()
     }
@@ -36,7 +36,7 @@ router.route('/')
         const newFile = new File(fileObj);
         await newFile.save();
 
-        res.status(200).json({result: newFile});
+        res.status(200).json({content: fileObj});
     }).catch(()=> {
         res.status(500).json({error: 'Internal server error'});
         return;

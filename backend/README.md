@@ -15,10 +15,11 @@ Chathub backend consists of three main components that are all hosted on the sam
 
 ### API
 
+- [Refresh token](#refresh-token)
 - [Register new user](#register-user)
 - [Login user](#login-user)
 - [Logout user](#logout-user)
-- [Refresh token](#refresh-token)
+- [Update user](#update-user)
 - [Get user](#get-user)
 - [Upload file](#upload-file)
 - [Get file](#get-file)
@@ -743,6 +744,50 @@ const options = {
 };
 
 fetch(encodeUri('http://api.chathub.kontra.tel/messages/get?utid=1XdqQYyD&amnt=3&date=2023-12-11T10:02:20.408Z'), options)
+  .then(response => response.json())
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
+```
+
+## Update user
+
+[**Back ➩**](#table-of-contents)
+
+Updates a user.
+
+- Request: **POST:** `https://api.chathub.kontra.tel/users/update`
+- AUTH: token
+
+### Parameters
+
+| Name     | Type   | Description                                                  |
+| -------- | ------ | ------------------------------------------------------------ |
+| uuid | string | ID of the user. (required) |
+| user | object | User object. |
+
+### Returns
+
+- 200 OK - User updated successfully.
+  - User object. (see [database section](#database))
+- 401 Unauthorized - Token is invalid or missing.
+- 403 Forbidden - Token is expired.
+- 400 Bad Request - Required params missing.
+- 500 Internal Server Error - Server error.
+- 404 Not Found - User not found.
+
+### Example
+
+```javascript
+const options = {
+  method: 'POST',
+  headers: {
+    Authorization: 'Bearer <auth token>',
+    'Content-Type': 'application/json'
+  },
+  body: '{"uuid":"DpHytzT9","user":{"name":"devNameNew","info":{"status":"8==D","bio":"olen testi useri xDD"}}}'
+};
+
+fetch('http://localhost:3001/users/update', options)
   .then(response => response.json())
   .then(response => console.log(response))
   .catch(err => console.error(err));

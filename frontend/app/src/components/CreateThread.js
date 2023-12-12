@@ -15,7 +15,7 @@ export default function CreateThread(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         const options = {
             method: 'POST',
             headers: {
@@ -29,24 +29,31 @@ export default function CreateThread(props) {
                 "nsfw": nsfw
             })
         };
-
-        try {
-            const response = await fetch('https://api.chathub.kontra.tel/threads/create', options);
-            if (response.ok) {
-                console.log("/Thread Created");
-                const responseData = await response.json();
-                props.addThread(responseData.content.thread);
-
-            } else {
-                if (response.status === 401) {
-                    console.error("Unauthorized, refreshing token...");
-                    TokenRefresh();
+    
+        const createThread = async (retryCount = 0) => {
+            try {
+                const response = await fetch('https://api.chathub.kontra.tel/threads/create', options);
+                if (response.ok) {
+                    console.log("/Thread Created");
+                    const responseData = await response.json();
+                    props.addThread(responseData.content.thread);
+                } else {
+                    if (response.status === 401 && retryCount < 3) {
+                        console.error("Unauthorized, refreshing token...");
+                        await TokenRefresh();
+                        await createThread(retryCount + 1);
+                    } else if (retryCount >= 3) {
+                        console.error("Failed to refresh token after 3 attempts");
+                    } else {
+                        console.error("/Create Thread, Server responded with status:", response.status);
+                    }
                 }
-                console.error("/Create Thread, Server responded with status:", response.status);
+            } catch (err) {
+                console.error(err);
             }
-        } catch (err) {
-            console.error(err);
-        }
+        };
+    
+        createThread();
     }
 
     const addMember = () => {

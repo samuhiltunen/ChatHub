@@ -131,9 +131,10 @@ app.post('/token', async (req, res) => {
             // Check if token exists
             if(token == null) {
 
+
             // Change user logged in status and last online
             dbConn().then(async ({ User }) => {
-                const user = await User.findOne({name: tokenload.user.name});
+                const user = await User.findOne({uuid: tokenload.user.uuid});
                 user.info.logged = false;
                 user.info.lastOnline = new Date();
                 await user.save();
