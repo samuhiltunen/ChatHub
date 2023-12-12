@@ -21,6 +21,9 @@ export default function Profile() {
         const token = localStorage.getItem('token');
 
         const updateUser = async (retryCount = 0) => {
+            if (!userId || !username || typeof status !== 'string' || typeof bio !== 'string') {
+                return;
+            }
             const options = {
                 method: 'POST',
                 headers: {

@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const BioChanger = ({ bio, setBio }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [newBio, setNewBio] = useState(bio);
+
+    useEffect(() => {
+        setNewBio(bio);
+    }, [bio]);
 
     const handleButtonClick = () => {
         setIsEditing(true);

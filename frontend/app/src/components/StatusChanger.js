@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const StatusChanger = ({ status, setStatus }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [newStatus, setNewStatus] = useState(status);
+
+    useEffect(() => {
+        setNewStatus(status);
+    }, [status]);
 
     const handleButtonClick = () => {
         setIsEditing(true);
