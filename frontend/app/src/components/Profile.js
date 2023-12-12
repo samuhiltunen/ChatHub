@@ -1,12 +1,14 @@
 
+
 import React, { useEffect, useState } from 'react';
 import "../css/main.css";
 import { Link } from 'react-router-dom';
 import "../css/profile.css";
 import ProfilePictureChanger from './TestPhoto';
 import { Logout } from './Logout';
+import { TokenRefresh } from './TokenRefresh';
 
-const StatusChanger = ({ username }) => {
+const StatusChanger = () => {
     const [status, setStatus] = useState('Hello, My name is TestUser!');
     const [isEditing, setIsEditing] = useState(false);
     const [newStatus, setNewStatus] = useState(status);
@@ -45,29 +47,77 @@ const StatusChanger = ({ username }) => {
         </div>
     );
 };
+const BioChanger = ({ initialBio }) => {
+    const [bio, setBio] = useState("This is my bio");
+    const [isEditing, setIsEditing] = useState(false);
+    const [newBio, setNewBio] = useState(bio);
+
+    const handleButtonClick = () => {
+        setIsEditing(true);
+    };
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        setBio(newBio);
+        setIsEditing(false);
+    };
+
+    const handleInputChange = (e) => {
+        setNewBio(e.target.value);
+    };
+
+    return (
+        <div>
+            {isEditing ? (
+                <form onSubmit={handleFormSubmit}>
+                    <textarea
+                        value={newBio}
+                        onChange={handleInputChange}
+                        rows="4" // Adjust the number of rows as needed
+                        cols="50" // Adjust the number of columns as needed
+                    />
+                    <br />
+                    <button type="submit">Submit</button>
+                </form>
+            ) : (
+                <div>
+                    <h2>{bio}</h2>
+                    <button onClick={handleButtonClick}>Change Bio</button>
+                </div>
+            )}
+        </div>
+    );
+};
 
 export default function Profile() {
     const [username, setUsername] = useState("");
+    const [userId, setUserId] = useState('');
     const handleLogout = Logout();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        setUsername(localStorage.getItem("username")); // replace with the username you want to search for
-
-        const fetchData = async () => {
+    
+        const getUser = async (retryCount = 0) => {
             const options = {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             };
-
+    
             try {
                 const response = await fetch(`https://api.chathub.kontra.tel/users/get`, options);
                 const data = await response.json();
                 if (response.ok) {
-                    console.log(data);
                     console.log(response.status);
+                    setUsername(data.content.name);
+                    setUserId(data.content.uuid);
+                } else if (response.status === 401 && retryCount < 3) {
+                    console.error("Unauthorized, refreshing token...");
+                    await TokenRefresh();
+                    await getUser(retryCount + 1);
+                } else if (retryCount >= 3) {
+                    console.error("Failed to refresh token after 3 attempts");
                 } else {
                     console.error("Server responded with status:", response.status);
                 }
@@ -75,13 +125,16 @@ export default function Profile() {
                 console.error(err);
             }
         }
-
-        fetchData();
+    
+        getUser();
     }, []);
 
     return (
         <>
-            <header className="header">
+            <header id={"profile-header"} className="header">
+                <Link to="/main">
+                    <button id="mainPageButton">Main Page</button>
+                </Link>
                 <div className="title">
                     <h1>ChatHub</h1>
                 </div>
@@ -91,9 +144,7 @@ export default function Profile() {
                     </button>
                     </Link>
 
-                    <Link to="/main">
-                        <button id="mainPageButton">Main Page</button>
-                    </Link>
+
 
                 </div>
             </header>
@@ -106,9 +157,15 @@ export default function Profile() {
                     <p>Your name</p>
                     {/*make maxium status length 20 characters*/}
                     <h2>{username}</h2>
+                    <p>user id: {userId}</p>
+                    <br></br>
                     <p>Status</p>
                     {/*make maxium status length 40 characters*/}
                     <StatusChanger username={username} />
+                    <br></br>
+                    <p>Bio</p>
+                    {/*make maxium status length 40 characters*/}
+                    <BioChanger username={username} />
                 </div>
 
 

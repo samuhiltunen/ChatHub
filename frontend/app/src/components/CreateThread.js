@@ -31,7 +31,7 @@ export default function CreateThread(props) {
         try {
             const response = await fetch('https://api.chathub.kontra.tel/threads/create', options);
             if (response.ok) {
-                console.log("Thread OK");
+                console.log("/Thread Created");
                 const responseData = await response.json();
                 props.addThread(responseData.content.thread);
 
@@ -66,7 +66,7 @@ export default function CreateThread(props) {
                         <label htmlFor="title" style={{ color: 'black' }}>Title</label>
                         <input type="text" id="title" value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" />
 
-                        <label htmlFor="members" style={{ color: 'black' }}>Members</label>
+                        <label htmlFor="members" style={{ color: 'black' }}>Members (userId)</label>
                         <input type="text" id="members" value={memberInput} onChange={e => setMemberInput(e.target.value)} placeholder="Add a member" />
                         <button type="button" onClick={addMember}>Add member</button>
                         <p style={{ color: 'black' }}>Members</p>
@@ -74,9 +74,9 @@ export default function CreateThread(props) {
                             {members.map((member, index) => <li key={index} style={{ color: 'black', backgroundColor: 'white' }}>{member}</li>)}
                         </ul>
 
-                        <label htmlFor="moderators" style={{ color: 'black' }}>Moderators</label>
+                        <label htmlFor="moderators" style={{ color: 'black' }}>Moderators (userID)</label>
                         <input type="text" id="moderators" value={moderatorInput} onChange={e => setModeratorInput(e.target.value)} placeholder="Add a moderator" />
-                        <button type="button" onClick={addModerator}>Add moderator</button>
+                        <button type="button" onClick={addModerator}>Add moderator (user id)</button>
                         <p style={{ color: 'black' }}>Moderators</p>
                         <ul>
                             {moderators.map((moderator, index) => <li key={index} style={{ color: 'black', backgroundColor: 'white' }}>{moderator}</li>)}
