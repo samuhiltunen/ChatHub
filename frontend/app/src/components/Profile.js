@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from 'react';
 import "../css/main.css";
 import { Link } from 'react-router-dom';
@@ -8,8 +6,7 @@ import ProfilePictureChanger from './TestPhoto';
 import { Logout } from './Logout';
 import { TokenRefresh } from './TokenRefresh';
 
-const StatusChanger = () => {
-    const [status, setStatus] = useState('Hello, My name is TestUser!');
+const StatusChanger = ({ status, setStatus }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [newStatus, setNewStatus] = useState(status);
 
@@ -47,8 +44,7 @@ const StatusChanger = () => {
         </div>
     );
 };
-const BioChanger = ({ initialBio }) => {
-    const [bio, setBio] = useState("This is my bio");
+const BioChanger = ({ bio, setBio }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [newBio, setNewBio] = useState(bio);
 
@@ -73,8 +69,8 @@ const BioChanger = ({ initialBio }) => {
                     <textarea
                         value={newBio}
                         onChange={handleInputChange}
-                        rows="4" // Adjust the number of rows as needed
-                        cols="50" // Adjust the number of columns as needed
+                        rows="4" 
+                        cols="50"
                     />
                     <br />
                     <button type="submit">Submit</button>
@@ -92,11 +88,60 @@ const BioChanger = ({ initialBio }) => {
 export default function Profile() {
     const [username, setUsername] = useState("");
     const [userId, setUserId] = useState('');
+    const [status, setStatus] = useState('Hello, My name is TestUser!');
+    const [bio, setBio] = useState('This is my bio');
     const handleLogout = Logout();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-    
+
+        const updateUser = async (retryCount = 0) => {
+            const options = {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    uuid: userId,
+                    user: {
+                        name: username,
+                        info: {
+                            status: status,
+                            bio: bio
+                        }
+                    }
+                })
+            };
+
+            try {
+                console.log('updating user');
+                const response = await fetch('https://api.chathub.kontra.tel/users/update', options);
+                if (!response.ok) {
+                    if (response.status === 401 && retryCount < 3) {
+                        console.error("Unauthorized, refreshing token...");
+                        await TokenRefresh();
+                        await updateUser(retryCount + 1);
+                    } else if (retryCount >= 3) {
+                        console.error("Failed to refresh token after 3 attempts");
+                    } else {
+                        throw new Error(`Server responded with status: ${response.status}`);
+                    }
+                } else {
+                    console.log('user updated');
+                    console.log("/updateUser: ", response.status);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        updateUser();
+    }, [status, bio]);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+
         const getUser = async (retryCount = 0) => {
             const options = {
                 method: 'GET',
@@ -104,7 +149,7 @@ export default function Profile() {
                     'Authorization': `Bearer ${token}`
                 }
             };
-    
+
             try {
                 const response = await fetch(`https://api.chathub.kontra.tel/users/get`, options);
                 const data = await response.json();
@@ -112,6 +157,8 @@ export default function Profile() {
                     console.log(response.status);
                     setUsername(data.content.name);
                     setUserId(data.content.uuid);
+                    setStatus(data.content.info.status);
+                    setBio(data.content.info.bio);
                 } else if (response.status === 401 && retryCount < 3) {
                     console.error("Unauthorized, refreshing token...");
                     await TokenRefresh();
@@ -125,7 +172,7 @@ export default function Profile() {
                 console.error(err);
             }
         }
-    
+
         getUser();
     }, []);
 
@@ -143,9 +190,6 @@ export default function Profile() {
                         Logout
                     </button>
                     </Link>
-
-
-
                 </div>
             </header>
 
@@ -161,11 +205,11 @@ export default function Profile() {
                     <br></br>
                     <p>Status</p>
                     {/*make maxium status length 40 characters*/}
-                    <StatusChanger username={username} />
+                    <StatusChanger username={username}  setStatus={setStatus} status={status}/>
                     <br></br>
                     <p>Bio</p>
                     {/*make maxium status length 40 characters*/}
-                    <BioChanger username={username} />
+                    <BioChanger bio={bio} setBio={setBio}/>
                 </div>
 
 
