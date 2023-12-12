@@ -36,7 +36,7 @@ router.route('/')
         const newFile = new File(fileObj);
         await newFile.save();
 
-        res.status(200).json({result: newFile});
+        res.status(200).json({content: fileObj});
     }).catch(()=> {
         res.status(500).json({error: 'Internal server error'});
         return;
