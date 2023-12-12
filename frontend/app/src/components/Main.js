@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import "../css/main.css";
 import { useParams } from 'react-router-dom';
 import Threads from './Threads';
@@ -14,7 +14,8 @@ export default function Main() {
     const [mainVisible, setMainVisible] = useState(true);
     const [messageContent, setMessageContent] = useState('');
     const [uploadedFileId, setUploadedFileId] = useState(null);
-    const [file, setFile] = useState(null); 
+    const fileInput = useRef(null);
+    const [file, setFile] = useState(null);
     let utid = useParams();
     utid = utid.utid;
 
@@ -32,7 +33,7 @@ export default function Main() {
         setFile(event.target.files[0]);
     };
 
-    const uploadFile = async (retryCount = 0) => { 
+    const uploadFile = async (retryCount = 0) => {
         const token = localStorage.getItem('token');
         const formData = new FormData();
         formData.append('file', file);
@@ -51,7 +52,7 @@ export default function Main() {
             console.log(fileOptions);
             const response = await fetch('https://file.chathub.kontra.tel/files', fileOptions);
             const data = await response.json();
-            if (!response.ok){
+            if (!response.ok) {
                 console.log("Error uploading file: ", response.status);
             }
             if (response.ok) {
@@ -73,14 +74,14 @@ export default function Main() {
 
     const createMessage = async (uploadedFileId, retryCount = 0) => {
         const token = localStorage.getItem('token');
-        console.log("before sending message: ",uploadedFileId);
-    
+        console.log("before sending message: ", uploadedFileId);
+
         const messageData = {
             utid: utid,
             content: messageContent,
             attachments: uploadedFileId ? [uploadedFileId] : []
         };
-    
+
         const messageOptions = {
             method: 'POST',
             headers: {
@@ -89,13 +90,13 @@ export default function Main() {
             },
             body: JSON.stringify(messageData)
         };
-    
+
         try {
             console.log("/create");
             const response = await fetch(`https://api.chathub.kontra.tel/messages/create`, messageOptions);
             if (response.ok) {
                 console.log("/message/create ", response.status);
-                setUploadedFileId(null); 
+                setUploadedFileId(null);
             } else if (response.status === 401 && retryCount < 3) {
                 console.error("Unauthorized, refreshing token...");
                 await TokenRefresh();
@@ -153,8 +154,9 @@ export default function Main() {
                     </div>
                     <div className="messagebox">
                         <div className={"messagewrap"}>
-                            <input type="file" onChange={handleFileChange} /> {/* Add this line */}
-                            <button><FontAwesomeIcon icon={faPaperclip} size={"lg"} /></button>
+
+                            <input type="file" onChange={handleFileChange} ref={fileInput} style={{ display: 'none' }} />
+                            <button onClick={() => fileInput.current && fileInput.current.click()}><FontAwesomeIcon icon={faPaperclip} size={"lg"} /></button>
                             <textarea
                                 id="messageInput"
                                 placeholder="Type your message"
