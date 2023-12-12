@@ -19,7 +19,7 @@ router.route('/:job')
         case 'create':
             
             // Check if request is valid
-            if(!req.body.utid || !req.body.content) {
+            if(!req.body.utid) {
                 res.status(400).json({error: 'Bad request'});
                 return;
             }
