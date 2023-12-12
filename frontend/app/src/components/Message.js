@@ -10,6 +10,7 @@ export default function Message(props) {
     return (
         <div className='message-container' id={props.sender === username ? 'SentByMeTrue':''}>
             <p>{props.text}</p>
+            <p>Sent by: {props.sender}</p>
             {props.fileId && props.fileId.map((path, index) => {
                 const isImage = path.match(/\.(jpeg|jpg|gif|png)$/i) != null;
                 return isImage ? 
