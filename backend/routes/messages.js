@@ -27,7 +27,7 @@ router.route('/:job')
             // Start database connection
             dbConn().then(async ({ Message, Thread }) => {
 
-                console.log(req.body.utid);
+                //console.log(req.body.utid);
 
                 // Check if thread exists
                 if(!await Thread.exists({ utid: req.body.utid })) {
@@ -39,7 +39,7 @@ router.route('/:job')
                 const newMessage = new Message({
                     umid: new ShortUniqueId().randomUUID(8),
                     author: req.user.name,
-                    content: [req.body.content],
+                    content: [req.body.content??''],
                     info: {
                         sent: new Date(),
                         edited: null,
