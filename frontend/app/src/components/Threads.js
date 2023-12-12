@@ -107,7 +107,7 @@ export default function Threads() {
               <textarea
                   type="text"
                   id="username-search"
-                  placeholder="search by username"
+                  placeholder="search by title"
                   value={searchText}
                   onChange={(e) => handleSearch(e.target.value)}
                   onKeyPress= {handleKeyPress}

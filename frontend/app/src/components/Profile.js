@@ -89,7 +89,10 @@ export default function Profile() {
 
     return (
         <>
-            <header className="header">
+            <header id={"profile-header"} className="header">
+                <Link to="/main">
+                    <button id="mainPageButton">Main Page</button>
+                </Link>
                 <div className="title">
                     <h1>ChatHub</h1>
                 </div>
@@ -99,9 +102,7 @@ export default function Profile() {
                     </button>
                     </Link>
 
-                    <Link to="/main">
-                        <button id="mainPageButton">Main Page</button>
-                    </Link>
+
 
                 </div>
             </header>

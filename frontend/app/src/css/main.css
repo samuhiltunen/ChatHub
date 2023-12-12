@@ -193,6 +193,7 @@ textarea:focus {
 #threads-container{
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
 }
 
 #allMessages{
