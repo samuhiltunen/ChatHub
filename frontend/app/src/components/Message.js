@@ -3,7 +3,8 @@ import { Modal } from 'react-bootstrap';
 
 export default function Message(props) {
     const [showModal, setShowModal] = useState(false);
-    const [modalImage, setModalImage] = useState('');
+    const [modalMedia, setModalMedia] = useState('');
+    const [isModalVideo, setIsModalVideo] = useState(false);
     const username = localStorage.getItem('username');
     console.log(props.fileId);
 
@@ -13,17 +14,25 @@ export default function Message(props) {
             <p>Sent by: {props.sender}</p>
             {props.fileId && props.fileId.map((path, index) => {
                 const isImage = path.match(/\.(jpeg|jpg|gif|png)$/i) != null;
-                return isImage ? 
-                    <img key={index} src={`https://${path}`} alt="Uploaded file" style={{maxWidth: '100%', maxHeight: '200px'}} onClick={() => {setShowModal(true); setModalImage(`https://${path}`);}} /> :
-                    <a key={index} href={`https://${path}`} download>Download file</a>
+                const isVideo = path.match(/\.(mp4|webm|ogg)$/i) != null;
+                if (isImage) {
+                    return <img key={index} src={`https://${path}`} alt="Uploaded file" style={{maxWidth: '100%', maxHeight: '200px'}} onClick={() => {setShowModal(true); setModalMedia(`https://${path}`); setIsModalVideo(false);}} />
+                } else if (isVideo) {
+                    return <video key={index} src={`https://${path}`} controls style={{maxWidth: '100%', maxHeight: '200px'}} onClick={() => {setShowModal(true); setModalMedia(`https://${path}`); setIsModalVideo(true);}} />
+                } else {
+                    return <a key={index} href={`https://${path}`} download>Download file</a>
+                }
             })}
             <p>{props.time}</p>
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Image Preview</Modal.Title>
+                    <Modal.Title>Media Preview</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <img src={modalImage} alt="Uploaded file" style={{width: '100%'}} />
+                    {isModalVideo ? 
+                        <video src={modalMedia} controls style={{width: '100%'}} /> :
+                        <img src={modalMedia} alt="Uploaded file" style={{width: '100%'}} />
+                    }
                 </Modal.Body>
             </Modal>
         </div>
