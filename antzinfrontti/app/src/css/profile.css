@@ -16,3 +16,6 @@
     border-radius: 8px;
     border: 1px solid #ccc;
 }
+#profile-header{
+    justify-content: space-evenly;
+}

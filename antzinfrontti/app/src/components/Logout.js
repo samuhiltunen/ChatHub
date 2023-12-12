@@ -25,9 +25,7 @@ export const Logout = () => {
             if (response.status === 401) {
                 console.log("refreshing token");
                 await TokenRefresh();
-                // Update options with the new token
                 options.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-                // Retry logout after refreshing the token
                 response = await fetch("https://auth.chathub.kontra.tel/logout", options);
             }
             if (response.ok) {
