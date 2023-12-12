@@ -1,4 +1,5 @@
 
+
 import React, { useEffect, useState } from 'react';
 import "../css/main.css";
 import { Link } from 'react-router-dom';
@@ -41,6 +42,47 @@ const StatusChanger = () => {
                 <div>
                     <h2>{status}</h2>
                     <button onClick={handleButtonClick}>Change status</button>
+                </div>
+            )}
+        </div>
+    );
+};
+const BioChanger = ({ initialBio }) => {
+    const [bio, setBio] = useState("This is my bio");
+    const [isEditing, setIsEditing] = useState(false);
+    const [newBio, setNewBio] = useState(bio);
+
+    const handleButtonClick = () => {
+        setIsEditing(true);
+    };
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        setBio(newBio);
+        setIsEditing(false);
+    };
+
+    const handleInputChange = (e) => {
+        setNewBio(e.target.value);
+    };
+
+    return (
+        <div>
+            {isEditing ? (
+                <form onSubmit={handleFormSubmit}>
+                    <textarea
+                        value={newBio}
+                        onChange={handleInputChange}
+                        rows="4" // Adjust the number of rows as needed
+                        cols="50" // Adjust the number of columns as needed
+                    />
+                    <br />
+                    <button type="submit">Submit</button>
+                </form>
+            ) : (
+                <div>
+                    <h2>{bio}</h2>
+                    <button onClick={handleButtonClick}>Change Bio</button>
                 </div>
             )}
         </div>
@@ -116,9 +158,14 @@ export default function Profile() {
                     {/*make maxium status length 20 characters*/}
                     <h2>{username}</h2>
                     <p>user id: {userId}</p>
+                    <br></br>
                     <p>Status</p>
                     {/*make maxium status length 40 characters*/}
                     <StatusChanger username={username} />
+                    <br></br>
+                    <p>Bio</p>
+                    {/*make maxium status length 40 characters*/}
+                    <BioChanger username={username} />
                 </div>
 
 
