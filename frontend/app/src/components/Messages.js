@@ -17,7 +17,11 @@ export default function Messages() {
         };
     
         const fetchMessages = async (retryCount = 0) => {
+            if (!utid) {
+                return;
+            }
             try {
+                console.log("/messages/get", utid);
                 const response = await fetch(`https://api.chathub.kontra.tel/messages/get?utid=${utid}&amnt=50`, messageOptions);
                 if (response.status === 401) {
                     console.error("Unauthorized, refreshing token...");
@@ -32,7 +36,7 @@ export default function Messages() {
                     return;
                 }
                 const data = await response.json();
-        
+            
                 setMessages(data.content.sort((a, b) => new Date(a.info.sent) - new Date(b.info.sent)));
             } catch (err) {
                 console.error(err);

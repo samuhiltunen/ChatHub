@@ -26,6 +26,9 @@ export default function Threads() {
     }
 
     const getThreads = async (uuid, retryCount = 0) => {
+        if (!uuid) {
+            return;
+        }
         try {
             const response = await fetch(`https://api.chathub.kontra.tel/threads/a?members=${uuid}`, threadOptions);
             const data = await response.json();
@@ -57,7 +60,11 @@ export default function Threads() {
             const response = await fetch(`https://api.chathub.kontra.tel/users/get`, userOptions);
             const data = await response.json();
             if (response.ok) {
-                getThreads(data.content.uuid);
+                if (data.content.uuid) {
+                    getThreads(data.content.uuid);
+                } else {
+                    console.log('User UUID is undefined');
+                }
             } else if (response.status === 401 && retryCount < 3) {
                 console.error("Unauthorized, refreshing token...");
                 await TokenRefresh();
