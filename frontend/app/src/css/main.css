@@ -1,27 +1,40 @@
 /* styles.css */
+:root{
+
+    /*värit*/
+
+    --theme-color: black; /* on header, aside yms */
+    --button-hover-color: black; /*buttoneiden hover*/
+    --button-background-color: #000000; /*buttonit ja header iconit*/
+    --button-color: white;  /*buttonien sisäinen color teksti ja icon yms */
+    --fa-button-border-color: black;
+}
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+
 }
 
 root {
     height: auto;
 }
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Montserrat', sans-serif;
+    background-color: white ;
 }
+
 
 header {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 12vh;
-    background-color: #333;
-    color: #fff;
+    background-color: var(--theme-color);
+    color: var(--button-color);
     text-align: center;
+    font-size: 24px;
 }
 
 
@@ -34,12 +47,60 @@ section {
 }
 
 
+
 main {
     display: flex;
     flex-direction: column;
     flex: 1;
     justify-content: flex-end;
     overflow: hidden;
+}
+
+.login-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    margin-top: 5px;
+}
+
+form {
+    text-align: center;
+    background-color: #f4f4f4;
+    padding: 20px;
+    border: 2px solid #1A1A1A;
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+}
+.form-input-container{
+    display: flex;
+    align-items: center;
+
+}
+
+#login-form, #register-form, #create-thread-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    min-width: 400px;
+    min-height: 500px;
+}
+
+
+
+input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 2px solid #1A1A1A;
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    margin-left: 2px;
+}
+
+.register-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
 }
 
 
@@ -55,44 +116,42 @@ input[type="email"],
 input[type="password"] {
     width: 100%;
     padding: 10px;
-    margin-bottom: 10px;
     box-sizing: border-box;
 }
 
+
 button {
-    background-color: #4CAF50;
-    color: #fff;
+    background-color: var(--button-background-color);
+    border: 2px solid var(--fa-button-border-color);
+    color: var(--button-color);
     padding: 10px;
-    border: none;
-    border-radius: 5px;
     cursor: pointer;
+    font-weight: 600;
     height: 2.4rem;
+    text-align: center;
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+    margin: 1px;
+    display: flex;
+    justify-content: center; /* Horizontally center the content */
+    align-items: center; /* Vertically center the content */
 }
 
-.fa-btn{
-    background-color: #4CAF50;
-    color: #fff;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    height: 2.4rem;
 
-}
-
-.fa-btn:hover{
-    background-color: #388E3C;
-}
 button:hover {
-    background-color: #388E3C;
+    background-color: var(--button-hover-color);
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
 }
 
 .header-icon {
     display: none; /* hide the hamburger icon */
-    color: #4CAF50;
+    color: var(--button-color);
+
 }
 .header-icon:hover {
-    color: #388E3C;
+    color: var(--button-color);
+    transform: translateY(-2px);
+    cursor: pointer;
 }
 
 .chat-container {
@@ -100,6 +159,10 @@ button:hover {
     flex: 1;
     overflow-y: scroll;
     justify-content: center;
+    background-color:inherit;
+}
+.chat-container::-webkit-scrollbar {
+    width: 0; /* This will hide the scrollbar */
 }
 
 
@@ -108,19 +171,48 @@ button:hover {
     width: 100%;
 }
 
-.messagewrap, .user-searchbox {
+.messagewrap{
     display: flex;
     border: black solid 1px;
-    border-radius: 5px;
     align-items: center;
     justify-content: space-between;
-    background-color: white;
+    background-color: var(--theme-color);
 }
+
 
 .user-searchbox{
     height: auto;
-    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1px;
+
 }
+
+#text-and-search-container{
+    display: flex;
+    flex: 1;
+    margin-left: 2px;
+
+}
+#text-area-in-threads{
+    flex: 1;
+    margin: 0;
+    border: 2px solid var(--fa-button-border-color);
+    border-right: none;
+
+
+}
+#search-button-in-threads{
+    margin: 0;
+    border: 2px solid var(--fa-button-border-color);
+    border-left: 0;
+
+
+
+}
+
+
 
 textarea{
     border: none;
@@ -134,8 +226,24 @@ textarea{
 #sendMessageButton {
 }
 
-#username-search {
-    flex: 1;
+.show-aside{
+    background-color: var(--theme-color);
+    color: #f4f4f4;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: fit-content;
+    min-width: 25%;
+
+}
+
+.hide-aside{
+    display: none
+}
+
+.hide-main {
+    display: none;
 }
 
 @media only screen and (max-width: 600px)  {
@@ -152,24 +260,6 @@ textarea{
 
 }
 
-.show-aside{
-    background-color: #333;
-    color: #fff;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: fit-content;
-
-}
-
-.hide-aside{
-    display: none
-}
-
-.hide-main {
-    display: none;
-}
 .thread-controls-container {
     display: flex;
     justify-content: space-evenly;
@@ -186,14 +276,13 @@ textarea:focus {
     outline: none; /* Removes the border when the textarea is focused */
 }
 
-#userSearchButtons {
-    background-color:#333333 ;
 
-}
 #threads-container{
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
+    overflow: hidden;
+    text-align: center;
+
 }
 
 #allMessages{
@@ -206,3 +295,43 @@ textarea:focus {
 #SentByMeTrue {
     align-self: flex-end;
 }
+
+#my-threads{
+    overflow-y: scroll;
+}
+
+#my-threads::-webkit-scrollbar {
+    width: 0; /* This will hide the scrollbar */
+}
+
+
+.thread-container {
+    margin-bottom: 5px;
+
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    background-color: var(--button-background-color);
+    border: 2px solid #1A1A1A;
+    color: #f4f4f4;
+}
+
+.thread-container:hover{
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
+}
+
+.thread-container p {
+    color: #f4f4f4;
+}
+
+.thread-link {
+    text-decoration: none;
+    flex: 1;
+}
+
+.message-container {
+    border: 1px solid black;
+}
+
+

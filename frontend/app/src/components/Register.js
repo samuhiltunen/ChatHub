@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../css/register.css";
+import "../css/main.css";
+import { faLock, faUser, faEnvelope} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -42,24 +45,37 @@ export default function Register() {
             <h1>ChatHub</h1>
           </header>
         </div>
-        <section className="register-section">
-          <form>
+
+        <section className="login-section">
+          <form id={"register-form"}>
             <h2>Register</h2>
-            <label htmlFor="username">Username:</label>
-            <input type="text" id="username" name="username" required onChange={e => setUsername(e.target.value)} />
-            <label htmlFor="email">Email:</label>
-            <input type="email" id="email" name="email" />
-            <label htmlFor="password">Password:</label>
-            <input type="password" id="password" name="password" required onChange={e => setPassword(e.target.value)} />
-            <label htmlFor="confirmPassword">Confirm Password:</label>
-            <input
+
+            <div className={"form-input-container"}>
+              <FontAwesomeIcon icon={faUser} size={"2x"}></FontAwesomeIcon>
+            <input placeholder={"Username"} type="text" id="username" name="username" required onChange={e => setUsername(e.target.value)} />
+          </div>
+            <div className={"form-input-container"}>
+              <FontAwesomeIcon icon={faEnvelope} size={"2x"}></FontAwesomeIcon>
+            <input placeholder={"Email"} type="email" id="email" name="email" />
+              </div>
+
+            <div className={"form-input-container"}>
+              <FontAwesomeIcon icon={faLock} size={"2x"}></FontAwesomeIcon>
+            <input placeholder={"Password"} type="password" id="password" name="password" required onChange={e => setPassword(e.target.value)} />
+            </div>
+
+            <div className={"form-input-container"}>
+              <FontAwesomeIcon icon={faLock} size={"2x"}></FontAwesomeIcon>
+              <input
+                placeholder={"Confirm Password"}
                 type="password"
                 id="confirmPassword"
                 name="confirmPassword"
                 required
                 onChange={e => setConfirmPassword(e.target.value)}
             />
-            {err && <p className="error-register">Check the inputs</p>}
+              </div>
+            {err && <p className="error-register">Check the inputs!</p>}
             <button type="submit" onClick={submitRegistration}>
               Register
             </button>

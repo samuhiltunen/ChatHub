@@ -19,6 +19,12 @@ async function login(req, res, next) {
     })
     .then(async (user) => {
 
+        // Check if user exists
+        if(!user) {
+            res.status(404).json({error: 'User not found'});
+            return;
+        }
+
         // Compare passwords
         if(!await bcrypt.compare(req.body.password, user.pass)) {
             res.status(403).json({error: 'Invalid password'});

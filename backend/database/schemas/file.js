@@ -7,7 +7,7 @@ const fileSchema = new Schema(
     ufid: String,
     name: String,
     path: String,
-    owner: String,
+    ownerUUID: String,
     size: Number,
     createdAt: Date
 },{

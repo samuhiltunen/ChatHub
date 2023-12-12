@@ -9,7 +9,7 @@ export  default function ProfileInAside(){
     return(
         <div className={"profile-aside"}>
             <Link to="/profile">
-            <button className={"fa-btn"}><FontAwesomeIcon icon={faCog} size={"lg"} /></button>
+            <button className={"fa-btn"}><FontAwesomeIcon icon={faCog} size={"xl"} /></button>
                 </Link>
 
         </div>

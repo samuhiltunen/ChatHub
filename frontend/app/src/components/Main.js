@@ -161,7 +161,7 @@ export default function Main() {
                                 value={messageContent}
                                 onChange={handleMessageChange}
                             />
-                            <button onClick={handleSendClick}><FontAwesomeIcon icon={faPaperPlane} size={"lg"} /></button>
+                            <button onClick={handleSendClick}><FontAwesomeIcon icon={faPaperPlane} size={"xl"} /></button>
                         </div>
                     </div>
                 </main>
