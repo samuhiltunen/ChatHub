@@ -19,9 +19,9 @@ const BioChanger = ({ bio, setBio }) => {
     };
 
     return (
-        <div>
+        <div className={"bio-change-container"}>
             {isEditing ? (
-                <form onSubmit={handleFormSubmit}>
+                <form className={"bio-change-container"} onSubmit={handleFormSubmit}>
                     <textarea
                         value={newBio}
                         onChange={handleInputChange}
@@ -32,7 +32,7 @@ const BioChanger = ({ bio, setBio }) => {
                     <button type="submit">Submit</button>
                 </form>
             ) : (
-                <div>
+                <div className={"bio-change-container"}>
                     <h2>{bio}</h2>
                     <button onClick={handleButtonClick}>Change Bio</button>
                 </div>
