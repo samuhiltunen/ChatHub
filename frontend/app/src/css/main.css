@@ -98,7 +98,6 @@ button:hover {
 .chat-container {
     display: flex;
     flex: 1;
-    border: 1px solid red;
     overflow-y: scroll;
     justify-content: center;
 }
