@@ -64,6 +64,52 @@ router.route('/:job')
             res.status(500).json({error: 'Internal server error'});
             return;
         });
+    } else if (req.params.job === 'update'){
+        // Do auth for update
+        auth(req, res, () => {
+        
+            // Check if request is valid
+            if(!req.body.uuid || !req.body.user) {
+                res.status(400).json({error: 'Bad request'});
+                return;
+            }
+
+            // Start database connection
+            dbConn().then(async ({ User }) => {
+
+                // User object from request
+                const newUser = req.body.user;
+
+                // Get user from database
+                const user = await User.findOne({uuid: req.body.uuid})
+
+                // Check if user exists
+                if(!user) {
+                    res.status(404).json({error: 'User not found'});
+                    return;
+                }
+
+                // Update user
+                user.info.avatar = newUser.info.avatar??user.info.avatar;
+                user.info.status = newUser.info.status??user.info.status;
+                user.info.bio = newUser.info.bio??user.info.bio;
+                user.name = newUser.name??user.name;
+                
+                // Save user to database
+                user.save();
+
+                // Response
+                res.status(200).json({content: user});
+
+            }).catch(err => {
+                console.log(err);
+                res.status(500).json({error: 'Internal server error'});
+                return;
+            });
+        });
+    } else {
+        res.status(400).json({error: 'Bad request'});
+        return;
     }
 })
 .get(auth, (req, res) => {
