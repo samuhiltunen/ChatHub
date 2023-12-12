@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import "../css/main.css";
 import { faLock, faUser, faEnvelope} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -79,6 +79,7 @@ export default function Register() {
             <button type="submit" onClick={submitRegistration}>
               Register
             </button>
+            <p>Already registered?<Link to={'/'}> <a >Login</a></Link> </p>
           </form>
         </section>
       </>

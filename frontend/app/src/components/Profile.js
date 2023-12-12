@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import "../css/main.css";
-import { Link } from 'react-router-dom';
 import "../css/profile.css";
+import { Link } from 'react-router-dom';
 import ProfilePictureChanger from './TestPhoto';
 import { Logout } from './Logout';
 import { TokenRefresh } from './TokenRefresh';
 import StatusChanger from './StatusChanger';
 import BioChanger from './BioChanger';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 
 export default function Profile() {
     const [username, setUsername] = useState("");
@@ -98,22 +100,23 @@ export default function Profile() {
         <>
             <header id={"profile-header"} className="header">
                 <Link to="/main">
-                    <button id="mainPageButton">Main Page</button>
+                    <button id="mainPageButton"><FontAwesomeIcon icon={faArrowLeft} size={"3x"}/></button>
                 </Link>
                 <div className="title">
                     <h1>ChatHub</h1>
                 </div>
                 <div className="buttons">
                     <Link to={"/"}><button id="logoutButton" onClick={handleLogout}>
-                        Logout
+                        <FontAwesomeIcon icon={faRightFromBracket} size={"3x"}></FontAwesomeIcon>
                     </button>
                     </Link>
                 </div>
             </header>
 
-            <main>
-                <h1>Profile</h1>
+            <main id={"profile-main"}>
+
                 <div id="profile-box" className="profile-container">
+                    <h1>Profile</h1>
                     <ProfilePictureChanger />
                     <p>Click photo to change profile picture</p>
                     <p>Your name</p>
