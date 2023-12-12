@@ -13,6 +13,8 @@ export default function Main() {
     const [asideVisible, setAsideVisible] = useState(true);
     const [mainVisible, setMainVisible] = useState(true);
     const [messageContent, setMessageContent] = useState('');
+    const [uploadedFileId, setUploadedFileId] = useState(null);
+    const [file, setFile] = useState(null); 
     let utid = useParams();
     utid = utid.utid;
 
@@ -26,22 +28,74 @@ export default function Main() {
         setMessageContent(event.target.value);
     };
 
-    const createMessage = async (retryCount = 0) => {
+    const handleFileChange = (event) => {
+        setFile(event.target.files[0]);
+    };
+
+    const uploadFile = async (retryCount = 0) => { 
         const token = localStorage.getItem('token');
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const fileOptions = {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        };
+
+        delete fileOptions.headers['Content-Type'];
+
+        try {
+            console.log(fileOptions);
+            const response = await fetch('https://file.chathub.kontra.tel/files', fileOptions);
+            const data = await response.json();
+            if (!response.ok){
+                console.log("Error uploading file: ", response.status);
+            }
+            if (response.ok) {
+                console.log("/file/uploaded ", response.status);
+                console.log(data.content.path);
+                setUploadedFileId(data.content.path);
+                return data.content.path;
+            } else if (response.status === 401 && retryCount < 3) {
+                console.error("Unauthorized, refreshing token...");
+                await TokenRefresh();
+                await uploadFile(retryCount + 1);
+            } else if (retryCount >= 3) {
+                console.error("Failed to refresh token after 3 attempts");
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const createMessage = async (uploadedFileId, retryCount = 0) => {
+        const token = localStorage.getItem('token');
+        console.log("before sending message: ",uploadedFileId);
+    
+        const messageData = {
+            utid: utid,
+            content: messageContent,
+            attachments: uploadedFileId ? [uploadedFileId] : []
+        };
+    
         const messageOptions = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ utid: utid, content: messageContent })
+            body: JSON.stringify(messageData)
         };
-
+    
         try {
             console.log("/create");
             const response = await fetch(`https://api.chathub.kontra.tel/messages/create`, messageOptions);
             if (response.ok) {
                 console.log("/message/create ", response.status);
+                setUploadedFileId(null); 
             } else if (response.status === 401 && retryCount < 3) {
                 console.error("Unauthorized, refreshing token...");
                 await TokenRefresh();
@@ -55,7 +109,12 @@ export default function Main() {
     };
 
     const handleSendClick = async () => {
-        await createMessage();
+        let uploadedFileId = null;
+        if (file) {
+            uploadedFileId = await uploadFile();
+            setFile(null);
+        }
+        await createMessage(uploadedFileId);
         setMessageContent('');
     };
 
@@ -77,7 +136,6 @@ export default function Main() {
         };
     }, []);
 
-
     return (
         <>
             <Header toggleAside={toggleAside} />
@@ -95,6 +153,7 @@ export default function Main() {
                     </div>
                     <div className="messagebox">
                         <div className={"messagewrap"}>
+                            <input type="file" onChange={handleFileChange} /> {/* Add this line */}
                             <button><FontAwesomeIcon icon={faPaperclip} size={"lg"} /></button>
                             <textarea
                                 id="messageInput"

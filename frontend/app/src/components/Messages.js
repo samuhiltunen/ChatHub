@@ -15,7 +15,7 @@ export default function Messages() {
                 Authorization: `Bearer ${token}`
             }
         };
-    
+
         const fetchMessages = async (retryCount = 0) => {
             if (!utid) {
                 return;
@@ -26,7 +26,7 @@ export default function Messages() {
                 if (response.status === 401) {
                     console.error("Unauthorized, refreshing token...");
                     await TokenRefresh();
-                    if (retryCount < 3) { 
+                    if (retryCount < 3) {
                         await fetchMessages(retryCount + 1);
                     } else {
                         console.error("Failed to refresh token after 3 attempts");
@@ -36,24 +36,24 @@ export default function Messages() {
                     return;
                 }
                 const data = await response.json();
-            
+                console.log("/messages/get", data);
                 setMessages(data.content.sort((a, b) => new Date(a.info.sent) - new Date(b.info.sent)));
             } catch (err) {
                 console.error(err);
             }
         };
-    
-        fetchMessages();  
-    
-        const intervalId = setInterval(fetchMessages, 3000); 
-    
-        return () => clearInterval(intervalId);  
+
+        fetchMessages();
+
+        const intervalId = setInterval(fetchMessages, 3000);
+
+        return () => clearInterval(intervalId);
     }, [utid]);
 
     return (
         <div id={"allMessages"}>
             {messages.map(message => {
-                return <Message text={message.content[0]} time={message.info.sent} key={message.umid} sender = {message.author}/>;
+                return <Message text={message.content[0]} time={message.info.sent} key={message.umid} sender={message.author} fileId={message.info.attatchments ? message.info.attatchments : undefined} />;
             })}
         </div>
     );
