@@ -149,17 +149,16 @@ router.route('/:job')
                 return;
             }
 
-            // Change message attatchments to file objects
-            const files = [];
-            for(const file of message[0].info.attatchments) {
-                const fileObj = await File.find().byUFID(file);
-                files.push(fileObj[0]);
+            // Change message attatchments to file objects if they exist
+            if(message[0].info.attatchments.length === 0) {
+                const files = [];
+                for(const file of message[0].info.attatchments) {
+                    const fileObj = await File.find().byUFID(file);
+                    files.push(fileObj[0]);
+                }
+                // Change message attatchments to file objects
+                message[0].info.attatchments = files;
             }
-            
-            // Change message attatchments to file objects
-            message[0].info.attatchments = files;
-            
-            console.log(message)
 
             // Send response
             res.status(200).json({content: message});
