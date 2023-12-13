@@ -8,7 +8,7 @@ import { TokenRefresh } from './TokenRefresh';
 import StatusChanger from './StatusChanger';
 import BioChanger from './BioChanger';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import {faArrowLeft, faLock, faRightFromBracket, faUser, faIdCard} from '@fortawesome/free-solid-svg-icons'
 
 export default function Profile() {
     const [username, setUsername] = useState("");
@@ -134,14 +134,22 @@ export default function Profile() {
             <main id={"profile-main"}>
 
                 <div id="profile-box" className="profile-container">
+
                     <h1>Profile</h1>
                     <ProfilePictureChanger setAvatar={setAvatar} avatar={avatar}/>
-                    <p>Click photo to change profile picture</p>
-                    <p>Your name</p>
-                    {/*make maxium status length 20 characters*/}
-                    <h2>{username}</h2>
-                    <p>user id: {userId}</p>
-                    <br></br>
+                    <p id={"vittu"}>Click photo to change profile picture</p>
+
+                    <div>
+                        <h2>Username: {username}</h2>
+                        <h2>User id: {userId}</h2>
+                    </div>
+                    <div className={"form-input-container"}>
+                        <FontAwesomeIcon icon={faUser} size={"2x"}></FontAwesomeIcon>
+                        <input
+                            placeholder={"Username: "}
+
+                        />
+                    </div>
                     <p>Status</p>
                     {/*make maxium status length 40 characters*/}
                     <StatusChanger username={username}  setStatus={setStatus} status={status}/>

@@ -330,13 +330,14 @@ textarea:focus {
     max-width: 320px;
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
 }
 
 .message-container p{
     flex: 1 1 auto; /* Allows items to grow and shrink based on content */
     word-wrap: break-word;
     overflow: hidden;
-
+    order: 2;
 }
 
 #allMessages{
@@ -412,3 +413,6 @@ textarea:focus {
     /* Adjust the opacity to make it invisible but clickable */
 }
 
+#vittu{
+    margin-bottom: 20px;
+}

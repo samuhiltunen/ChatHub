@@ -37,3 +37,7 @@
     align-items: center;
 
 }
+
+#bio-text-area{
+    max-width: 193px;
+}
