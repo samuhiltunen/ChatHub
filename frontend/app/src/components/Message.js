@@ -6,10 +6,14 @@ export default function Message(props) {
     const [modalMedia, setModalMedia] = useState('');
     const [isModalVideo, setIsModalVideo] = useState(false);
     const username = localStorage.getItem('username');
+
+    let formattedTime = new Date(props.time).toLocaleString();
+
     return (
-        <div className='message-container' id={props.sender === username ? 'SentByMeTrue':''}>
+        <div className={'whole-message-container'} id={props.sender === username ? 'SentByMeTrue':''}>
+        <div className='message-container' id={props.sender === username ? 'SentByMeTrue':''} >
             <p>{props.text}</p>
-            <p>Sent by: {props.sender}</p>
+
             {props.files && props.files.map((file, index) => {
                 const path = file.path;
                 const isImage = path.match(/\.(jpeg|jpg|gif|png)$/i) != null;
@@ -28,7 +32,7 @@ export default function Message(props) {
                     )
                 }
             })}
-            <p>{props.time}</p>
+
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Media Preview</Modal.Title>
@@ -40,6 +44,11 @@ export default function Message(props) {
                     }
                 </Modal.Body>
             </Modal>
+        </div>
+            <div className={'sender-info-container'} id={props.sender === username ? 'SentByMeTrueForMessage':''}  >
+            <p>{props.sender}  </p>
+            <p>{formattedTime}</p>
+            </div>
         </div>
     );
 }
