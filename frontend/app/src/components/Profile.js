@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "../css/main.css";
 import "../css/profile.css";
 import { Link } from 'react-router-dom';
-import ProfilePictureChanger from './TestPhoto';
+import ProfilePictureChanger from './ProfilePictureChanger';
 import { Logout } from './Logout';
 import { TokenRefresh } from './TokenRefresh';
 import StatusChanger from './StatusChanger';
@@ -15,10 +15,12 @@ export default function Profile() {
     const [userId, setUserId] = useState('');
     const [status, setStatus] = useState('Hello, My name is TestUser!');
     const [bio, setBio] = useState('This is my bio');
+    const [avatar, setAvatar] = useState('');
     const handleLogout = Logout();
 
     useEffect(() => {
         let token = localStorage.getItem('token');
+        console.log(" avatar before update user ",avatar);
 
         const updateUser = async (retryCount = 0) => {
             if (!userId || !username || typeof status !== 'string' || typeof bio !== 'string') {
@@ -36,7 +38,8 @@ export default function Profile() {
                         name: username,
                         info: {
                             status: status,
-                            bio: bio
+                            bio: bio,
+                            avatar: avatar
                         }
                     }
                 })
@@ -63,7 +66,7 @@ export default function Profile() {
         };
 
         updateUser();
-    }, [status, bio]);
+    }, [status, bio, avatar]);
 
     useEffect(() => {
         let token = localStorage.getItem('token');
@@ -84,6 +87,8 @@ export default function Profile() {
                     setUserId(data.content.uuid);
                     setStatus(data.content.info.status);
                     setBio(data.content.info.bio);
+                    setAvatar(data.content.info.avatar);
+                    console.log(data);
                 } else if (response.status === 401 && retryCount < 3) {
                     console.error("Unauthorized, refreshing token...");
                     await TokenRefresh();
@@ -123,7 +128,7 @@ export default function Profile() {
 
                 <div id="profile-box" className="profile-container">
                     <h1>Profile</h1>
-                    <ProfilePictureChanger />
+                    <ProfilePictureChanger setAvatar={setAvatar} avatar={avatar}/>
                     <p>Click photo to change profile picture</p>
                     <p>Your name</p>
                     {/*make maxium status length 20 characters*/}
@@ -138,8 +143,6 @@ export default function Profile() {
                     {/*make maxium status length 40 characters*/}
                     <BioChanger bio={bio} setBio={setBio}/>
                 </div>
-
-
             </main>
         </>
 
