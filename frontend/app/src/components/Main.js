@@ -122,9 +122,9 @@ export default function Main() {
         await createMessage(uploadedFileId);
         setMessageContent('');
 
-        setTimeout(() => {  //scrollaa chatin paskan alkuun
+        {/*setTimeout(() => {  //scrollaa chatin paskan alkuun
             containerRef.current.scrollTop = containerRef.current.scrollHeight;
-        },3000);
+        },3000); */}
     };
 
     useEffect(() => {
