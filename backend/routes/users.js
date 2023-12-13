@@ -116,7 +116,17 @@ router.route('/:job')
 
     // Check if query is empty return self
     if(Object.keys(req.query).length === 0) {
-        res.status(200).json({content: req.user});
+        dbConn().then(async ({ User }) => {
+            const user = await User.findOne({uuid: req.user.uuid});
+
+            // Check if user exists
+            if(!user) {
+                res.status(404).json({error: 'User not found'});
+                return;
+            }
+
+            res.status(200).json({content: user});
+        })
         return;
     }
 
