@@ -74,7 +74,8 @@ export default function Main() {
     };
 
     const createMessage = async (uploadedFileId, retryCount = 0) => {
-        if (!messageContent || !messageContent.trim()) {
+        console.log("fileId: ", uploadedFileId);
+        if ((!messageContent || !messageContent.trim()) && !uploadedFileId) {
             return;
         }
         const token = localStorage.getItem('token');
@@ -96,6 +97,7 @@ export default function Main() {
 
         try {
             console.log("/create");
+            console.log(messageOptions);
             const response = await fetch(`https://api.chathub.kontra.tel/messages/create`, messageOptions);
             if (response.ok) {
                 console.log("/message/create ", response.status);
