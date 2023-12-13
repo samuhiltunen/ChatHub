@@ -327,6 +327,16 @@ textarea:focus {
     margin: 5px;
     border-radius: 10px 10px 10px 0px;
     padding: 10px;
+    max-width: 320px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.message-container p{
+    flex: 1 1 auto; /* Allows items to grow and shrink based on content */
+    word-wrap: break-word;
+    overflow: hidden;
+
 }
 
 #allMessages{
@@ -335,12 +345,48 @@ textarea:focus {
     flex-direction: column;
     align-items: baseline;
 }
+.chat-container {
+    display: flex;
+    flex: 1;
+    overflow-y: scroll;
+    justify-content: center;
+    background-color:inherit;
+}
+.chat-container::-webkit-scrollbar {
+    width: 0; /* This will hide the scrollbar */
+}
+
+.sender-info-container{
+    display: flex;
+    margin-left: 5px;
+    margin-right: 5px;
+
+}
+.sender-info-container p{
+    margin-right: 5px;
+    margin-left: 5px;
+
+
+}
+
+.whole-message-container{
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+
+}
 
 #SentByMeTrue {
     align-self: flex-end;
     border-radius: 10px 10px 0px 10px;
 
 }
+
+#SentByMeTrueForMessage{
+    align-self: flex-end;
+}
+
+
 
 
 #profile-main{
