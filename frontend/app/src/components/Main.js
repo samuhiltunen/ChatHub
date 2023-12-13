@@ -23,7 +23,6 @@ export default function Main() {
     const toggleAside = () => {
         setAsideVisible(!asideVisible);
         setMainVisible(!mainVisible);
-        console.log(asideVisible)
     };
 
     const handleMessageChange = (event) => {
@@ -50,7 +49,6 @@ export default function Main() {
         delete fileOptions.headers['Content-Type'];
 
         try {
-            console.log(fileOptions);
             const response = await fetch('https://file.chathub.kontra.tel/files', fileOptions);
             const data = await response.json();
             if (!response.ok) {
@@ -58,7 +56,6 @@ export default function Main() {
             }
             if (response.ok) {
                 console.log("/file/uploaded ", response.status);
-                console.log(data.content.path);
                 setUploadedFileId(data.content.ufid);
                 return data.content.ufid;
             } else if (response.status === 401 && retryCount < 3) {
@@ -74,7 +71,6 @@ export default function Main() {
     };
 
     const createMessage = async (uploadedFileId, retryCount = 0) => {
-        console.log("fileId: ", uploadedFileId);
         if ((!messageContent || !messageContent.trim()) && !uploadedFileId) {
             return;
         }
@@ -96,8 +92,6 @@ export default function Main() {
         };
 
         try {
-            console.log("/create");
-            console.log(messageOptions);
             const response = await fetch(`https://api.chathub.kontra.tel/messages/create`, messageOptions);
             if (response.ok) {
                 console.log("/message/create ", response.status);
