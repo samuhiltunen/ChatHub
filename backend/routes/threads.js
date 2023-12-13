@@ -221,7 +221,42 @@ router.route('/:job')
         const thread = await Thread.findOne({utid: req.body.utid});
 
         // Check if thread exists and user is owner
-        if(thread === null || thread.options.owner !== req.user.uuid) {
+        if(thread === null) {
+            res.status(404).json({error: 'Thread not found'});
+            return;
+        }
+
+        // If user wants to leave thread
+        if(req.params.job === 'leave') {
+            // Check if user is owner
+            if(thread.options.owner === req.user.uuid) {
+                res.status(403).json({error: 'Forbidden'});
+                return;
+            }
+
+            // Check if user is moderator
+            if(thread.options.moderators.includes(req.user.uuid)) {
+                thread.options.moderators.splice(thread.options.moderators.indexOf(req.user.uuid), 1);
+            }
+
+            // Check if user is member
+            if(thread.members.includes(req.user.uuid)) {
+                thread.members.splice(thread.members.indexOf(req.user.uuid), 1);
+            } else {
+                res.status(403).json({error: 'Forbidden'});
+                return;
+            }
+
+            // Save thread to database
+            await thread.save();
+
+            // Response
+            res.status(200).json({content: 'Left thread'});
+            return;
+        }
+
+        // Check if user has permission
+        if(thread.options.owner !== req.user.uuid) {
             res.status(403).json({error: 'Forbidden'});
             return;
         }
