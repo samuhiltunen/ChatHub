@@ -16,6 +16,7 @@ export default function Main() {
     const [uploadedFileId, setUploadedFileId] = useState(null);
     const fileInput = useRef(null);
     const [file, setFile] = useState(null);
+    const containerRef = useRef(null);
     let utid = useParams();
     utid = utid.utid;
 
@@ -106,6 +107,7 @@ export default function Main() {
         } catch (err) {
             console.error(err);
         }
+
     };
 
     const handleSendClick = async () => {
@@ -116,6 +118,10 @@ export default function Main() {
         }
         await createMessage(uploadedFileId);
         setMessageContent('');
+
+        setTimeout(() => {  //scrollaa chatin paskan alkuun
+            containerRef.current.scrollTop = containerRef.current.scrollHeight;
+        },3000);
     };
 
     useEffect(() => {
@@ -136,6 +142,13 @@ export default function Main() {
         };
     }, []);
 
+
+
+
+
+
+
+
     return (
         <>
             <Header toggleAside={toggleAside} />
@@ -147,8 +160,8 @@ export default function Main() {
                     {/* if button pressed = true:
                     <AddPeople />*/}
                 </aside>
-                <main className={mainVisible ? null : 'hide-main'}>
-                    <div id="chat" className="chat-container">
+                <main className={mainVisible ? null : 'hide-main'}  >
+                    <div id="chat" className="chat-container" ref={containerRef}>
                         <Messages />
                     </div>
                     <div className="messagebox">
