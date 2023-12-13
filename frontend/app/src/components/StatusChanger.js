@@ -23,9 +23,9 @@ const StatusChanger = ({ status, setStatus }) => {
     };
 
     return (
-        <div>
+        <div className={"bio-change-container"}>
             {isEditing ? (
-                <form onSubmit={handleFormSubmit}>
+                <form className={"bio-change-container"} onSubmit={handleFormSubmit}>
                     <input
                         type="text"
                         value={newStatus}
@@ -34,7 +34,7 @@ const StatusChanger = ({ status, setStatus }) => {
                     <button type="submit">Submit</button>
                 </form>
             ) : (
-                <div>
+                <div className={"bio-change-container"}>
                     <h2>{status}</h2>
                     <button onClick={handleButtonClick}>Change status</button>
                 </div>
