@@ -149,8 +149,6 @@ router.route('/:job')
                 return;
             }
 
-            console.log(message);
-
             // Change message attatchments to file objects if they exist
             if(message[0].info.attatchments.length !== 0) {
                 const files = [];
@@ -173,9 +171,20 @@ router.route('/:job')
             const messages = await Message.find().byThread(req.query.utid, amnt, date)
 
             // Check if messages exist
-            if(!messages) {
+            if(messages.length === 0) {
                 res.status(404).json({error: 'Messages not found'});
                 return;
+            }
+
+            // Change message attatchments to file objects if they exist
+            if(messages[0].info.attatchments.length !== 0) {
+                const files = [];
+                for(const file of messages[0].info.attatchments) {
+                    const fileObj = await File.find().byUFID(file);
+                    files.push(fileObj[0]);
+                }
+                // Change message attatchments to file objects
+                messages[0].info.attatchments = files;
             }
 
             // Send response
