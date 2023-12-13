@@ -12,7 +12,7 @@ const messageSchema = new Schema(
             edited: Date,
             authorUUID: String,
             utid: String,
-            attatchments: [String],
+            attatchments: [],
         }
     },{
         query: {

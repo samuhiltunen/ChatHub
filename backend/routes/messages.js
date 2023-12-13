@@ -136,7 +136,7 @@ router.route('/:job')
     }
 
     // Start database connection
-    dbConn().then(async ({ Message }) => {
+    dbConn().then(async ({ Message, File }) => {
 
         // Find message by umid
         if(req.query.umid) {
@@ -148,6 +148,18 @@ router.route('/:job')
                 res.status(404).json({error: 'Message not found'});
                 return;
             }
+
+            // Change message attatchments to file objects
+            const files = [];
+            for(const file of message[0].info.attatchments) {
+                const fileObj = await File.find().byUFID(file);
+                files.push(fileObj[0]);
+            }
+            
+            // Change message attatchments to file objects
+            message[0].info.attatchments = files;
+            
+            console.log(message)
 
             // Send response
             res.status(200).json({content: message});
