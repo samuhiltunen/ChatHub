@@ -285,16 +285,7 @@ textarea:focus {
 
 }
 
-#allMessages{
-    flex: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: baseline;
-}
 
-#SentByMeTrue {
-    align-self: flex-end;
-}
 
 #my-threads{
     overflow-y: scroll;
@@ -331,12 +322,47 @@ textarea:focus {
 }
 
 .message-container {
-    border: 1px solid black;
+    border: 2px solid black;
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    margin: 5px;
+    border-radius: 10px 10px 10px 0px;
+    padding: 10px;
 }
+
+#allMessages{
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+}
+
+#SentByMeTrue {
+    align-self: flex-end;
+    border-radius: 10px 10px 0px 10px;
+
+}
+
 
 #profile-main{
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.file-button {
+    position: relative;
+    overflow: hidden;
+    /* Add any additional styles for the button */
+}
+
+.file-button input[type='file'] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    /* Adjust the opacity to make it invisible but clickable */
 }
 
