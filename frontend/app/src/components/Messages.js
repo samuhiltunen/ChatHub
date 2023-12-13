@@ -8,6 +8,7 @@ export default function Messages() {
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
+        setMessages([]);
         const fetchMessages = async (retryCount = 0) => {
             if (!utid) {
                 return;

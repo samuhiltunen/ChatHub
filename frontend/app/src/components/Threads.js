@@ -102,7 +102,6 @@ export default function Threads() {
         setShowAddPeople(!showAddPeople);
     };
 
-
     useEffect(() => {
         getUser();
     }, []);
@@ -113,11 +112,8 @@ export default function Threads() {
 
     return (
       <div id={"threads-container"}>
-
           <div className="user-searchbox">
-
               <div id={"text-and-search-container"}>
-
                     <textarea id={"text-area-in-threads"}
                             type="text"
                             placeholder="Search by thread"
@@ -126,13 +122,9 @@ export default function Threads() {
                             onKeyPress= {handleKeyPress}
                     />
                     <button id={"search-button-in-threads"} onClick={() => handleSearch(searchText)}> <FontAwesomeIcon icon={faMagnifyingGlass} size={"xl"}/> </button>
-
               </div>
-
               <button onClick={toggleAddPeople}> <FontAwesomeIcon icon={faUserPlus} size={"xl"}/> </button>
-
           </div>
-
               { showAddPeople
                   ? (<div><CreateThread addThread={addThread}/></div>)
                   : (
