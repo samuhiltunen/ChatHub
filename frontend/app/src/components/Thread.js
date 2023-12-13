@@ -6,7 +6,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {TokenRefresh} from "./TokenRefresh";
 
 export default function Thread(props) {
-  console.log("threads rendered");
     const deleteThread =  async () => {
       console.log("Deleting thread...", props.utid);
       let token = localStorage.getItem('token');
