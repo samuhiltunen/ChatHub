@@ -11,7 +11,7 @@ const logger = (req, res, next) => {
 
    // Log request
     console.log(`
-    [${req.currtime}] ${req.method}: ${req.hostname}${req.route} requested from ${req.header('x-forwarded-for')}
+    [${req.currtime}] ${req.method}: ${req.hostname}${req.originalUrl} requested from ${req.header('x-forwarded-for')}
     
     Request:
        L ${reqData}
