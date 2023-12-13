@@ -152,7 +152,7 @@ router.route('/:job')
             console.log(message);
 
             // Change message attatchments to file objects if they exist
-            if(message[0].info.attatchments.length === 0) {
+            if(message[0].info.attatchments.length !== 0) {
                 const files = [];
                 for(const file of message[0].info.attatchments) {
                     const fileObj = await File.find().byUFID(file);
