@@ -139,7 +139,7 @@ export default function Threads() {
                       <div id={"my-threads"}>
                           <h1>My Threads</h1>
                           {filteredThreads.map(thread => (
-                              <Thread title={thread.title} key={thread.utid} owner={thread.options.owner} utid={thread.utid}/>
+                              <Thread title={thread.title} key={thread.utid} owner={thread.options.owner} utid={thread.utid} setThreadsData={setThreadsData}/>
                           ))}
                       </div>
                   )}
