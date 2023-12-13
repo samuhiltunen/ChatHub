@@ -144,10 +144,12 @@ router.route('/:job')
             const message = await Message.find().byUMID(req.query.umid);
 
             // Check if message exists
-            if(!message) {
+            if(message.length === 0) {
                 res.status(404).json({error: 'Message not found'});
                 return;
             }
+
+            console.log(message);
 
             // Change message attatchments to file objects if they exist
             if(message[0].info.attatchments.length === 0) {
