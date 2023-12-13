@@ -9,6 +9,9 @@ const logger = (req, res, next) => {
    else if(req.query != {}) reqData = JSON.stringify(req.query);
    else reqData = "empty";
 
+   // Ignore get messages
+   if(req.method === "GET" && req.originalUrl.startsWith('/messages/')) return;
+
    // Log request
     console.log(`
     [${req.currtime}] ${req.method}: ${req.hostname}${req.originalUrl} requested from ${req.header('x-forwarded-for')}
