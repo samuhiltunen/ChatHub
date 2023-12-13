@@ -28,6 +28,7 @@ export default function Login() {
         console.log("OK");
         localStorage.setItem('token', data.accessToken);
         localStorage.setItem('refreshToken', data.refreshToken);
+        localStorage.setItem('username', username);
         navigate('/main');
       } else {
         console.error("Server responded with status:", response.status);
