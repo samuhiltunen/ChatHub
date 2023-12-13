@@ -58,8 +58,8 @@ export default function Main() {
             if (response.ok) {
                 console.log("/file/uploaded ", response.status);
                 console.log(data.content.path);
-                setUploadedFileId(data.content.path);
-                return data.content.path;
+                setUploadedFileId(data.content.ufid);
+                return data.content.ufid;
             } else if (response.status === 401 && retryCount < 3) {
                 console.error("Unauthorized, refreshing token...");
                 await TokenRefresh();

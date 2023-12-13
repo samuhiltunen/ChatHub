@@ -6,12 +6,12 @@ export default function Message(props) {
     const [modalMedia, setModalMedia] = useState('');
     const [isModalVideo, setIsModalVideo] = useState(false);
     const username = localStorage.getItem('username');
-
     return (
         <div className='message-container' id={props.sender === username ? 'SentByMeTrue':''}>
             <p>{props.text}</p>
             <p>Sent by: {props.sender}</p>
-            {props.fileId && props.fileId.map((path, index) => {
+            {props.files && props.files.map((file, index) => {
+                const path = file.path;
                 const isImage = path.match(/\.(jpeg|jpg|gif|png)$/i) != null;
                 const isVideo = path.match(/\.(mp4|webm|ogg)$/i) != null;
                 if (isImage) {
@@ -19,7 +19,13 @@ export default function Message(props) {
                 } else if (isVideo) {
                     return <video key={index} src={`https://${path}`} controls style={{maxWidth: '100%', maxHeight: '200px'}} onClick={() => {setShowModal(true); setModalMedia(`https://${path}`); setIsModalVideo(true);}} />
                 } else {
-                    return <a key={index} href={`https://${path}`} download>Download file</a>
+                    return (
+                    <div>
+                        <p>Name: {file.name}</p>
+                        <p>Size: {file.size}</p>
+                        <a key={index} href={`https://${path}`} download>Download</a>
+                    </div>
+                    )
                 }
             })}
             <p>{props.time}</p>
