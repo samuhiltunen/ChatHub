@@ -20,8 +20,6 @@ export default function Profile() {
 
     useEffect(() => {
         let token = localStorage.getItem('token');
-        console.log(" avatar before update user ",avatar);
-
         const updateUser = async (retryCount = 0) => {
             if (!userId || !username || typeof status !== 'string' || typeof bio !== 'string') {
                 return;
@@ -88,7 +86,6 @@ export default function Profile() {
                     setStatus(data.content.info.status);
                     setBio(data.content.info.bio);
                     setAvatar(data.content.info.avatar);
-                    console.log(data);
                 } else if (response.status === 401 && retryCount < 3) {
                     console.error("Unauthorized, refreshing token...");
                     await TokenRefresh();

@@ -34,7 +34,6 @@ const ProfilePictureChanger = ({ setAvatar, avatar }) => {
       }
       if (response.ok) {
         console.log("/file/uploaded ", response.status);
-        console.log("avatar url", data.content.path);
         return data.content.path;
       } else if (response.status === 401 && retryCount < 3) {
         console.error("Unauthorized, refreshing token...");
@@ -51,7 +50,6 @@ const ProfilePictureChanger = ({ setAvatar, avatar }) => {
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     const newAvatar = await uploadFile(file);
-    console.log("new avatar", `https://${newAvatar}`);
     setProfilePicture(`https://${newAvatar}`);
     setAvatar(`https://${newAvatar}`);
   };
