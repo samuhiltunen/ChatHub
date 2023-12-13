@@ -15,11 +15,12 @@ export default function CreateThread(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        let token = localStorage.getItem('token');
     
         const options = {
             method: 'POST',
             headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token'),
+                Authorization: 'Bearer ' + token,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -41,6 +42,7 @@ export default function CreateThread(props) {
                     if (response.status === 401 && retryCount < 3) {
                         console.error("Unauthorized, refreshing token...");
                         await TokenRefresh();
+                        token = localStorage.getItem('token');
                         await createThread(retryCount + 1);
                     } else if (retryCount >= 3) {
                         console.error("Failed to refresh token after 3 attempts");

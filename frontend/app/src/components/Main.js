@@ -74,7 +74,6 @@ export default function Main() {
 
     const createMessage = async (uploadedFileId, retryCount = 0) => {
         const token = localStorage.getItem('token');
-        console.log("before sending message: ", uploadedFileId);
 
         const messageData = {
             utid: utid,

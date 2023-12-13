@@ -8,7 +8,7 @@ export const Logout = () => {
     const handleLogout = async (e) => {
         e.preventDefault();
 
-        const token = localStorage.getItem('token');
+        let token = localStorage.getItem('token');
         const refreshToken = localStorage.getItem('refreshToken');
 
         let options = {
@@ -25,7 +25,7 @@ export const Logout = () => {
             if (response.status === 401) {
                 console.log("refreshing token");
                 await TokenRefresh();
-                options.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+                token = localStorage.getItem('token');
                 response = await fetch("https://auth.chathub.kontra.tel/logout", options);
             }
             if (response.ok) {

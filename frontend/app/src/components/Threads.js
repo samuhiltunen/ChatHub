@@ -8,7 +8,7 @@ import { TokenRefresh } from './TokenRefresh';
 
 export default function Threads() {
     const [threadsData, setThreadsData] = useState([]);
-    const token = localStorage.getItem('token');
+    let token = localStorage.getItem('token');
 
     const [searchText, setSearchText] = useState('');
     const [filteredThreads, setFilteredThreads] = useState(threadsData);
@@ -37,6 +37,7 @@ export default function Threads() {
             } else if (response.status === 401 && retryCount < 3) {
                 console.error("Unauthorized, refreshing token...");
                 await TokenRefresh();
+                token = localStorage.getItem('token');
                 await getThreads(uuid, retryCount + 1);
             } else if (retryCount >= 3) {
                 console.error("Failed to refresh token after 3 attempts");
@@ -68,6 +69,7 @@ export default function Threads() {
             } else if (response.status === 401 && retryCount < 3) {
                 console.error("Unauthorized, refreshing token...");
                 await TokenRefresh();
+                token = localStorage.getItem('token');
                 await getUser(retryCount + 1);
             } else if (retryCount >= 3) {
                 console.error("Failed to refresh token after 3 attempts");
@@ -78,6 +80,7 @@ export default function Threads() {
             console.error(err);
         }
     };
+
     
 
     const handleSearch = (searchQuery) => {

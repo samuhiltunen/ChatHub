@@ -16,7 +16,6 @@ export const TokenRefresh = async () => {
             if (ok) {
                 localStorage.removeItem('token');
                 localStorage.setItem('token', data.accessToken);
-                console.log(status);
                 console.log("token refreshed");
             } else {
                 throw new Error("Server responded with status: " + status);

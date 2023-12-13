@@ -12,11 +12,6 @@ export default function Login() {
   const [err, setErr] = useState(false);
   let navigate = useNavigate();
 
-
-  const handleRegisterClick = () => {
-    navigate('/register');
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 

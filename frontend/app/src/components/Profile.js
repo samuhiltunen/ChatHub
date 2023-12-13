@@ -18,7 +18,7 @@ export default function Profile() {
     const handleLogout = Logout();
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        let token = localStorage.getItem('token');
 
         const updateUser = async (retryCount = 0) => {
             if (!userId || !username || typeof status !== 'string' || typeof bio !== 'string') {
@@ -49,6 +49,7 @@ export default function Profile() {
                     if (response.status === 401 && retryCount < 3) {
                         console.error("Unauthorized, refreshing token...");
                         await TokenRefresh();
+                        token = localStorage.getItem('token');
                         await updateUser(retryCount + 1);
                     } else if (retryCount >= 3) {
                         console.error("Failed to refresh token after 3 attempts");
@@ -65,7 +66,7 @@ export default function Profile() {
     }, [status, bio]);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        let token = localStorage.getItem('token');
 
         const getUser = async (retryCount = 0) => {
             const options = {
@@ -86,6 +87,7 @@ export default function Profile() {
                 } else if (response.status === 401 && retryCount < 3) {
                     console.error("Unauthorized, refreshing token...");
                     await TokenRefresh();
+                    token = localStorage.getItem('token');
                     await getUser(retryCount + 1);
                 } else if (retryCount >= 3) {
                     console.error("Failed to refresh token after 3 attempts");

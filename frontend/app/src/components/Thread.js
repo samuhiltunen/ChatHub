@@ -6,9 +6,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {TokenRefresh} from "./TokenRefresh";
 
 export default function Thread(props) {
-
-    /*
-    const token = localStorage.getItem('token');
+   /*  let token = localStorage.getItem('token');
 
     const options = {
         method: 'DELETE',
@@ -16,30 +14,38 @@ export default function Thread(props) {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
-        body: `{"utid":"${props.utid}"}` // utid of the thread to be deleted
+        body: JSON.stringify({utid: props.utid})
     };
 
     const deleteThread =  async () => {
         try {
-            const response = await fetch('http://api.chathub.kontra.tel/threads/del', options);
+            const response = await fetch('https://api.chathub.kontra.tel/threads/del', options);
 
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            } else if (response.status === 401) {
+                console.error("Unauthorized, refreshing token...");
+                await TokenRefresh();
+                token = localStorage.getItem('token');
+                await deleteThread();
+            }
             const data = await response.json();
+            console.log(data);
 
         } catch (err) {
             console.error(err);
         }
-    };
-     */
+    }; */
 
     return (
       <div className="thread-container">
-    <Link to={`/threads/${props.utid}`} className="thread-link">
-      <div>
-        <p> {props.title}</p>
-        <p> ID: {props.utid}</p>
-      </div>
-    </Link>
-          <button /*onClick={deleteThread}*/> <FontAwesomeIcon icon={ faTrashAlt} size={"xl"}/> </button>
+        <Link to={`/threads/${props.utid}`} className="thread-link">
+          <div>
+            <p> {props.title}</p>
+            <p> ID: {props.utid}</p>
           </div>
-  );
+        </Link>
+        <button /* onClick={deleteThread} */> <FontAwesomeIcon icon={ faTrashAlt} size={"xl"}/> </button>
+      </div>
+    );
 };
