@@ -14,7 +14,6 @@ function auth(req, res, next) {
     //    };
     //    //next();
     //}
-    console.log('Starting auth');
     // Check if token exists
     if(token === undefined) res.status(400).json({error: "Missing auth"});
     else {
@@ -23,7 +22,6 @@ function auth(req, res, next) {
             if(err) res.status(401).json({error: "Unauthorized"});
             else {
                 req.user = payload.user;
-                console.log('Auth success');
                 next();
             }
         });

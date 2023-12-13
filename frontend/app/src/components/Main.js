@@ -74,6 +74,9 @@ export default function Main() {
     };
 
     const createMessage = async (uploadedFileId, retryCount = 0) => {
+        if (!messageContent || !messageContent.trim()) {
+            return;
+        }
         const token = localStorage.getItem('token');
 
         const messageData = {
@@ -166,7 +169,6 @@ export default function Main() {
                     </div>
                     <div className="messagebox">
                         <div className={"messagewrap"}>
-
                             <input type="file" onChange={handleFileChange} ref={fileInput} style={{ display: 'none' }} />
                             <button onClick={() => fileInput.current && fileInput.current.click()}><FontAwesomeIcon icon={faPaperclip} size={"lg"} /></button>
                             <textarea
