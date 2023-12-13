@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import {faCircleInfo} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const BioChanger = ({ bio, setBio }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -25,7 +27,7 @@ const BioChanger = ({ bio, setBio }) => {
     return (
         <div className={"bio-change-container"}>
             {isEditing ? (
-                <form className={"bio-change-container"} onSubmit={handleFormSubmit}>
+                <form className={"change-container"} onSubmit={handleFormSubmit}>
                     <textarea
                         value={newBio}
                         onChange={handleInputChange}
@@ -36,9 +38,12 @@ const BioChanger = ({ bio, setBio }) => {
                     <button type="submit">Submit</button>
                 </form>
             ) : (
-                <div className={"bio-change-container"}>
-                    <h2>{bio}</h2>
-                    <button onClick={handleButtonClick}>Change Bio</button>
+                <div className={"change-container"}>
+                    <div className={"change-container"} id={"flex-row"}>
+                    <FontAwesomeIcon icon={faCircleInfo} size={"2x"}></FontAwesomeIcon>
+                    <h2>Bio: {bio}</h2>
+                    </div>
+                    <button className={"change-button"} onClick={handleButtonClick}>Change Bio</button>
                 </div>
             )}
         </div>

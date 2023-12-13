@@ -8,7 +8,7 @@ import { TokenRefresh } from './TokenRefresh';
 import StatusChanger from './StatusChanger';
 import BioChanger from './BioChanger';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {faArrowLeft, faLock, faRightFromBracket, faUser, faIdCard} from '@fortawesome/free-solid-svg-icons'
+import {faArrowLeft, faLock, faRightFromBracket, faUser, faIdCard, faCircleInfo, faStar} from '@fortawesome/free-solid-svg-icons'
 
 export default function Profile() {
     const [username, setUsername] = useState("");
@@ -139,24 +139,21 @@ export default function Profile() {
                     <ProfilePictureChanger setAvatar={setAvatar} avatar={avatar}/>
                     <p id={"vittu"}>Click photo to change profile picture</p>
 
-                    <div>
-                        <h2>Username: {username}</h2>
-                        <h2>User id: {userId}</h2>
+                    <div className={"user-info-container"}>
+                        <div className={"user-info"}>
+                            <FontAwesomeIcon icon={faUser} size={"2x"}></FontAwesomeIcon>
+                            <h2>Username: {username}</h2>
+                        </div>
+                        <div className={"user-info"}>
+                            <FontAwesomeIcon icon={faIdCard} size={"2x"}></FontAwesomeIcon>
+                            <h2>User ID: {userId}</h2>
+                        </div>
+                            <StatusChanger username={username}  setStatus={setStatus} status={status}/>
+                            <BioChanger bio={bio} setBio={setBio}/>
                     </div>
-                    <div className={"form-input-container"}>
-                        <FontAwesomeIcon icon={faUser} size={"2x"}></FontAwesomeIcon>
-                        <input
-                            placeholder={"Username: "}
 
-                        />
-                    </div>
-                    <p>Status</p>
-                    {/*make maxium status length 40 characters*/}
-                    <StatusChanger username={username}  setStatus={setStatus} status={status}/>
-                    <br></br>
-                    <p>Bio</p>
-                    {/*make maxium status length 40 characters*/}
-                    <BioChanger bio={bio} setBio={setBio}/>
+
+
                 </div>
             </main>
         </>

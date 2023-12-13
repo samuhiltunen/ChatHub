@@ -23,21 +23,65 @@
     justify-content: space-evenly;
 }
 
-.bio-change-container{
+.user-info-container{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 
 }
-.status-change-container{
+
+
+.change-container textarea{
+    max-width: 200px;
+    border:black 2px solid;
+}
+.change-container{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
 
+}
+
+.change-container h2{
+    display: inline;
+    max-width: 320px;
+    word-wrap: break-word;
+    overflow: hidden;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 #bio-text-area{
     max-width: 193px;
+}
+
+#vittu{
+    margin-bottom: 20px;
+}
+
+.user-info{
+    display: flex;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    justify-content: center;
+
+    align-items: center;
+}
+
+#flex-row{
+    flex-direction: row;
+    overflow: hidden;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.change-button{
+    justify-content: center;
+    align-items: center;
+
 }

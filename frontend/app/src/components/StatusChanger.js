@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import {faStar} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const StatusChanger = ({ status, setStatus }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -23,9 +25,9 @@ const StatusChanger = ({ status, setStatus }) => {
     };
 
     return (
-        <div className={"bio-change-container"}>
+        <div className={"change-container"}>
             {isEditing ? (
-                <form className={"bio-change-container"} onSubmit={handleFormSubmit}>
+                <form className={"change-container"} onSubmit={handleFormSubmit}>
                     <input
                         type="text"
                         value={newStatus}
@@ -34,9 +36,12 @@ const StatusChanger = ({ status, setStatus }) => {
                     <button type="submit">Submit</button>
                 </form>
             ) : (
-                <div className={"bio-change-container"}>
-                    <h2>{status}</h2>
-                    <button onClick={handleButtonClick}>Change status</button>
+                <div className={"change-container"}>
+                    <div className={"change-container"} id={"flex-row"}>
+                    <FontAwesomeIcon icon={faStar} size={"2x"}></FontAwesomeIcon>
+                    <h2>Status: {status}</h2>
+                    </div>
+                    <button className={"change-button"} onClick={handleButtonClick}>Change status</button>
                 </div>
             )}
         </div>
