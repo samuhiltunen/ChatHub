@@ -230,8 +230,26 @@ router.route('/:job')
         if(req.params.job === 'leave') {
             // Check if user is owner
             if(thread.options.owner === req.user.uuid) {
-                res.status(403).json({error: 'Forbidden'});
-                return;
+                // If user is owner and only member, delete thread
+                if(thread.members.length === 1) {
+                    await Thread.deleteOne({utid: req.body.utid});
+                    res.status(204).json({content: 'Thread deleted'});
+                    return;
+                }
+
+                // If user is owner and not only member, transfer ownership to first moderator else first member
+                if(thread.options.moderators.length > 0) {
+                    thread.options.owner = thread.options.moderators[0];
+                    thread.options.moderators.splice(0, 1);
+                    await thread.save();
+                    res.status(200).json({content: 'Ownership transferred'});
+                    return;
+                } else {
+                    thread.options.owner = thread.members[0];
+                    await thread.save();
+                    res.status(200).json({content: 'Ownership transferred'});
+                    return;
+                }
             }
 
             // Check if user is moderator
@@ -243,7 +261,7 @@ router.route('/:job')
             if(thread.members.includes(req.user.uuid)) {
                 thread.members.splice(thread.members.indexOf(req.user.uuid), 1);
             } else {
-                res.status(403).json({error: 'Forbidden'});
+                res.status(404).json({error: 'User not found in thread'});
                 return;
             }
 
