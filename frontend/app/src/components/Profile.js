@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import "../css/main.css";
 import "../css/profile.css";
 import { Link } from 'react-router-dom';
@@ -17,6 +17,7 @@ export default function Profile() {
     const [bio, setBio] = useState('This is my bio');
     const [avatar, setAvatar] = useState('');
     const handleLogout = Logout();
+    const isLoaded = useRef({update:false});
 
     useEffect(() => {
         let token = localStorage.getItem('token');
@@ -24,6 +25,13 @@ export default function Profile() {
             if (!userId || !username || typeof status !== 'string' || typeof bio !== 'string') {
                 return;
             }
+
+            // Check if all data is loaded
+            if (!isLoaded.current.update) {
+                isLoaded.current.update = true;
+                return;
+            }
+
             const options = {
                 method: 'POST',
                 headers: {
@@ -44,7 +52,6 @@ export default function Profile() {
             };
 
             try {
-                console.log("Updating user...");
                 const response = await fetch('https://api.chathub.kontra.tel/users/update', options);
                 if (!response.ok) {
                     if (response.status === 401 && retryCount < 3) {
@@ -57,6 +64,8 @@ export default function Profile() {
                     } else {
                         throw new Error(`Server responded with status: ${response.status}`);
                     }
+                } else {
+                    console.log("User updated");
                 }
             } catch (err) {
                 console.error(err);
@@ -67,6 +76,7 @@ export default function Profile() {
     }, [status, bio, avatar]);
 
     useEffect(() => {
+        console.log("Getting user...");
         let token = localStorage.getItem('token');
 
         const getUser = async (retryCount = 0) => {
@@ -86,6 +96,7 @@ export default function Profile() {
                     setStatus(data.content.info.status);
                     setBio(data.content.info.bio);
                     setAvatar(data.content.info.avatar);
+                    console.log("User data loaded");
                 } else if (response.status === 401 && retryCount < 3) {
                     console.error("Unauthorized, refreshing token...");
                     await TokenRefresh();
@@ -100,7 +111,6 @@ export default function Profile() {
                 console.error(err);
             }
         }
-
         getUser();
     }, []);
 
