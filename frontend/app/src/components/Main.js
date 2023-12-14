@@ -2,18 +2,18 @@ import React, { useEffect, useState, useRef } from 'react';
 import "../css/main.css";
 import { useParams } from 'react-router-dom';
 import Threads from './Threads';
-import ProfileInAside from "./ProfileInAside";
+import ProfileInAside from "../functions/ProfileInAside";
 import Header from "./Header";
 import Messages from "./Messages";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperclip, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
-import { TokenRefresh } from './TokenRefresh';
+import { uploadFile } from '../functions/uploadFile';
+import { createMessage } from '../functions/createMessage';
 
 export default function Main() {
     const [asideVisible, setAsideVisible] = useState(true);
     const [mainVisible, setMainVisible] = useState(true);
     const [messageContent, setMessageContent] = useState('');
-    const [uploadedFileId, setUploadedFileId] = useState(null);
     const fileInput = useRef(null);
     const [file, setFile] = useState(null);
     const containerRef = useRef(null);
@@ -33,94 +33,14 @@ export default function Main() {
         setFile(event.target.files[0]);
     };
 
-    const uploadFile = async (retryCount = 0) => {
-        const token = localStorage.getItem('token');
-        const formData = new FormData();
-        formData.append('file', file);
-
-        const fileOptions = {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: formData
-        };
-
-        delete fileOptions.headers['Content-Type'];
-
-        try {
-            const response = await fetch('https://file.chathub.kontra.tel/files', fileOptions);
-            const data = await response.json();
-            if (!response.ok) {
-                console.log("Error uploading file: ", response.status);
-            }
-            if (response.ok) {
-                console.log("/file/uploaded ", response.status);
-                setUploadedFileId(data.content.ufid);
-                return data.content.ufid;
-            } else if (response.status === 401 && retryCount < 3) {
-                console.error("Unauthorized, refreshing token...");
-                await TokenRefresh();
-                await uploadFile(retryCount + 1);
-            } else if (retryCount >= 3) {
-                console.error("Failed to refresh token after 3 attempts");
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    const createMessage = async (uploadedFileId, retryCount = 0) => {
-        if ((!messageContent || !messageContent.trim()) && !uploadedFileId) {
-            return;
-        }
-        const token = localStorage.getItem('token');
-
-        const messageData = {
-            utid: utid,
-            content: messageContent,
-            attachments: uploadedFileId ? [uploadedFileId] : []
-        };
-
-        const messageOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(messageData)
-        };
-
-        try {
-            const response = await fetch(`https://api.chathub.kontra.tel/messages/create`, messageOptions);
-            if (response.ok) {
-                console.log("/message/create ", response.status);
-                setUploadedFileId(null);
-            } else if (response.status === 401 && retryCount < 3) {
-                console.error("Unauthorized, refreshing token...");
-                await TokenRefresh();
-                await createMessage(retryCount + 1);
-            } else if (retryCount >= 3) {
-                console.error("Failed to refresh token after 3 attempts");
-            }
-        } catch (err) {
-            console.error(err);
-        }
-
-    };
-
     const handleSendClick = async () => {
         let uploadedFileId = null;
         if (file) {
-            uploadedFileId = await uploadFile();
+            uploadedFileId = await uploadFile(file);
             setFile(null);
         }
-        await createMessage(uploadedFileId);
+        await createMessage(utid, messageContent, uploadedFileId);
         setMessageContent('');
-
-        {/*setTimeout(() => {  //scrollaa chatin paskan alkuun
-            containerRef.current.scrollTop = containerRef.current.scrollHeight;
-        },3000); */}
     };
 
     useEffect(() => {
@@ -140,13 +60,6 @@ export default function Main() {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-
-
-
-
-
-
-
 
     return (
         <>

@@ -2,11 +2,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import "../css/main.css";
 import "../css/profile.css";
 import { Link } from 'react-router-dom';
-import ProfilePictureChanger from './ProfilePictureChanger';
-import { Logout } from './Logout';
-import { TokenRefresh } from './TokenRefresh';
-import StatusChanger from './StatusChanger';
-import BioChanger from './BioChanger';
+import ProfilePictureChanger from '../functions/ProfilePictureChanger';
+import { Logout } from '../functions/Logout';
+import { TokenRefresh } from '../functions/TokenRefresh';
+import StatusChanger from '../functions/StatusChanger';
+import BioChanger from '../functions/BioChanger';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faArrowLeft, faLock, faRightFromBracket, faUser, faIdCard, faCircleInfo, faStar} from '@fortawesome/free-solid-svg-icons'
 

@@ -2,86 +2,18 @@ import React, {useEffect, useState} from 'react';
 import Thread from './Thread';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import CreateThread from "./CreateThread";
-import { TokenRefresh } from './TokenRefresh';
-
+import CreateThread from "../functions/CreateThread";
+import { getUser } from "../functions/getUser";
 
 export default function Threads() {
     const [threadsData, setThreadsData] = useState([]);
-    let token = localStorage.getItem('token');
-
     const [searchText, setSearchText] = useState('');
     const [filteredThreads, setFilteredThreads] = useState(threadsData);
     const [showAddPeople, setShowAddPeople] = useState(false);
 
-    const threadOptions = {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-    };
-
     const addThread = (newThread) => {
         setThreadsData(prevThreads => [...prevThreads, newThread]);
     }
-
-    const getThreads = async (uuid, retryCount = 0) => {
-        if (!uuid) {
-            return;
-        }
-        try {
-            const response = await fetch(`https://api.chathub.kontra.tel/threads/a?members=${uuid}`, threadOptions);
-            const data = await response.json();
-            if (response.ok) {
-                setThreadsData(data.content);
-            } else if (response.status === 401 && retryCount < 3) {
-                console.error("Unauthorized, refreshing token...");
-                await TokenRefresh();
-                token = localStorage.getItem('token');
-                await getThreads(uuid, retryCount + 1);
-            } else if (retryCount >= 3) {
-                console.error("Failed to refresh token after 3 attempts");
-            } else {
-                console.error("Server responded with status:", response.status);
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    const getUser = async (retryCount = 0) => {
-        const userOptions = {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        };
-    
-        try {
-            const response = await fetch(`https://api.chathub.kontra.tel/users/get`, userOptions);
-            const data = await response.json();
-            if (response.ok) {
-                if (data.content.uuid) {
-                    getThreads(data.content.uuid);
-                } else {
-                    console.log('User UUID is undefined');
-                }
-            } else if (response.status === 401 && retryCount < 3) {
-                console.error("Unauthorized, refreshing token...");
-                await TokenRefresh();
-                token = localStorage.getItem('token');
-                await getUser(retryCount + 1);
-            } else if (retryCount >= 3) {
-                console.error("Failed to refresh token after 3 attempts");
-            } else {
-                console.error("Server responded with status:", response.status);
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    
 
     const handleSearch = (searchQuery) => {
         setSearchText(searchQuery);
@@ -90,7 +22,6 @@ export default function Threads() {
         );
         setFilteredThreads(filtered);
     };
-
 
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
@@ -103,7 +34,7 @@ export default function Threads() {
     };
 
     useEffect(() => {
-        getUser();
+        getUser(setThreadsData);
     }, []);
 
     useEffect(() => {

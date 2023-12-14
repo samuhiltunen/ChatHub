@@ -6,7 +6,6 @@ export default function Message(props) {
     const [modalMedia, setModalMedia] = useState('');
     const [isModalVideo, setIsModalVideo] = useState(false);
     const username = localStorage.getItem('username');
-
     let formattedTime = new Date(props.time).toLocaleString();
 
     return (

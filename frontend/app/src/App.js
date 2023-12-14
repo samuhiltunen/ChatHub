@@ -4,7 +4,7 @@ import Main from './components/Main';
 import Login from './components/Login';
 import Register from './components/Register';
 import Profile from './components/Profile';
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './functions/ProtectedRoute';
 
 function App() {
   return (
