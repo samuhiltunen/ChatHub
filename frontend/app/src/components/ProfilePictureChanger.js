@@ -70,7 +70,7 @@ const ProfilePictureChanger = ({ setAvatar, avatar }) => {
       <div>
         <img
           src={`${profilePicture}?${Date.now()}`}
-          alt="Profile"
+          alt="Click this to add a profile picture" 
           className="avatar"
           id="profile-photo"
           onClick={handleImageClick}
