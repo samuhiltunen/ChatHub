@@ -44,7 +44,7 @@ router.route('/:job')
                 name: req.body.name,
                 pass: bcrypt.hashSync(req.body.password, 10),
                 info: {
-                    avatar: req.body.avatar??'default',
+                    avatar: req.body.avatar??'https://file.chathub.kontra.tel/image/woczA4oJlc.jpg',
                     status: 'Hello there! I am new to ChatHub.',
                     bio: req.body.bio??'',
                     logged: false,
